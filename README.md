@@ -26,9 +26,10 @@ curl is command line tool and library for transferring data with URLs
 - Versions Tested: curl 7.19.7 
   
 
-./jq ... For Mac/Unix/Linux Platforms ONLY
+./jq 
 
 jq is a lightweight and flexible command-line JSON processor
+- **For Mac/Unix/Linux Platforms ONLY**
 - References: https://stedolan.github.io/jq/  
 - Versions Tested: jq version 1.3
 	
