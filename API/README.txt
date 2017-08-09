@@ -1,7 +1,6 @@
 
 
 So you want to work with the Delphix APIs?
-https://docs.delphix.com/docs/files/74711255/74711259/1/1490715980497/Delphix_API_101_SW+edited.pdf
 
 
 Disclaimer: As always, these scripts are provided "as-is" and the end user is responsible
