@@ -1,5 +1,6 @@
 # Change Log 
 
-This is a new repository and currently no scripts have been uploaded yet. Please revisit soon as they will be shortly.
+This is a new repository. Scripts are in the process of being uploaded and verified.  Please check back soon for "verified" release.
 
 Regards,
+Bitt...
