@@ -18,14 +18,22 @@ How to get started
 Required Packages
 
 curl://
+
   command line tool and library for transferring data with URLs
+  
   NOTE: The curl command library is included with most operating systems
-  References: https://github.com/curl/curl    https://curl.haxx.se/
+  
+  References: https://github.com/curl/curl     https://curl.haxx.se/
+  
   Versions Tested: curl 7.19.7 
+  
 
 ./jq  
-  jq is a lightweight and flexible command-line JSON processor.
+
+  jq is a lightweight and flexible command-line JSON processor
+  
   References: https://stedolan.github.io/jq/  
+  
   Versions Tested: jq version 1.3
 	
 	      
