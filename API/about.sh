@@ -36,7 +36,7 @@
 source ./jqJSON_subroutines.sh
 
 #########################################################
-#Parameter Initialization
+## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
