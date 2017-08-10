@@ -114,8 +114,8 @@ Timeflow
 	Rollback VDB to Timestamp			Filename: vdb_rollback_timestamp.sh
 	Rollback VDB to Snapshot			Filename: vdb_rollback_snapshot.sh
 	Rollback VDB to SCN (location)			Filename: vdb_rollback_scn.sh
-	Refresh VDB to Timestamp			Filename: vdb_ refresh _timestamp.sh
-	Refresh VDB to Snapshot				Filename: vdb_ refresh _snapshot.sh
+	Refresh VDB to Timestamp			Filename: vdb_refresh_timestamp.sh
+	Refresh VDB to Snapshot				Filename: vdb_refresh_snapshot.sh
 	Refresh VDB to SCN (location)			Filename: vdb_refresh_scn.sh
 
 
