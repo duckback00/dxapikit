@@ -1,8 +1,35 @@
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : jqJSON_subroutines.sh
+# Description  : Shell Script Subroutines Commonly Used by API scripts
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#
 
-
+################################################################
 #
 # This code requires the jq Linux/Mac JSON parser program ...
 # 
+
+
 jqParse() {
    STR=$1                  # json string
    FND=$2                  # name to find
@@ -20,7 +47,6 @@ jqParse() {
    fi   
    echo "${RESULTS}"
 }  
-
 
 
 #
@@ -66,35 +92,34 @@ EOF
 
 
 
-
 #########################################################
 ## Get API Version Info ...
 
 jqGet_APIVAL() {
 
-#echo "About API "
-STATUS=`curl -s -X GET -k ${BaseURL}/about -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-#echo ${STATUS} | jq "."
+   #echo "About API "
+   STATUS=`curl -s -X GET -k ${BaseURL}/about -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+   #echo ${STATUS} | jq "."
 
-#
-# Get Delphix Engine API Version ...
-#
-major=`echo ${STATUS} | jq --raw-output ".result.apiVersion.major"`
-minor=`echo ${STATUS} | jq --raw-output ".result.apiVersion.minor"`
-micro=`echo ${STATUS} | jq --raw-output ".result.apiVersion.micro"`
+   #
+   # Get Delphix Engine API Version ...
+   #
+   major=`echo ${STATUS} | jq --raw-output ".result.apiVersion.major"`
+   minor=`echo ${STATUS} | jq --raw-output ".result.apiVersion.minor"`
+   micro=`echo ${STATUS} | jq --raw-output ".result.apiVersion.micro"`
 
-let apival=${major}${minor}${micro}
-#echo "Delphix Engine API Version: ${major}${minor}${micro}"
+   let apival=${major}${minor}${micro}
+   #echo "Delphix Engine API Version: ${major}${minor}${micro}"
 
-if [ "$apival" == "" ]
-then
-   echo "Error: Delphix Engine API Version Value Unknown $apival, exiting ..."
-   exit 1;
-#else
-#   echo "Delphix Engine API Version: ${major}${minor}${micro}"
-fi
+   if [ "$apival" == "" ]
+   then
+      echo "Error: Delphix Engine API Version Value Unknown $apival, exiting ..."
+      exit 1;
+   #else
+   #   echo "Delphix Engine API Version: ${major}${minor}${micro}"
+   fi
 
-echo $apival
+   echo $apival
 
 }
 
