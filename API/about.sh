@@ -43,6 +43,8 @@ source ./jqJSON_subroutines.sh
 #########################################################
 ## Authentication ...
 
+echo "Authenticating on ${BaseURL}"
+
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
 if [ "${RESULTS}" != "OK" ]
@@ -52,7 +54,6 @@ then
 fi
 
 echo "Session and Login Successful ..."
-
 
 #########################################################
 ## About API Call ...
@@ -65,7 +66,6 @@ STATUS=`curl -s -X GET -k ${BaseURL}/about -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 # Show Pretty (Human Readable) Output ...
 #
 echo ${STATUS} | jq "."
-
 
 #########################################################
 # 
@@ -117,7 +117,6 @@ else
    fi
 fi
 
-
 #
 # Get Delphix Engine Enabled Features ...
 # 
@@ -145,11 +144,9 @@ do
 done
 IFS=
 
-
 # 
 # The End is Hear ...
 #
 echo " "
 echo "Done "
 exit 0;
-
