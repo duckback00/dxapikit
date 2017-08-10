@@ -32,19 +32,33 @@
 # Sample script to create or delete a Delphix Engine Group object ... 
 #
 #########################################################
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
+
+#########################################################
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
 
 #########################################################
-#                   DELPHIX CORP                        #
-#########################################################
+## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
 #########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
-#########################################################
+## Authentication ...
+
+echo "Authenticating on ${BaseURL}"
+
+RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
+#echo "Results: ${RESULTS}"
+if [ "${RESULTS}" != "OK" ]
+then
+   echo "Error: Exiting ... ${RESULTS}"
+   exit 1;
+fi
+
+echo "Session and Login Successful ..."
 
 #########################################################
 ## List Existing Group Names ...
@@ -90,7 +104,6 @@ then
 fi
 export ACTION
 
-
 #########################################################
 # Authentication ...
 #
@@ -106,7 +119,7 @@ fi
 echo "Session and Login Successful ..."
 
 #########################################################
-## Get group reference
+## Get Group Reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 RESULTS=$( jqParse "${STATUS}" "status" )
