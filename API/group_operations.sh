@@ -1,5 +1,33 @@
-#!/bin/bash
-#v1.1
+#!/bin/sh
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : group_operations.sh
+# Description  : Delphix API for groups
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#
+# Interactive Usage: ./group_operations.sh
+#
+# Non-Interactive Usage: ./group_operations.sh [Group_Name] [create | delete]
 #
 # Sample script to create or delete a Delphix Engine Group object ... 
 #
@@ -18,15 +46,40 @@ source ./jqJSON_subroutines.sh
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
 
+#########################################################
+## List Existing Group Names ...
+
+STATUS=`curl -s -X GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+#echo "group: ${STATUS}"
+RESULTS=$( jqParse "${STATUS}" "status" )
+
+#
+# Parse out group names ...
+#
+GROUP_NAMES=`echo ${STATUS} | jq --raw-output '.result[] | .name '`
+echo "Existing Group Names: "
+echo "${GROUP_NAMES}"
+
 #
 # Command Line Arguments ...
 #
+DELPHIX_GRP="$1"
+if [[ "${DELPHIX_GRP}" == "" ]]
+then
+   echo "Please Enter Group Name (case sensitive): "
+   read DELPHIX_GRP
+   if [ "${DELPHIX_GRP}" == "" ]
+   then
+      echo "No Group Name Provided, Exiting ..."
+      exit 1;
+   fi
+fi;
+export DELPHIX_GRP
 
-ACTION=$1
+ACTION=$2
 if [[ "${ACTION}" == "" ]]
 then
-   echo "Usage: ./group_operations.sh [create | delete] [GROUP_Name] "
-   echo "Please Enter Group Option : "
+   echo "Please Enter Group Option [create | delete] : "
    read ACTION
    if [ "${ACTION}" == "" ]
    then
@@ -35,19 +88,8 @@ then
    fi
    ACTION=$(echo "${ACTION}" | tr '[:upper:]' '[:lower:]')
 fi
+export ACTION
 
-DELPHIX_GRP="$2"
-if [[ "${DELPHIX_GRP}" == "" ]]
-then
-   echo "Please Enter Group Name (case sensitive): "
-   read DELPHIX_GRP 
-   if [ "${DELPHIX_GRP}" == "" ]
-   then
-      echo "No Group Name Provided, Exiting ..."
-      exit 1;
-   fi
-fi;
-export DELPHIX_GRP
 
 #########################################################
 # Authentication ...
