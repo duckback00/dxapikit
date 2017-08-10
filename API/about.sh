@@ -27,47 +27,35 @@
 # Usage: ./about.sh
 #
 #########################################################
-#                   DELPHIX CORP                        #
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
+
+#########################################################
+## Subroutines ...
+
+source ./jqJSON_subroutines.sh
+
+#########################################################
+#Parameter Initialization
 
 . ./delphix_engine.conf
 
 #########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
+## Authentication ...
+
+RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
+#echo "Results: ${RESULTS}"
+if [ "${RESULTS}" != "OK" ]
+then
+   echo "Error: Exiting ... ${RESULTS}"
+   exit 1;
+fi
+
+echo "Session and Login Successful ..."
+
+
 #########################################################
-
-#
-# Session ...
-#
-echo "Session API "
-curl -s -X POST -k --data @- ${BaseURL}/session -c "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
-{
-    "type": "APISession",
-    "version": {
-        "type": "APIVersion",
-        "major": 1,
-        "minor": 7,
-        "micro": 0
-    }
-}
-EOF
-
-
-
-#
-# Login ...
-#
-echo " "
-echo "Login API "
-curl -s -X POST -k --data @- ${BaseURL}/login -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
-{
-  "type": "LoginRequest",
-  "username": "${DMUSER}",
-  "password": "${DMPASS}"
-}
-EOF
-
-
+## About API Call ...
 
 echo " "
 echo "About API "
@@ -79,7 +67,7 @@ STATUS=`curl -s -X GET -k ${BaseURL}/about -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 echo ${STATUS} | jq "."
 
 
-#################################################################################
+#########################################################
 # 
 # Some jq parsing examples ...
 #
