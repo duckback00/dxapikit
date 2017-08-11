@@ -1,20 +1,48 @@
 #!/bin/bash
-#v1.1
 #
-# sample script to perform basic operations on a  VDB.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : vdb_refresh_scn.sh
+# Description  : Delphix API Refresh VDB by Timeflow SCN
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#  4.) Change values below as required
+#
+# Interactive Usage: ./vdb_refresh_scn.sh
 #
 # Delphix Docs Reference:
-#   https://docs.delphix.com/display/DOCS/API+Cookbook%3A+Refresh+VDB
+#   https://docs.delphix.com/docs/reference/web-service-api-guide/api-cookbook-common-tasks-workflows-and-examples
 #
-#
+#########################################################
+#                   DELPHIX CORP                        #
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
+
 #########################################################
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
 
 #########################################################
-#                   DELPHIX CORP                        #
-#########################################################
+## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
@@ -39,8 +67,9 @@ fi;
 export SOURCE_SID
 
 #########################################################
-# Authentication ...
-#
+## Authentication ...
+
+echo "Authenticating on ${BaseURL}"
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
@@ -127,7 +156,9 @@ then
    exit 1;
 fi
 
-
+#
+# Build JSON String ...
+#
 json="{
     \"type\": \"OracleRefreshParameters\",
     \"timeflowPointParameters\": {
@@ -138,6 +169,7 @@ json="{
 }"
 
 echo "json> ${json}"
+echo "Please wait, Submitting Refresh Job Request ..."
 
 #
 # Submit VDB operations request ...
