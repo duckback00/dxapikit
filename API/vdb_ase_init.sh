@@ -1,25 +1,52 @@
 #!/bin/bash
-#v1.1
 #
-# Delphix Doc's Reference: 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : vdb_ase_init.sh 
+# Description  : Delphix APIs for init operations on ASE VDBs
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#  4.) Change values below as required
+#
+# Usage: ./vdb_ase_init.sh
+#
+# Delphix Doc's Reference:
 #    https://docs.delphix.com/pages/viewpage.action?pageId=51970750
 #
+#########################################################
+#                   DELPHIX CORP                        #
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
+
 #########################################################
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
 
 #########################################################
-#                   DELPHIX CORP                        #
-#########################################################
 ## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
 #########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
-#########################################################
-
 #
 # Command Line Arguments ...
 #
@@ -53,8 +80,9 @@ fi;
 export SOURCE_SID
 
 #########################################################
-# Authentication ...
-#
+## Authentication ...
+
+echo "Authenticating on ${BaseURL}"
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
@@ -103,7 +131,6 @@ fi
 VENDOR_SOURCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.container=="'"${CONTAINER_REFERENCE}"'") | .type '`
 echo "vendor source: ${VENDOR_SOURCE}"
 
-
 #########################################################
 #
 # start or stop the vdb based on the argument passed to the script
@@ -134,7 +161,6 @@ esac
 if [ "${ACTION}" == "status" ]
 then
 
-
    # 
    # Get Source Status ...
    #
@@ -151,9 +177,7 @@ then
    echo "Runtime Status: ${r}"
    echo "Enabled: ${r1}"
 
-
 else
-
 
    # 
    # delete ...
@@ -188,7 +212,6 @@ EOF
       STATUS=`curl -s -X POST -k ${BaseURL}/source/${VDB}/${ACTION} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 
    fi      # end if delete ...
-
 
    #########################################################
    #
@@ -231,7 +254,6 @@ EOF
    else
       echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
    fi
-
 
 fi     # end if $status
 
