@@ -1,14 +1,16 @@
-#dxapikit
+README.txt
+v1.0
 
-## So you want to work with the Delphix APIs?
+** So you want to work with the Delphix APIs? **
 
 Disclaimer: As always, these scripts are provided "as-is" and the end user is responsible
 for the application and usage of these scripts within their environment. Test, verify, 
 re-test, and re-verify prior to using any code into production. 
 
-These scripts are basic examples and require manual editing of the files for configuring 
+These scripts are basic examples and some require manual editing of the files for configuring 
 the parameter values for the respective environment and operations. 
 
+First, update the    delphix_engine.conf   file for your Delphix Engine connection information!
 
 # 
 # Delphix Engine Config File ...
@@ -28,20 +30,30 @@ DMPASS=delphix
 
 
 Appendix
-
+--------
 Quick Start - Sample Scripts
 
-Note: Almost all the Unix/Linux/Mac shell scripts required the jq command line parser.
+The Unix/Linux/Mac shell scripts required the jq command line parser and curl command line libraries.
 
 For Unix/Linux/Mac environments, verify that jq is installed.
+
 $ which jq
 /usr/local/bin/jq
 
 $ jq --version
-jq-1.4
+jq version 1.3   (Linux)
+jq-1.4           (Mac)
+
+$ which curl
+/usr/bin/curl
+
+$ curl --version
+curl 7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2  (Linux)
+curl 7.43.0 (x86_64-apple-darwin14.0) libcurl/7.43.0 SecureTransport zlib/1.2.5  (Mac)
 
 
-First, update the    delphix_engine.conf   file for your Delphix Engine connection information!
+Sample Scripts
+--------------
 
 Linux Included Config Scripts
         Delphix Engine Configuration Parameter Values	Filename: delphix_engine.conf
