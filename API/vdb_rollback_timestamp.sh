@@ -29,7 +29,7 @@
 # Interactive Usage: ./vdb_rollback_timestamp.sh
 #
 # Delphix Docs Reference:
-#   https://docs.delphix.com/docs/reference/web-service-api-guide/api-cookbook-common-tasks-workflows-and-examples/api-cookbook-refresh-vdb
+#   https://docs.delphix.com/docs/reference/web-service-api-guide/api-cookbook-common-tasks-workflows-and-examples
 #
 #########################################################
 #                   DELPHIX CORP                        #
@@ -154,6 +154,8 @@ json="{
 }"
 
 echo "json> ${json}"
+
+echo "Please wait, Submitting Rollback Job Request ..."
 
 #
 # Submit VDB operations request ...
