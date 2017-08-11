@@ -15,7 +15,7 @@
 # Copyright (c) 2017 by Delphix. All rights reserved.
 #
 # Program Name : link_sqlserver_jq.sh 
-# Description  : Delphix API to link/ingest a SQLSever dSource
+# Description  : Delphix API to link/ingest a SQLServer dSource
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
 # Version      : v1.0.0
