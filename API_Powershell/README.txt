@@ -72,7 +72,7 @@ http://www.gregorystrike.com/2011/01/27/how-to-tell-if-powershell-is-32-bit-or-6
 PS> if ($env:Processor_Architecture -eq "x86") { write "running on 32bit" } else
 {write "running on 64bit"}
 running on 32bit
-.	.	.	or	.	.	.
+. . . or . . .
 PS> if ([System.IntPtr]::Size -eq 4) { "32-bit" } else { "64-bit" }
 32-bit
 
@@ -148,7 +148,7 @@ If the alias curl name is to the Invoke-WebRequest, you will need to use the cur
 
 PS> Remove-item alias:curl
 
-Verify that curl and/or	curl.exe	work	from	the	respective	Powershell environment:
+Verify that curl and/or curl.exe work from the respective Powershell environment:
 
 PS> curl.exe --version
 curl 7.49.1 (x86_64-w64-mingw32) ...
