@@ -88,8 +88,8 @@ Linux / ASE Database
         Provision an ASE VDB                            Filename: provision_ase_jq.sh
 
 Linux / SQL Server Database
-        Link/Ingest a SQL Server dSource                Filename: link_sqlserver.sh
-        Provision a SQL Server VDB                      Filename: provision_sqlserver.sh
+        Link/Ingest a SQL Server dSource                Filename: link_sqlserver_jq.sh
+        Provision a SQL Server VDB                      Filename: provision_sqlserver_jq.sh
 	
 Timeflows
 	VDB Timeflow Object Information /Details	Filename: flows.sh
