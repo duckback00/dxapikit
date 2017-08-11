@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,13 +39,13 @@
 #  echo $JSON | jq ".delphix[] | select (.job)"
 #
 #########################################################
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
+
+#########################################################
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
-
-#########################################################
-#                   DELPHIX CORP                        #
-#########################################################
 
 #########################################################
 #Parameter Initialization
@@ -53,13 +53,9 @@ source ./jqJSON_subroutines.sh
 . ./delphix_engine.conf
 
 #########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
-#########################################################
+## Session and Login ...
 
 echo "Authenticating on ${BaseURL}"
-
-#########################################################
-## Session and Login ...
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
@@ -71,6 +67,7 @@ fi
 
 echo "Session and Login Successful ..."
 
+#########################################################
 #
 # about action alert analytics authorization capacity connectivity database environment fault group host
 # jetstream job maskingjob namespace network permission policy replication repository role service session
