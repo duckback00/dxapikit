@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/sh
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,24 +33,23 @@
 #    https://docs.delphix.com/docs/reference/web-service-api-guide/api-cookbook-common-tasks-workflows-and-examples/api-cookbook-stop-start-a-vdb
 #
 #########################################################
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
+
+#########################################################
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
 
-#########################################################
-#                   DELPHIX CORP                        #
 #########################################################
 ## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
 #########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
-#########################################################
+## Authentication ...
 
-#########################################################
-# Authentication ...
-#
+echo "Authenticating on ${BaseURL}"
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
