@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,19 +28,18 @@
 # Interactive Usage: ./flows.sh
 #
 #########################################################
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
+
+#########################################################
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
 
 #########################################################
-#                   DELPHIX CORP                        #
-#########################################################
+## Parameter Initialization ...
 
 . ./delphix_engine.conf
-
-#########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
-#########################################################
 
 #########################################################
 ## Session and Login ...
@@ -56,7 +55,6 @@ then
 fi
 
 echo "Session and Login Successful ..."
-
 
 #########################################################
 ## Get database container
