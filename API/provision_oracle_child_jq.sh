@@ -1,17 +1,37 @@
 #!/bin/bash
-#v1.x
-
-#########################################################
-## Subroutines ...
-
-source ./jqJSON_subroutines.sh
-
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : provision_oracle_child_jq.sh
+# Description  : Provision an Oracle VDB Example
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#  4.) Change values below as required
+#
+# Usage: ./provision_oracle_child_jq.sh
+#
 #########################################################
 #                   DELPHIX CORP                        #
+# Please make changes to the parameters below as req'd! #
 #########################################################
-#Parameter Initialization
-
-. ./delphix_engine.conf
 
 #
 # Required for Database Link and Sync ...
@@ -20,13 +40,38 @@ SOURCE_SID="VBITT"               # dSource name used to get db container referen
 
 VDB_NAME="VBITT2"                # Delphix VDB Name
 MOUNT_BASE="/mnt/provision"      # Delphix Engine Mount Path 
-DELPHIX_GRP="Oracle_Target"      # Delphix Engine Group Name
-TARGET_ENV="Oracle Target"       # Target Environment used to get repository reference value 
-TARGET_HOME="/u02/ora/app/product/11.2.0/dbhome_1"   # Target Instance within Environment 
+DELPHIX_GRP="Oracle Source"      # Delphix Engine Group Name
+TARGET_ENV="Linux Source"        # Target Environment used to get repository reference value 
+TARGET_HOME="/u01/app/oracle/product/11.2.0.4/db_1"   # Target Instance within Environment 
+
+ARCHIVELOGMODE="false"            # true or false ONLY
+
+#
+# Optional: Oracle Init Parameters Template ...
+#
+# Delphix5120HWv8> database template list display=name,reference;
+#
+# Uncomment template line if applicable ...
+#
+ORACLE_INIT_TPL=""
+#ORACLE_INIT_TPL='"configTemplate": "DATABASE_TEMPLATE-1",'
 
 #########################################################
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
+
+#########################################################
+## Subroutines ...
+
+source ./jqJSON_subroutines.sh
+
+#########################################################
+## Parameter Initialization ...
+
+. ./delphix_engine.conf
+
+#########################################################
+## Authentication ...
 
 echo "Authenticating on ${BaseURL}"
 
@@ -41,7 +86,7 @@ fi
 echo "Session and Login Successful ..."
 
 #########################################################
-## Get or Create Group 
+## Get Group Reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "group: ${STATUS}"
@@ -54,9 +99,8 @@ GROUP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"
 echo "group reference: ${GROUP_REFERENCE}"
 
 #########################################################
-## Get database container
+## Get database container ...
 
-#echo "curl -s -X GET -k ${BaseURL}/database -b \"${COOKIE}\" -H \"${CONTENT_TYPE}\""
 STATUS=`curl -s -X GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "database: ${STATUS}"
 RESULTS=$( jqParse "${STATUS}" "status" )
@@ -66,9 +110,14 @@ RESULTS=$( jqParse "${STATUS}" "status" )
 #
 CONTAINER_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${SOURCE_SID}"'") | .reference '`
 echo "container reference: ${CONTAINER_REFERENCE}"
+if [[ "${CONTAINER_REFERENCE}" == "" ]]
+then
+   echo "Error: No container found for ${SOURCE_SID} ${CONTAINER_REFERENCE}, Exiting ..."
+   exit 1;
+fi
 
 #########################################################
-## Get Environment reference  
+## Get Environment reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "environment: ${STATUS}"
@@ -81,7 +130,7 @@ ENV_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${
 echo "env reference: ${ENV_REFERENCE}"
 
 #########################################################
-## Get Repository reference  
+## Get Repository reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/repository -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "repository: ${STATUS}"
@@ -92,6 +141,11 @@ RESULTS=$( jqParse "${STATUS}" "status" )
 # 
 REP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.environment=="'"${ENV_REFERENCE}"'" and .name=="'"${TARGET_HOME}"'") | .reference '`
 echo "repository reference: ${REP_REFERENCE}"
+if [[ "${REP_REFERENCE}" == "" ]]
+then
+   echo "Error: No repository reference found for ${TARGET_ENV} and ${TARGET_HOME}, please verify values. Exiting ..."
+   exit 1;
+fi
 
 #########################################################
 ## Get API Version Info ...
@@ -130,12 +184,24 @@ json="{
     },
     \"source\": {
         \"type\": \"OracleVirtualSource\","
+#
+# Version Specific JSON parameter requirement for Illium ...
+#
 if [ $apival -ge 180 ]
 then
 json="${json}
         \"allowAutoVDBRestartOnHostReboot\": false,"
 fi
+#
+# Optional: Oracle Init Parameters Template ...
+#
 json="${json}
+${ORACLE_INIT_TPL}"
+#
+# Continue Building JSON Data String ...
+#
+json="${json}
+        \"archivelogMode\": ${ARCHIVELOGMODE},
         \"mountBase\": \"${MOUNT_BASE}\"
     },
     \"sourceConfig\": {
