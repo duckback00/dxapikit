@@ -67,7 +67,7 @@ ORACLE_INIT_TPL=""
 source ./jqJSON_subroutines.sh
 
 #########################################################
-#Parameter Initialization
+## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
@@ -100,7 +100,7 @@ GROUP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"
 echo "group reference: ${GROUP_REFERENCE}"
 
 #########################################################
-## Get database container
+## Get database container ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "database: ${STATUS}"
@@ -117,9 +117,8 @@ then
    exit 1;
 fi
 
-
 #########################################################
-## Get Environment reference  
+## Get Environment reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "environment: ${STATUS}"
@@ -132,7 +131,7 @@ ENV_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${
 echo "env reference: ${ENV_REFERENCE}"
 
 #########################################################
-## Get Repository reference  
+## Get Repository reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/repository -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "repository: ${STATUS}"
@@ -143,6 +142,11 @@ RESULTS=$( jqParse "${STATUS}" "status" )
 # 
 REP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.environment=="'"${ENV_REFERENCE}"'" and .name=="'"${TARGET_HOME}"'") | .reference '`
 echo "repository reference: ${REP_REFERENCE}"
+if [[ "${REP_REFERENCE}" == "" ]]
+then
+   echo "Error: No repository reference found for ${TARGET_ENV} and ${TARGET_HOME}, please verify values. Exiting ..."
+   exit 1;
+fi
 
 #########################################################
 ## Get API Version Info ...
@@ -167,7 +171,6 @@ then
 else
    echo "Delphix Engine API Version: ${major}${minor}${micro}"
 fi
-
 
 #########################################################
 ## Provision an Oracle Database ...
