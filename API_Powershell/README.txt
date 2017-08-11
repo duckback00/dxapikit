@@ -33,7 +33,7 @@ DMPASS=delphix
 Appendix
 --------
 
-Technical	NOTE: Powershell Open Source is now available for Linux and Mac OS.
+Technical NOTE: Powershell Open Source is now available for Linux and Mac OS.
 https://techcrunch.com/2016/08/18/microsoft-open-sources-powershell-brings-it-tolinux-and-os-x/
 
 
@@ -132,7 +132,7 @@ Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s
 rtmp rtsp scp sftp smtp smtps telnet tftp
 Features: IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2
 
-Invoking	the	curl or	curl.exe from	Powershell	command	line.	
+Invoking the curl or curl.exe from Powershell command line.
 
 PS> Get-Command curl
 CommandType Name ModuleName
@@ -162,16 +162,16 @@ Sample Scripts
 --------------
 
 Authentication
-	Windows Powershell Authentication           Filename: auth1.ps1
+	Windows Powershell Authentication           	Filename: auth1.ps1
 
 Windows / SQL Server
-	Powershell Functions 							          Filename: parseFunctions.ps1
-	Create a Windows Target Environment				  Filename: create_window_target_env.ps1
-	Link/Ingest a SQL Server dSource  				  Filename: link_sqlserver.ps1
-	Provision a SQL Server VDB 						      Filename: provision_sqlserver.ps1
-	Provision a VDB from a VDB 						      Filename: provision_sqlserver_child.ps1
-	Delete a dSource or Virtural Database			  Filename: delete_database_sqlserver.ps1
-	Refresh a VDB with Powershell					      Filename: windows_sqlserver_refresh.txt
+	Powershell Functions 		          	Filename: parseFunctions.ps1
+	Create a Windows Target Environment		Filename: create_window_target_env.ps1
+	Link/Ingest a SQL Server dSource  		Filename: link_sqlserver.ps1
+	Provision a SQL Server VDB 			Filename: provision_sqlserver.ps1
+	Provision a VDB from a VDB 			Filename: provision_sqlserver_child.ps1
+	Delete a dSource or Virtural Database		Filename: delete_database_sqlserver.ps1
+	Refresh a VDB with Powershell		        Filename: windows_sqlserver_refresh.txt
 
 
 *** WIP contact me for details or updates ***
