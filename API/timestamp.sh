@@ -1,5 +1,37 @@
 #!/bin/bash
-#v1.x
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : timestamp.sh
+# Description  : Delphix API to find Timestamps within Timeflows 
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#  4.) Change values below as required
+#
+# Usage: ./timestamp.sh
+#
+#########################################################
+#                   DELPHIX CORP                        #
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
 
 #########################################################
 ## Subroutines ...
@@ -48,21 +80,45 @@ function is_between() {
 #results=$(is_between "2016-10-19T02:24:21.000Z" "2016-10-20T02:24:21.000Z" "2016-10-19T02:24:21.002Z")
 
 #########################################################
-#                   DELPHIX CORP                        #
-#########################################################
+## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
 #########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
-#########################################################
+## Session and Login ...
 
+echo "Authenticating on ${BaseURL}"
+
+RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
+#echo "Results: ${RESULTS}"
+if [ "${RESULTS}" != "OK" ]
+then
+   echo "Error: Exiting ..."
+   exit 1;
+fi
+
+echo "Session and Login Successful ..."
+
+#########################################################
+## Get database list ...
+
+STATUS=`curl -s -X GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+#echo "database: ${STATUS}"
+RESULTS=$( jqParse "${STATUS}" "status" )
+
+#########################################################
 #
 # Command Line Arguments ...
 #
 SOURCE_SID=$1
 if [[ "${SOURCE_SID}" == "" ]]
 then
+
+   VDB_NAMES=`echo "${STATUS}" | jq --raw-output '.result[] | .name '`
+   echo "VDB Names:"
+   echo "${VDB_NAMES}"
+   echo " "
+
    echo "Please Enter dSource or VDB Name: "
    read SOURCE_SID
    if [ "${SOURCE_SID}" == "" ]
@@ -89,30 +145,10 @@ then
 fi;
 export TZ
 
-
 #########################################################
-## Session and Login ...
-
-echo "Authenticating on ${BaseURL}"
-
-RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
-#echo "Results: ${RESULTS}"
-if [ "${RESULTS}" != "OK" ]
-then
-   echo "Error: Exiting ..."
-   exit 1;
-fi
-
-echo "Session and Login Successful ..."
-
-#########################################################
-## Get database container
+## Get database container ...
 
 echo "Source: ${SOURCE_SID}"
-
-STATUS=`curl -s -X GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-#echo "database: ${STATUS}"
-RESULTS=$( jqParse "${STATUS}" "status" )
 
 CONTAINER_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${SOURCE_SID}"'") | .reference '`
 echo "container reference: ${CONTAINER_REFERENCE}"
@@ -125,7 +161,7 @@ echo "Timeflows API "
 STATUS=`curl -s -X GET -k ${BaseURL}/timeflow -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 
 #########################################################
-## Select the timeflow  
+## Select the timeflow ...
 
 FLOW_NAMES=`echo "${STATUS}" | jq --raw-output '.result[] | select(.container=="'"${CONTAINER_REFERENCE}"'") | .name '`
 echo "timeflow names:"
@@ -143,8 +179,6 @@ while read -r FLOW_NAME
 do
    echo "-------------------------------------------------------"
    echo "Processing Timeflow: $FLOW_NAME"
-
-
 
    # Get timeflow reference ...
    FLOW_REF=`echo "${STATUS}" | jq --raw-output '.result[] | select(.name=="'"${FLOW_NAME}"'") | .reference '`
