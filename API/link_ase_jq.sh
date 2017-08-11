@@ -1,19 +1,37 @@
 #!/bin/bash
-#v1.x
-
-#########################################################
-## Subroutines ...
-
-source ./jqJSON_subroutines.sh
-
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : link_ase_jq.sh 
+# Description  : Delphix API to link/ingest ASE dSource 
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#  4.) Change values below as required
+#
+# Usage: ./link_ase_jq.sh
+#
 #########################################################
 #                   DELPHIX CORP                        #
+# Please make changes to the parameters below as req'd! #
 #########################################################
-
-#########################################################
-# Parameter Initialization
-
-. ./delphix_engine.conf
 
 #########################################################
 #         USER VALUES CHANGES REQUIRED BELOW            #
@@ -27,7 +45,7 @@ DELPHIX_GRP="ASE_Sources"          # Delphix Group Name
 SOURCE_ENV="Linux Source"          # Source Enviroment Name
 SOURCE_INSTANCE="LINUXSOURCE"      # Source Database Oracle Home or SQL Server Instance Name
 SOURCE_SID="delphixdb"             # Source Environment Database SID
-SOURCE_DB_USER="sa"           # Source Database user account
+SOURCE_DB_USER="sa"                # Source Database user account
 SOURCE_DB_PASS="delphix"           # Source Database user password
 
 STAGE_ENV="Linux Source"           # Staging Environment   
@@ -47,10 +65,20 @@ SYNC_MODE="ASENewBackupSyncParameters"
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
 
-echo "Authenticating on ${BaseURL}"
+#########################################################
+## Subroutines ...
+
+source ./jqJSON_subroutines.sh
+
+#########################################################
+## Parameter Initialization ...
+
+. ./delphix_engine.conf
 
 #########################################################
 ## Session and Login ...
+
+echo "Authenticating on ${BaseURL}"
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
@@ -69,7 +97,7 @@ apival=$( jqGet_APIVAL )
 echo "Delphix Engine API Version: ${apival}"
 
 #########################################################
-## Get or Create Group 
+## Get Group Reference ... 
 
 STATUS=`curl -s -X GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "Group Status: ${STATUS}"
@@ -79,7 +107,7 @@ GROUP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"
 echo "Delphix Engine Group Reference: ${GROUP_REFERENCE}"
 
 #########################################################
-## Get Environment reference
+## Get Environment reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "Environment Status: ${STATUS}"
@@ -100,7 +128,7 @@ ENV_STAGE_USER=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"$
 echo "Staging environment reference user: ${ENV_STAGE_USER}"
 
 #########################################################
-## Get Repository reference
+## Get Repository reference ... 
 
 STATUS=`curl -s -X GET -k ${BaseURL}/repository -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "Repository Status: ${STATUS}"
@@ -113,7 +141,7 @@ REP_STAGE=`echo ${STATUS} | jq --raw-output '.result[] | select(.environment=="'
 echo "Staging repository reference: ${REP_STAGE}"
 
 #########################################################
-## Get sourceconfig
+## Get sourceconfig ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/sourceconfig -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "Source Config Status: ${STATUS}"
@@ -209,7 +237,6 @@ else
    echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
 fi
 
-
 #########################################################
 #
 # sync snapshot ...
@@ -275,7 +302,6 @@ then
 else
    echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
 fi
-
 
 ############## E O F ####################################
 echo " "
