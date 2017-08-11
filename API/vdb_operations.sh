@@ -32,6 +32,9 @@
 # Delphix Docs Reference:
 #   https://docs.delphix.com/docs/reference/web-service-api-guide
 #
+#########################################################
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
 
 #########################################################
 ## Subroutines ...
@@ -39,18 +42,14 @@
 source ./jqJSON_subroutines.sh
 
 #########################################################
-#                   DELPHIX CORP                        #
-#########################################################
+## Parameter Initialization ...
 
 . ./delphix_engine.conf
 
 #########################################################
-#         NO CHANGES REQUIRED BELOW THIS POINT          #
-#########################################################
+## Authentication ...
 
-#########################################################
-# Authentication ...
-#
+echo "Authenticating on ${BaseURL}"
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
