@@ -55,7 +55,7 @@ ARCHIVELOGMODE="false"            # true or false ONLY
 # Uncomment template line if applicable ...
 #
 ORACLE_INIT_TPL=""
-ORACLE_INIT_TPL='"configTemplate": "DATABASE_TEMPLATE-1",'
+#ORACLE_INIT_TPL='"configTemplate": "DATABASE_TEMPLATE-1",'
 
 #########################################################
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
@@ -102,7 +102,6 @@ echo "group reference: ${GROUP_REFERENCE}"
 #########################################################
 ## Get database container
 
-#echo "curl -s -X GET -k ${BaseURL}/database -b \"${COOKIE}\" -H \"${CONTENT_TYPE}\""
 STATUS=`curl -s -X GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "database: ${STATUS}"
 RESULTS=$( jqParse "${STATUS}" "status" )
