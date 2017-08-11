@@ -1,17 +1,37 @@
 #!/bin/bash
-#v1.x
-
-#########################################################
-## Subroutines ...
-
-source ./jqJSON_subroutines.sh
-
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : provision_ase_jq.sh
+# Description  : Delphix API to provision an ASE VDB
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#  4.) Change values below as required
+#
+# Usage: ./provision_ase_jq.sh
+#
 #########################################################
 #                   DELPHIX CORP                        #
+# Please make changes to the parameters below as req'd! #
 #########################################################
-#Parameter Initialization
-
-. ./delphix_engine.conf
 
 #########################################################
 #         USER VALUES CHANGES REQUIRED BELOW            #
@@ -31,10 +51,20 @@ TARGET_REP="LINUXSOURCE"         # Target Environment Repository / Instance name
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
 
-echo "Authenticating on ${BaseURL}"
+#########################################################
+## Subroutines ...
+
+source ./jqJSON_subroutines.sh
 
 #########################################################
-## Session and Login ...
+## Parameter Initialization ...
+
+. ./delphix_engine.conf
+
+#########################################################
+## Authentication ...
+
+echo "Authenticating on ${BaseURL}"
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
@@ -47,7 +77,7 @@ fi
 echo "Session and Login Successful ..."
 
 #########################################################
-## Get or Create Group 
+## Get Group Reference ... 
 
 STATUS=`curl -s -X GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 RESULTS=$( jqParse "${STATUS}" "status" )
@@ -59,7 +89,7 @@ GROUP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"
 echo "group reference: ${GROUP_REFERENCE}"
 
 #########################################################
-## Get database container
+## Get database container ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "Database: ${STATUS}"
@@ -72,7 +102,7 @@ CONTAINER_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=
 echo "container reference: ${CONTAINER_REFERENCE}"
 
 #########################################################
-## Get Environment reference  
+## Get Environment reference ... 
 
 STATUS=`curl -s -X GET -k ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "Environment Status: ${STATUS}"
@@ -87,7 +117,7 @@ echo "env reference: ${ENV_REFERENCE}"
 echo "env reference host: ${ENV_REFERENCE_HOST}"
 
 #########################################################
-## Get Repository reference  
+## Get Repository reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/repository -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "Repository Status: ${STATUS}"
