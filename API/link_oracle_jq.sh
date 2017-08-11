@@ -1,13 +1,36 @@
 #!/bin/bash
-#v1.x
-
-#########################################################
-## Subroutines ...
-
-source ./jqJSON_subroutines.sh
-
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : link_oracle_jq.sh
+# Description  : Delphix API to link/ingest a dSource
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl and jq command line libraries
+#  2.) Populate Delphix Engine Connection Information . ./delphix_engine.conf
+#  3.) Include ./jqJSON_subroutines.sh
+#  4.) Change values below as required
+#
+# Usage: ./link_oracle_jq.sh
+#
 #########################################################
 #                   DELPHIX CORP                        #
+# Please make changes to the parameters below as req'd! #
 #########################################################
 
 #
@@ -40,7 +63,7 @@ SOURCE_POLICY="        ,\"sourcingPolicy\": {
 #
 # Optional: Add if default SnapSync Policy is None ...
 #
-# LINK_NOW="       , \"linkNow\": true"
+#LINK_NOW="       , \"linkNow\": true"
 LINK_NOW=""
 
 #########################################################
@@ -48,14 +71,19 @@ LINK_NOW=""
 #########################################################
 
 #########################################################
+## Subroutines ...
+
+source ./jqJSON_subroutines.sh
+
+#########################################################
 #Parameter Initialization
 
 . ./delphix_engine.conf
 
-echo "Authenticating on ${BaseURL}"
-
 #########################################################
 ## Session and Login ...
+
+echo "Authenticating on ${BaseURL}"
 
 RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
 #echo "Results: ${RESULTS}"
@@ -68,7 +96,7 @@ fi
 echo "Session and Login Successful ..."
 
 #########################################################
-## Get or Create Group 
+## Get Group Reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 RESULTS=$( jqParse "${STATUS}" "status" )
@@ -80,7 +108,7 @@ GROUP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"
 echo "group reference: ${GROUP_REFERENCE}"
 
 #########################################################
-## Get sourceconfig
+## Get sourceconfig reference ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/sourceconfig -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 RESULTS=$( jqParse "${STATUS}" "status" )
