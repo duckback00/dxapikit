@@ -49,7 +49,7 @@ jq is a lightweight and flexible command-line JSON processor
  limitations under the License.
 
 
-#Preface
+## Preface
 
 What is RESTFul?  API?  JSON?  CLI?  Object Reference?  GET/POST?  Cookies?  HTTP/HTTPS? cURL?  Where do I begin?  Who can help me?  Documentation?  Tutorials?  That’s great for Linux, but I am on Windows?  Parse?  Don’t have a clue about sed, awk, grep, cut, and other acronyms. What about Regular Expressions, like “Hello”?
 
