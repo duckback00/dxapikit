@@ -47,3 +47,15 @@ jq is a lightweight and flexible command-line JSON processor
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+
+
+#Preface
+
+What is RESTFul?  API?  JSON?  CLI?  Object Reference?  GET/POST?  Cookies?  HTTP/HTTPS? cURL?  Where do I begin?  Who can help me?  Documentation?  Tutorials?  That’s great for Linux, but I am on Windows?  Parse?  Don’t have a clue about sed, awk, grep, cut, and other acronyms. What about Regular Expressions, like “Hello”?
+
+Just a small sampling of questions that you may or may not know the answers to, let alone learning Delphix and a programming language. Delphix is a technical product, and being new to the Delphix family can be a bit overwhelming. The goal for this document is simple, to enable users to get up to speed quickly on how to use Delphix APIs. 
+
+Hope you find it useful! 
+
+Regards,
+Bitt... 
