@@ -1,8 +1,35 @@
-# Filename: create_window_target_env.ps1
-# Description: Delphix Powershell Sample Authentication Script ...
-# Date: 2016-08-02
-# Author: Bitt...
 #
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : create_windows_target_env.ps1
+# Description  : Delphix PowerShell API Create Env Example  
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl command line libraries
+#  2.) Populate Delphix Engine Connection Information . .\delphix_engine_conf.ps1
+#  3.) Change values below as required
+#
+# Usage: ./create_windows_target_env.ps1
+#
+#########################################################
+#                   DELPHIX CORP                        #
+# Please make changes to the parameters below as req'd! #
+#########################################################
 
 #
 # Variables ...
@@ -12,6 +39,10 @@ $BaseURL = "http://172.16.160.195/resources/json/delphix"
 $cookie = "cookies.txt"
 $user = "delphix_admin"
 $pass = "delphix"
+$host_name = "172.16.160.196"         # IP Address or Fully Qualified Hostname
+$host_user = "DELPHIX\\delphix_admin"
+$host_pass = "delphix"
+$TARGET_ENV = "Windows Target"
 
 # 
 # Session JSON Data ...
@@ -64,21 +95,21 @@ $json = @"
     \"type\": \"HostEnvironmentCreateParameters\",
     \"primaryUser\": {
         \"type\": \"EnvironmentUser\",
-        \"name\": \"DELPHIX\\delphix_admin\",
+        \"name\": \"${host_user}\",
         \"credential\": {
             \"type\": \"PasswordCredential\",
-            \"password\": \"delphix\"
+            \"password\": \"${host_pass}\"
         }
     },
     \"hostEnvironment\": {
         \"type\": \"WindowsHostEnvironment\",
-        \"name\": \"Windows Target\"
+        \"name\": \"${TARGET_ENV}\"
     },
     \"hostParameters\": {
         \"type\": \"WindowsHostCreateParameters\",
         \"host\": {
             \"type\": \"WindowsHost\",
-            \"address\": \"172.16.160.196\",
+            \"address\": \"${host_name}\",
             \"connectorPort\": 9100
         }
     }
