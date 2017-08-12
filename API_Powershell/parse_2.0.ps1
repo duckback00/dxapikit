@@ -71,5 +71,3 @@ write-output "cores: $tmp"
 #
 write-output "${nl}Done ...${nl}"
 exit;
-
-
