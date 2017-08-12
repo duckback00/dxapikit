@@ -1,30 +1,45 @@
-# Filename: link_sqlserver.ps1
-# Description: Delphix Powershell Sample Authentication Script ...
-# Date: 2016-08-02
-# Author: Bitt...
 #
-
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Variables ...
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-$nl = [Environment]::NewLine
-$BaseURL = "http://172.16.160.195/resources/json/delphix"
-$cookie = "cookies.txt"
-$delphix_user = "delphix_admin"
-$delphix_pass = "delphix"
-
-$CONTENT_TYPE="Content-Type: application/json"
-$DELAYTIMESEC=10
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2017 by Delphix. All rights reserved.
+#
+# Program Name : link_sqlserver.ps1
+# Description  : Delphix PowerShell API Link dSource Example  
+# Author       : Alan Bitterman
+# Created      : 2017-08-09
+# Version      : v1.0.0
+#
+# Requirements :
+#  1.) curl command line libraries
+#  2.) Populate Delphix Engine Connection Information . .\delphix_engine_conf.ps1
+#  3.) Change values below as required
+#
+# Usage: ./link_sqlserver.ps1 
+#
+#########################################################
+#                   DELPHIX CORP                        #
+# Please make changes to the parameters below as req'd! #
+#########################################################
 
 #
 # Required for Database Link and Sync ...
 #
-$DELPHIX_NAME="delphixdb"           # Delphix dSource Name
-$DELPHIX_GRP="Windows_Source"       # Delphix Group Name
+$DELPHIX_NAME="delphix_demo"        # Delphix dSource Name
+$DELPHIX_GRP="Windows Source"       # Delphix Group Name
 
-$SOURCE_ENV="Window Target"         # Source Enviroment Name
+$SOURCE_ENV="Windows Target"        # Source Enviroment Name
 $SOURCE_INSTANCE="MSSQLSERVER"      # Source Database Oracle Home or SQL Server Instance  Name
-$SOURCE_SID="delphixdb"             # Source Environment Database SID
+$SOURCE_SID="delphix_demo"          # Source Environment Database SID
 $SOURCE_DB_USER="sa"                # Source Database user account
 $SOURCE_DB_PASS="delphix"           # Source Database user password
 
@@ -32,93 +47,38 @@ $SOURCE_DB_PASS="delphix"           # Source Database user password
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
 
-#
-# Local Functions ...
-#
-. .\parseFunctions.ps1
+#########################################################
+## Local Functions ...
+
+. .\delphixFunctions.ps1
 
 #########################################################
-#
-# Authentication ...
-#
-write-output "Authenticating on ${BaseURL}"
+## Parameter Initialization ...
 
-# 
-# Session JSON Data ...
-#
-#write-output "Creating session.json file ..."
-$json = @"
-{
-    "type": "APISession",
-    "version": {
-        "type": "APIVersion",
-        "major": 1,
-        "minor": 7,
-        "micro": 0
-    }
-}
-"@
+. .\delphix_engine_conf.ps1
 
-#
-# Output File using UTF8 encoding ...
-#
-write-output $json | Out-File "session.json" -encoding utf8
+#########################################################
+## Authentication ...
 
-#
-# Delphix Curl Session API ...
-#
-#write-output "Calling Session API ... "
-$results = (curl --insecure -c "${cookie}" -sX POST -H "${CONTENT_TYPE}" -d "@session.json" -k ${BaseURL}/session)
-#write-output "Session API Results: ${results}"
+write-output "Authenticating on ${BaseURL} ... ${nl}"
 
-# Convert Results String to JSON Object and Get Results Status ...
+$results=RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" 
+#write-output "${nl} Results are ${results} ..."
+
 $o = ConvertFrom-Json20 $results
-$status=$o.status			#echo "Status ... $status ${nl}"
+$status=$o.status                       #echo "Status ... $status ${nl}"
 if ("${status}" -ne "OK") {
    echo "Job Failed with ${status} Status ${nl} $results ${nl}"
    exit 1
 }
 
-#
-# Login JSON Data ...
-# 
-#write-output "Creating login.json file ..."
-$json = @"
-{
-    "type": "LoginRequest",
-    "username": "${delphix_user}",
-    "password": "${delphix_pass}"
-}
-"@
-
-#
-# Output File using UTF8 encoding ...
-#
-write-output $json | Out-File "login.json" -encoding utf8
-
-#
-# Delphix Curl Login API ...
-#
-#write-output "Calling Login API ..."
-$results = (curl --insecure -b "${cookie}" -sX POST -H "${CONTENT_TYPE}" -d "@login.json" -k ${BaseURL}/login)
-#write-output "Login API Results: ${results}"
-
-# Convert Results String to JSON Object and Get Results Status ...
-$o = ConvertFrom-Json20 $results
-$status=$o.status			#echo "Status ... $status ${nl}"
-if ("${status}" -ne "OK") {
-   echo "Job Failed with ${status} Status ${nl} $results ${nl}"
-   exit 1
-}
 echo "Login Successful ..."
 
-
-
 #########################################################
-## Get or Create Group
+## Get Group Reference ...
 
 #write-output "${nl}Calling Group API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/group)
+$results = (curl.exe --insecure -sX GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}")
 #write-output "Group API Results: ${results}"
 
 # Convert Results String to JSON Object and Get Results Status ...
@@ -137,10 +97,10 @@ $GROUP_REFERENCE=$b.reference
 echo "group reference: ${GROUP_REFERENCE}"
 
 #########################################################
-## Get sourceconfig
+## Get sourceconfig ...
 
 #write-output "${nl}Calling sourceconfig API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/sourceconfig)
+$results = (curl.exe --insecure -sX GET -k ${BaseURL}/sourceconfig -b "${COOKIE}" -H "${CONTENT_TYPE}")
 #write-output "sourceconfig API Results: ${results}"
 
 # Convert Results String to JSON Object and Get Results Status ...
@@ -159,10 +119,10 @@ $SOURCE_CFG=$b.reference
 echo "sourceconfig reference: ${SOURCE_CFG}"
 
 #########################################################
-## Get Environment reference
+## Get Environment reference ...
 
 #write-output "${nl}Calling environment API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/environment)
+$results = (curl.exe --insecure -sX GET -k ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TYPE}")
 #write-output "environment API Results: ${results}"
 
 $o = ConvertFrom-Json20 $results
@@ -172,11 +132,13 @@ $b = $a | where { $_.name -eq "${SOURCE_ENV}" } | Select-Object
 $ENV_REFERENCE=$b.reference
 echo "env reference: ${ENV_REFERENCE}"
 
+#ENV_REFERENCE=$( parseResults "${STATUS}" "${SOURCE_ENV}" "name" "reference" )
+
 #########################################################
-## Get Repository reference
+## Get Repository reference ...
 
 #write-output "${nl}Calling repository API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/repository)
+$results = (curl.exe --insecure -sX GET -k ${BaseURL}/repository -b "${COOKIE}" -H "${CONTENT_TYPE}")
 #write-output "repository API Results: ${results}"
 
 # Convert Results String to JSON Object and Get Results Status ...
@@ -194,41 +156,39 @@ $b = $a | where { $_.name -eq "${SOURCE_INSTANCE}" } | Select-Object
 $REP_REFERENCE=$b.reference
 echo "repository reference: ${REP_REFERENCE}"
 
-#
-# Parse ...
-#
-#REP_REFERENCE=$( parseResults "${STATUS}" "${ENV_REFERENCE}" "environment" "reference" )
-#echo "repository reference: ${REP_REFERENCE}"
-
 #########################################################
-## Link Source Database ...
+## Provision a SQL Server Database ...
 
 $json = @"
 {
-    "type": "LinkParameters",
-    "group": "${GROUP_REFERENCE}",
-    "linkData": {
-        "type": "MSSqlLinkData",
-        "config": "${SOURCE_CFG}",
-        "dbCredentials": {
-            "type": "PasswordCredential",
-            "password": "${SOURCE_DB_PASS}"
+    \"type\": \"LinkParameters\",
+    \"group\": \"${GROUP_REFERENCE}\",
+    \"linkData\": {
+        \"type\": \"MSSqlLinkData\",
+        \"config\": \"${SOURCE_CFG}\",
+        \"dbCredentials\": {
+            \"type\": \"PasswordCredential\",
+            \"password\": \"${SOURCE_DB_PASS}\"
         },
-        "dbUser": "${SOURCE_DB_USER}",
-        "pptRepository": "${REP_REFERENCE}"
+        \"dbUser\": \"${SOURCE_DB_USER}\",
+        \"pptRepository\": \"${REP_REFERENCE}\"
     },
-    "name": "${DELPHIX_NAME}"
+    \"name\": \"${DELPHIX_NAME}\"
 }
 "@
+
 
 # linkData Options
 #       , "validatedSyncMode": "NONE"
 
-write-output $json | Out-File "link_sqlserver.json" -encoding utf8
+#
+# Output File using UTF8 encoding ...
+#
+write-output $json | Out-File "provision_sqlserver.json" -encoding utf8
 
-#write-output "${nl}Calling database link API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX POST -H "Content-Type: application/json" -d "@link_sqlserver.json" -k ${BaseURL}/database/link)
-write-output "database link API Results: ${results}"
+#write-output "${nl}Calling database provision API ...${nl}"
+$results = (curl.exe --insecure -sX POST -k ${BaseURL}/database/link -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
+write-output "database provision API Results: ${results}"
 
 # Convert Results String to JSON Object and Get Results Status ...
 $o = ConvertFrom-Json20 $results
@@ -248,7 +208,7 @@ $JOB=$o.job
 echo "Job # $JOB ${nl}"
 
 # 
-# Fast Job, allow to finish before while loop ...
+# Allow job to submit internally before while loop ...
 #
 sleep 2
 
@@ -256,11 +216,11 @@ sleep 2
 # Job Information ...
 #
 #write-output "${nl}Calling job API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/job/${JOB})
+$results = (curl.exe --insecure -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
 #write-output "job API Results: ${results}"
 
 $o = ConvertFrom-Json20 "${results}"		#$o
-$a = $o.result								#$a
+$a = $o.result					#$a
 
 #
 # Get Job Status and Job Information ...
@@ -279,7 +239,7 @@ DO
   $d = Get-Date
   echo "Current status as of ${d} : ${JOBSTATE} : ${PERCENTCOMPLETE}% Completed"
   sleep ${DELAYTIMESEC}
-  $results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/job/${JOB})
+  $results = (curl.exe --insecure -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
   $o = ConvertFrom-Json20 "${results}"
   $a = $o.result
   $JOBSTATE=$a.jobState
@@ -295,7 +255,6 @@ if ("${JOBSTATE}" -eq "COMPLETED") {
 } else {
    echo "Job Failed with ${JOBSTATE} Status ${nl}"
 }
-
 
 #########################################################
 #
@@ -310,11 +269,11 @@ echo "JOB $JOB ${nl}"
 # Job Information ...
 #
 #write-output "${nl}Calling job API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/job/${JOB})
+$results = (curl.exe --insecure -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
 #write-output "job API Results: ${results}"
 
 $o = ConvertFrom-Json20 "${results}"		#$o
-$a = $o.result								#$a
+$a = $o.result					#$a
 
 #
 # Get Job Status and Job Information ...
@@ -333,7 +292,7 @@ DO
   $d = Get-Date
   echo "Current status as of ${d} : ${JOBSTATE} : ${PERCENTCOMPLETE}% Completed"
   sleep ${DELAYTIMESEC}
-  $results = (curl --insecure -b "${cookie}" -sX GET -H "${CONTEXT_TYPE}" -k ${BaseURL}/job/${JOB})
+  $results = (curl.exe --insecure -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
   $o = ConvertFrom-Json20 "${results}"
   $a = $o.result
   $JOBSTATE=$a.jobState
@@ -350,9 +309,8 @@ if ("${JOBSTATE}" -eq "COMPLETED") {
    echo "Job Failed with ${JOBSTATE} Status ${nl}"
 }
 
-
-#
-# The End is Near ...
-#
-echo "${nl}Done ...${nl}"
-exit;
+############## E O F ####################################
+echo " "
+echo "Done ..."
+echo " "
+exit 0
