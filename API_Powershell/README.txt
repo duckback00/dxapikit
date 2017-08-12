@@ -45,9 +45,13 @@ Requirements
 ============
 
 
-Powershell Version 
+PowerShell Version 
 ------------------
-Windows has a number of versions of Powershell. The minimum version for Delphix is 2.0 for SQL Server 2008 environments. There are numerous enhancements and features with subsequent Powershell versions. Additionally, you must be aware of the architecture of 32bit or 64bit Powershell versions you are running from within.
+Windows has a number of versions of PowerShell. The minimum version for Delphix is 2.0 for SQL Server 2008 environments. There are numerous enhancements and features with subsequent Powershell versions. 
+
+These examples are for PowerShell 2.0 or later. In PowerShell 2.0 there are no JSON parsing modules, so these scripts include JSON parsing functions. Starting with PowerShell 3.0 and later, native JSON parsing modules are included in PowerShell. The 2.0 JSON parsing functions are different than the PowerShell 3.0 or later modules, PLEASE update the scripts accordingly if you do not want to use the provided 2.0 JSON functions.
+
+Additionally, you must be aware of the architecture of 32bit or 64bit Powershell versions you are running from within.
 
 PS> $PSVersionTable.PSVersion
 Major Minor Build Revision
@@ -162,22 +166,24 @@ Sample Scripts
 --------------
 
 Windows Included Config Script
-        Delphix Engine Configuration Parameter Values   Filename: delphix_engine_conf.ps1
-        Powershell Functions in Examples          	Filename: delphixFunctions.sh
+        Delphix Engine Configuration Parameter Values   	Filename: delphix_engine_conf.ps1
+        Powershell Functions in Examples          		Filename: delphixFunctions.sh
 
 Authentication
-	Windows Powershell Authentication           	Filename: auth1.ps1
-	Windows Powershell Authentication           	Filename: auth2.ps1
+	Windows Powershell Authentication no Functions  	Filename: auth1.ps1
+	Windows Powershell Authentication w/Functions          	Filename: auth2.ps1
 
 Windows / SQL Server
+	Delphix PowerShell API Create Env Example		Filename: create_window_target_env.ps1
+	Link/Ingest a SQL Server dSource  			Filename: link_sqlserver.ps1
+	Provision a SQL Server VDB 				Filename: provision_sqlserver.ps1
+	Delete a SQL Server dSource or VDB 			Filename: delete_database_sqlserver.ps1
 
-	Link/Ingest a SQL Server dSource  		Filename: link_sqlserver.ps1
-	Provision a SQL Server VDB 			Filename: provision_sqlserver.ps1
-	Delete a SQL Server dSource or VDB 		Filename: delete_database_sqlserver.ps1
+PowerShell 2.0 JSON Parsing Examples
+	Sample JSON Parsing for PowerShell 2.#.# Version	FIlename: parse_2.0.ps1
 
-PS 2.0 JSON Parsing Examples
-	Sample JSON Parsing for PS 2.#.# Version	FIlename: parse_2.0.ps1
-NOTE: Starting with PS 3.0 and later, native JSON parsing modules are included.
+NOTE: Starting with PowerShell 3.0 and later, native JSON parsing modules are included. The 2.0 JSON parsing functions are different than the PowerShell 3.0 or later modules, PLEASE update the scripts accordingly if you do not want to use the provided 2.0 JSON functions.
+
 
 *** WIP contact me for details or updates ***
 
