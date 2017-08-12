@@ -16,6 +16,11 @@ DxAPIkit is a set of scripts, which are provided by Delphix personnel. DxAPIkit 
    Check a documentation for more details
    https://docs.delphix.com/docs/files/77120152/77121389/1/1501725989988/So+you+want+to+work+with+Delphix+APIs.pdf
 
+## Delphix Engine Versions Tested
+- 5.1.5
+- 5.1.6
+- 5.1.7
+
 ## Required Packages
 
 curl://
