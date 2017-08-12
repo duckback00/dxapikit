@@ -4,10 +4,11 @@
 
 ## What is it?
 
-DxAPIkit is a set of scripts, which are provided by Delphix personnel. DxAPIkit scripts constist of Mac/Unix/Linux shell scripts and Windows PowerShell scripts. 
+DxAPIkit is a set of scripts, which are provided by Delphix personnel. DxAPIkit scripts constist of Mac/Unix/Linux shell scripts and Windows PowerShell scripts. Also included, are Masking Scripts for both platforms as well.
 
 - API
 - API_Powershell 
+- Masking
 
 The Windows PowerShell scripts utilize the provided JSON parser functions (or native JSON parser module after PowerShell version 3) while the Mac/Unix/Linux shell scripts require the jq command line JSON parser.  
 
