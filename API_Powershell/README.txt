@@ -161,17 +161,17 @@ curl 7.49.1 (x86_64-w64-mingw32) ...
 Sample Scripts
 --------------
 
+Windows Included Config Script
+        Delphix Engine Configuration Parameter Values   Filename: delphix_engine_conf.ps1
+        Powershell Functions in Examples          	Filename: delphixFunctions.sh
+
 Authentication
 	Windows Powershell Authentication           	Filename: auth1.ps1
+	Windows Powershell Authentication           	Filename: auth2.ps1
 
 Windows / SQL Server
-	Powershell Functions 		          	Filename: parseFunctions.ps1
-	Create a Windows Target Environment		Filename: create_window_target_env.ps1
 	Link/Ingest a SQL Server dSource  		Filename: link_sqlserver.ps1
 	Provision a SQL Server VDB 			Filename: provision_sqlserver.ps1
-	Provision a VDB from a VDB 			Filename: provision_sqlserver_child.ps1
-	Delete a dSource or Virtural Database		Filename: delete_database_sqlserver.ps1
-	Refresh a VDB with Powershell		        Filename: windows_sqlserver_refresh.txt
 
 
 *** WIP contact me for details or updates ***
