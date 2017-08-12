@@ -172,6 +172,7 @@ Authentication
 Windows / SQL Server
 	Link/Ingest a SQL Server dSource  		Filename: link_sqlserver.ps1
 	Provision a SQL Server VDB 			Filename: provision_sqlserver.ps1
+	Delete a SQL Server dSource or VDB 		Filename: delete_database_sqlserver.ps1
 
 
 *** WIP contact me for details or updates ***
