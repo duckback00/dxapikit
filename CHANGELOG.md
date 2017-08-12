@@ -1,6 +1,8 @@
 # Change Log 
 
-This is a new repository. Scripts are in the process of being uploaded and verified.  Please check back soon for "verified" release.
+## August 12, 2017
 
-Regards,
-Bitt...
+This is a new repository, thus the initial publishing of the scripts
+
+Please see each folders respective README file for details
+
