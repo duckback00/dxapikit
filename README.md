@@ -73,7 +73,7 @@ jq is a lightweight and flexible command-line JSON processor
 
 ## Other Projects of Interest
 
-**dxtoolkit** Great Perl Library of Programs that use the Delphix API
+**dxtoolkit** Great Perl Library of Programs that use the Delphix APIs
 https://github.com/delphix/dxtoolkit
 
 
