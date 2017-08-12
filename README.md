@@ -7,9 +7,15 @@
 DxAPIkit is a set of scripts, which are provided by Delphix personnel. DxAPIkit scripts constist of Mac/Unix/Linux shell scripts and Windows PowerShell scripts. 
 
 - API
-- API_PowerShell 
+- API_Powershell 
 
-The Windows PowerShell scripts utilize the provided JSON parser functions (or native JSON parser module after PowerShell version 3) while the Mac/Unix/Linux shell scripts require the jq command line JSON parser.  All scripts require the curl command line library. The scripts are provided as shell scripts and can be easily ported to your favorite programming language of choice if desirable. Knowledge of the Delphix Engine is required with limited programming experience recommended to use the DxAPIkit. The goal for this project is to help Delphix users get up to speed quickly on how to use the Delphix API's.
+The Windows PowerShell scripts utilize the provided JSON parser functions (or native JSON parser module after PowerShell version 3) while the Mac/Unix/Linux shell scripts require the jq command line JSON parser.  
+
+All scripts require the curl command line library. 
+
+The scripts are provided as shell scripts and can be easily ported to your favorite programming language of choice if desirable. Knowledge of the Delphix Engine is required with limited programming experience recommended to use the DxAPIkit. 
+
+The goal for this project is to help Delphix users get up to speed quickly on how to use the Delphix API's.
 
 
 ## What's new?
