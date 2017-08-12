@@ -16,7 +16,7 @@
 # Program Name : auth2.ps1
 # Description  : Delphix PowerShell API Basic Example  
 # Author       : Alan Bitterman
-# Created      : 2017-08-09
+# Created      : 2017-08-10
 # Version      : v1.0.0
 #
 # Requirements :
