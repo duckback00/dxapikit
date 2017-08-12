@@ -170,10 +170,14 @@ Authentication
 	Windows Powershell Authentication           	Filename: auth2.ps1
 
 Windows / SQL Server
+
 	Link/Ingest a SQL Server dSource  		Filename: link_sqlserver.ps1
 	Provision a SQL Server VDB 			Filename: provision_sqlserver.ps1
 	Delete a SQL Server dSource or VDB 		Filename: delete_database_sqlserver.ps1
 
+PS 2.0 JSON Parsing Examples
+	Sample JSON Parsing for PS 2.#.# Version	FIlename: parse_2.0.ps1
+NOTE: Starting with PS 3.0 and later, native JSON parsing modules are included.
 
 *** WIP contact me for details or updates ***
 
