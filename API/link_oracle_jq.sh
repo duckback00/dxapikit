@@ -37,9 +37,9 @@
 # Required for Database Link and Sync ...
 #
 DELPHIX_NAME="orcl"               # Delphix dSource Name
-DELPHIX_GRP="Oracle Source"       # Delphix Group Name
+DELPHIX_GRP="Oracle_Source"       # Delphix Group Name
 
-SOURCE_ENV="Linux Source"         # Source Enviroment Name
+SOURCE_ENV="Linux Host"           # Source Enviroment Name
 SOURCE_SID="orcl"                 # Source Environment Database SID
 DB_USER="delphixdb"               # Source Database SID user account
 DB_PASS="delphixdb"               # Source Database SID user password
