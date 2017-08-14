@@ -40,8 +40,8 @@ SOURCE_SID="VBITT"               # dSource name used to get db container referen
 
 VDB_NAME="VBITT2"                # Delphix VDB Name
 MOUNT_BASE="/mnt/provision"      # Delphix Engine Mount Path 
-DELPHIX_GRP="Oracle Source"      # Delphix Engine Group Name
-TARGET_ENV="Linux Source"        # Target Environment used to get repository reference value 
+DELPHIX_GRP="Oracle_Target"      # Delphix Engine Group Name
+TARGET_ENV="Linux Host"          # Target Environment used to get repository reference value 
 TARGET_HOME="/u01/app/oracle/product/11.2.0.4/db_1"   # Target Instance within Environment 
 
 ARCHIVELOGMODE="false"            # true or false ONLY
