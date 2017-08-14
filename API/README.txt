@@ -3,6 +3,8 @@ v1.0
 
 ** So you want to work with the Delphix APIs? **
 
+Unix/Linux/Mac Shell Scripts
+
 Disclaimer: As always, these scripts are provided "as-is" and the end user is responsible
 for the application and usage of these scripts within their environment. Test, verify, 
 re-test, and re-verify prior to using any code into production. 
