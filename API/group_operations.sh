@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 # Description  : Delphix API for groups
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.0.0
+# Version      : v1.0.1 2017-08-14
 #
 # Requirements :
 #  1.) curl and jq command line libraries
@@ -27,7 +27,7 @@
 #
 # Interactive Usage: ./group_operations.sh
 #
-# Non-Interactive Usage: ./group_operations.sh [Group_Name] [create | delete]
+# Non-Interactive Usage: ./group_operations.sh [create | delete] [Group_Name]
 #
 # Sample script to create or delete a Delphix Engine Group object ... 
 #
@@ -61,36 +61,17 @@ fi
 echo "Session and Login Successful ..."
 
 #########################################################
-## List Existing Group Names ...
+## Get List of Existing Group Names ...
 
 STATUS=`curl -s -X GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "group: ${STATUS}"
 RESULTS=$( jqParse "${STATUS}" "status" )
 
-#
-# Parse out group names ...
-#
-GROUP_NAMES=`echo ${STATUS} | jq --raw-output '.result[] | .name '`
-echo "Existing Group Names: "
-echo "${GROUP_NAMES}"
-
+#########################################################
 #
 # Command Line Arguments ...
 #
-DELPHIX_GRP="$1"
-if [[ "${DELPHIX_GRP}" == "" ]]
-then
-   echo "Please Enter Group Name (case sensitive): "
-   read DELPHIX_GRP
-   if [ "${DELPHIX_GRP}" == "" ]
-   then
-      echo "No Group Name Provided, Exiting ..."
-      exit 1;
-   fi
-fi;
-export DELPHIX_GRP
-
-ACTION=$2
+ACTION=$1
 if [[ "${ACTION}" == "" ]]
 then
    echo "Please Enter Group Option [create | delete] : "
@@ -104,19 +85,25 @@ then
 fi
 export ACTION
 
-#########################################################
-# Authentication ...
-#
-
-RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" )
-#echo "Results: ${RESULTS}"
-if [ "${RESULTS}" != "OK" ]
+DELPHIX_GRP="$2"
+if [[ "${DELPHIX_GRP}" == "" ]]
 then
-   echo "Error: Exiting ..."
-   exit 1;
-fi
+   #
+   # Parse out group names ...
+   #
+   GROUP_NAMES=`echo ${STATUS} | jq --raw-output '.result[] | .name '`
+   echo "Existing Group Names: "
+   echo "${GROUP_NAMES}"
 
-echo "Session and Login Successful ..."
+   echo "Please Enter Group Name (case sensitive): "
+   read DELPHIX_GRP
+   if [ "${DELPHIX_GRP}" == "" ]
+   then
+      echo "No Group Name Provided, Exiting ..."
+      exit 1;
+   fi
+fi;
+export DELPHIX_GRP
 
 #########################################################
 ## Get Group Reference ...
