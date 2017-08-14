@@ -36,7 +36,7 @@ curl -X POST -k --data @- ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TY
     },
     "hostEnvironment": {
         "type": "UnixHostEnvironment",
-        "name": "Oracle Target"
+        "name": "Linux Host"
     },
     "hostParameters": {
         "type": "UnixHostCreateParameters",
