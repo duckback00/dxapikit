@@ -8,7 +8,7 @@
 ./group_operations.sh create "Windows_Source"
 ./group_operations.sh create "Windows_Target"
 
-
+./group_operations.sh delete Untitled
 
 #
 # Verify Oracle Environment is Up and listener/database are running ...
@@ -20,6 +20,4 @@
 #
 #./create_window_target_env.sh
 #. .\create_window_target_env.ps1
-
-
 
