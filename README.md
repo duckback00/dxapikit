@@ -33,10 +33,8 @@ Thegoal for this project is to help Delphix users get up to speed quickly on how
 
 
 ## Delphix Engine Versions Tested
-- 5.1.5
-- 5.1.6
-- 5.1.7
-- 5.1.8
+- 5.0.#
+- 5.1.# including 5.1.8 
 
 
 ## Required Packages
