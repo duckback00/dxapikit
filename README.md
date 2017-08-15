@@ -26,7 +26,7 @@ Thegoal for this project is to help Delphix users get up to speed quickly on how
 
 ## How to get started
 
-   Check a documentation for more details
+   Check Delphix documentation for more details
    https://docs.delphix.com/docs/files/77120152/77121389/1/1501725989988/So+you+want+to+work+with+Delphix+APIs.pdf
 
    Please see each folders respective README file for details
