@@ -44,7 +44,7 @@ curl://
 curl is command line tool and library for transferring data with URLs 
 - NOTE: The curl command library is included with most operating systems
 - References: https://github.com/curl/curl     https://curl.haxx.se/
-- Versions Tested: curl 7.19.7 
+- Versions Tested: curl 7.19.7, 7.43.0 
   
 
 ./jq 
@@ -52,7 +52,7 @@ curl is command line tool and library for transferring data with URLs
 jq is a lightweight and flexible command-line JSON processor
 - Required for **Mac/Unix/Linux Platforms ONLY**
 - References: https://stedolan.github.io/jq/  
-- Versions Tested: jq version 1.3
+- Versions Tested: jq version 1.3, 1.4 
 	
 	      
 ## Legalness
