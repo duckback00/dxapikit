@@ -16,7 +16,7 @@ All scripts require the curl command line library.
 
 The scripts are provided as shell scripts and can be easily ported to your favorite programming language of choice if desirable. Knowledge of the Delphix Engine is required with limited programming experience recommended to use the DxAPIkit. 
 
-Thegoal for this project is to help Delphix users get up to speed quickly on how to use the Delphix API's.
+The goal for this project is to help Delphix users get up to speed quickly on how to use the Delphix API's.
 
 
 ## What's new?
