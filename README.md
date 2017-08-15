@@ -36,6 +36,7 @@ Thegoal for this project is to help Delphix users get up to speed quickly on how
 - 5.1.5
 - 5.1.6
 - 5.1.7
+- 5.1.8
 
 
 ## Required Packages
