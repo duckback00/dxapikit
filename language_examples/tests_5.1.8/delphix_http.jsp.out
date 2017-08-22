@@ -1,0 +1,42 @@
+http://localhost:8080/demoapp/delphix_http.jsp
+
+Trying ...
+session> {"type":"OKResult","status":"OK","result":{"type":"APISession","version":{"type":"APIVersion","major":1,"minor":7,"micro":0},"locale":null,"client":null},"job":null,"action":null} 
+cookie> JSESSIONID=BA57F546C050519237C0EA73CBAD6CED
+login> {"type":"OKResult","status":"OK","result":"USER-2","job":null,"action":null} 
+system results> {"type":"OKResult",
+"status":"OK",
+"result":{"type":"SystemInfo",
+"productType":"standard",
+"productName":"Delphix Engine",
+"buildTitle":"Delphix Engine 5.1.8.0",
+"buildTimestamp":"2017-08-09T16:13:01.000Z",
+"buildVersion":{"type":"VersionInfo",
+"major":5,
+"minor":1,
+"micro":8,
+"patch":0},
+"configured":true,
+"enabledFeatures":["XPP",
+"MDD",
+"JETSTREAM"],
+"apiVersion":{"type":"APIVersion",
+"major":1,
+"minor":8,
+"micro":2},
+"banner":null,
+"locales":["en-US"],
+"currentLocale":"en-US",
+"hostname":"Delphix5180HWv8",
+"sshPublicKey":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDrQmFW9eheOVcQywWAriKtVon62hPB3lGMjHTfGpF6P7AeU+q230pYJtCw8a2ru5fIsg0/TIhn733ovUgYmrVmRH/pMODhu9V6pUDugRtYlcvVPXZgiUGDvfmGriJG+I5RY1Me18q95fyDjp5aFbw00+nXwn3DVPkgzbHMCd6eRMfiu9HTTJBV+SYzAtAvJcmcdjIZl235NNjGm3NhKfIL5Qk0FmZr6HBqkdrLpecMkMw4Mg6+1tazB+AmDKt5VMiTPDdPS8aascO/tFJRBgsFYhGq0Y7TTzLENtsd99D9hAwV3UwE4UFOzPKnbksb94/suCDirF+L3y3OTk4glexr root@Delphix5180HWv8\n",
+"memorySize":8.58107904E9,
+"platform":"VMware with BIOS date 05/20/2014",
+"uuid":"564dff35-d01c-5f45-1fb9-4f8583fd8b38",
+"processors":[{"type":"CPUInfo",
+"speed":2.5E9,
+"cores":1}],
+"storageUsed":1.0774153216E10,
+"storageTotal":3.0945574912E10,
+"installationTime":"2017-08-14T18:15:45.000Z"},
+"job":null,
+"action":null}

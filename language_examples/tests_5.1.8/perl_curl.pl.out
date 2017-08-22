@@ -1,0 +1,19 @@
+abitterman-mbpro:language_examples abitterman$ perl -version
+
+This is perl 5, version 18, subversion 2 (v5.18.2) built for darwin-thread-multi-2level
+(with 2 registered patches, see perl -V for more detail)
+
+
+
+
+abitterman-mbpro:language_examples abitterman$ perl perl_curl.pl
+Testing cURL on Perl ...
+
+Session Results: {"type":"OKResult","status":"OK","result":{"type":"APISession","version":{"type":"APIVersion","major":1,"minor":7,"micro":0},"locale":null,"client":null},"job":null,"action":null} 
+
+Login Results: {"type":"OKResult","status":"OK","result":"USER-2","job":null,"action":null} 
+
+Enviornment Results: {"type":"ListResult","status":"OK","result":[{"type":"WindowsHostEnvironment","reference":"WINDOWS_HOST_ENVIRONMENT-3","namespace":null,"name":"Windows Target","description":"","primaryUser":"HOST_USER-4","enabled":false,"host":"WINDOWS_HOST-3","proxy":null},{"type":"UnixHostEnvironment","reference":"UNIX_HOST_ENVIRONMENT-1","namespace":null,"name":"Linux Host","description":null,"primaryUser":"HOST_USER-1","enabled":true,"host":"UNIX_HOST-1","aseHostEnvironmentParameters":null}],"job":null,"action":null,"total":2,"overflow":false} 
+
+Done
+abitterman-mbpro:language_examples abitterman$

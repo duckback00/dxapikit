@@ -1,0 +1,15 @@
+abitterman-mbpro:language_examples abitterman$ python --version
+Python 2.7.10
+
+bitterman-mbpro:language_examples abitterman$ python auth.py
+Authenticating URL http://172.16.160.195/resources/json/delphix ... 
+{"type":"OKResult","status":"OK","result":{"type":"APISession","version":{"type":"APIVersion","major":1,"minor":7,"micro":0},"locale":null,"client":null},"job":null,"action":null}
+Login ... 
+{"type":"OKResult","status":"OK","result":"USER-2","job":null,"action":null}
+About ... 
+{"type":"OKResult","status":"OK","result":{"type":"PublicSystemInfo","productType":"standard","productName":"Delphix Engine","buildTitle":"Delphix Engine 5.1.8.0","buildTimestamp":"2017-08-09T16:13:01.000Z","buildVersion":{"type":"VersionInfo","major":5,"minor":1,"micro":8,"patch":0},"configured":true,"enabledFeatures":["XPP","MDD","JETSTREAM"],"apiVersion":{"type":"APIVersion","major":1,"minor":8,"micro":2},"banner":null,"locales":["en-US"],"currentLocale":"en-US"},"job":null,"action":null}
+JSON Parsing Examples ...
+OK
+Delphix Engine 5.1.8.0
+1
+abitterman-mbpro:language_examples abitterman$

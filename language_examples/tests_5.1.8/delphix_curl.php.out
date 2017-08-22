@@ -1,0 +1,62 @@
+abitterman-mbpro:language_examples abitterman$ php -version
+PHP 5.5.38 (cli) (built: Mar 30 2017 12:11:07) 
+Copyright (c) 1997-2015 The PHP Group
+Zend Engine v2.5.0, Copyright (c) 1998-2015 Zend Technologies
+
+abitterman-mbpro:language_examples abitterman$ php delphix_curl.php
+Session json> {"type":"APISession","version":{"type":"APIVersion","major":1,"minor":7,"micro":0}} 
+Session Results> {"type":"OKResult","status":"OK","result":{"type":"APISession","version":{"type":"APIVersion","major":1,"minor":7,"micro":0},"locale":null,"client":null},"job":null,"action":null} 
+Login json> {"type":"LoginRequest","username":"delphix_admin","password":"delphix"} 
+Login Results> {"type":"OKResult","status":"OK","result":"USER-2","job":null,"action":null} 
+Calling About API ...
+About Results> {"type":"OKResult","status":"OK","result":{"type":"PublicSystemInfo","productType":"standard","productName":"Delphix Engine","buildTitle":"Delphix Engine 5.1.8.0","buildTimestamp":"2017-08-09T16:13:01.000Z","buildVersion":{"type":"VersionInfo","major":5,"minor":1,"micro":8,"patch":0},"configured":true,"enabledFeatures":["XPP","MDD","JETSTREAM"],"apiVersion":{"type":"APIVersion","major":1,"minor":8,"micro":2},"banner":null,"locales":["en-US"],"currentLocale":"en-US"},"job":null,"action":null} 
+Converting json string to a PHP Array 
+stdClass Object
+(
+    [type] => OKResult
+    [status] => OK
+    [result] => stdClass Object
+        (
+            [type] => PublicSystemInfo
+            [productType] => standard
+            [productName] => Delphix Engine
+            [buildTitle] => Delphix Engine 5.1.8.0
+            [buildTimestamp] => 2017-08-09T16:13:01.000Z
+            [buildVersion] => stdClass Object
+                (
+                    [type] => VersionInfo
+                    [major] => 5
+                    [minor] => 1
+                    [micro] => 8
+                    [patch] => 0
+                )
+
+            [configured] => 1
+            [enabledFeatures] => Array
+                (
+                    [0] => XPP
+                    [1] => MDD
+                    [2] => JETSTREAM
+                )
+
+            [apiVersion] => stdClass Object
+                (
+                    [type] => APIVersion
+                    [major] => 1
+                    [minor] => 8
+                    [micro] => 2
+                )
+
+            [banner] => 
+            [locales] => Array
+                (
+                    [0] => en-US
+                )
+
+            [currentLocale] => en-US
+        )
+
+    [job] => 
+    [action] => 
+)
+abitterman-mbpro:language_examples abitterman$
