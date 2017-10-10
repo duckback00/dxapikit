@@ -108,6 +108,33 @@ Jetstream
 	Create an Jetstream Container in a Template 	Filename: jetstream_container.sh
 	Create a Bookmark within a Branch		Filename: jetstream_bookmark.sh 
 	Refresh a Container from Template Source 	Filename: jetstream_refresh.sh
+
+	#
+	# List Bookmarks per Branch and provides option to Delete Bookmark 
+	#
+	jetstream_list_bookmarks.sh							  
+
+	#
+	# List Branches per Container and provides option to Activate/Delete Branch
+	#
+	jetstream_list_branches.sh                            
+
+	#
+	# Creates a Branch within a Container using the latest Branch Timestamp
+	#
+	jetstream_create_branch_from_latest.sh				  
+
+	#
+	# Creates a Branch within a Container per Bookmark Selection
+	#
+	jetstream_create_branch_from_bookmark.sh              
+
+Snapshots
+	#
+	# Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency 
+	# with option to delete non-dependent snapshots
+	#
+	snapshot_details.sh	
 	
 Jobs
 	Display list of Delphix Engine Jobs		Filename: jobs.sh
