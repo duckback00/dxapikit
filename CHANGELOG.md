@@ -1,35 +1,30 @@
 # Change Log 
 
 ## October 9, 2017
-
-New APIs Added ...
-//
-// List Bookmarks per Branch and provides option to Delete Bookmark 
-//
-jetstream_list_bookmarks.sh							  
-
-//
-// List Branches per Container and provides option to Activate/Delete Branch
-//
-jetstream_list_branches.sh                            
-
-//
-// Creates a Branch within a Container using the latest Branch Timestamp
-//
-jetstream_create_branch_from_latest.sh				  
-
-//
-// Creates a Branch within a Container per Bookmark Selection
-//
-jetstream_create_branch_from_bookmark.sh              
-
-//
-// Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency 
-// with option to delete non-dependent snapshots
-//
-snapshot_details.sh	
-
-
+ <br />
+New APIs Added ... <br />
+ <br />
+List Bookmarks per Branch and provides option to Delete Bookmark  <br />
+Filename: jetstream_list_bookmarks.sh <br />
+ <br />
+ <br />
+List Branches per Container and provides option to Activate/Delete Branch <br />
+Filename: jetstream_list_branches.sh <br />
+ <br />
+ <br />
+Creates a Branch within a Container using the latest Branch Timestamp <br />
+Filename: jetstream_create_branch_from_latest.sh <br />
+ <br />
+ <br />
+Creates a Branch within a Container per Bookmark Selection <br />
+Filename: jetstream_create_branch_from_bookmark.sh <br />
+ <br />
+ <br />
+Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency with option to delete non-dependent snapshots <br />
+Filename: snapshot_details.sh <br />	
+ <br />
+ <br />
+ 
 ## August 12, 2017
 
 This is a new repository, thus the initial publishing of the scripts
