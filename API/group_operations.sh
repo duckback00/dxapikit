@@ -32,6 +32,11 @@
 # Sample script to create or delete a Delphix Engine Group object ... 
 #
 #########################################################
+## Parameter Initialization ...
+
+. ./delphix_engine.conf
+
+#########################################################
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
 
@@ -39,11 +44,6 @@
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
-
-#########################################################
-## Parameter Initialization ...
-
-. ./delphix_engine.conf
 
 #########################################################
 ## Authentication ...
