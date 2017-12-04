@@ -3,9 +3,11 @@
 ## December 3, 2017
  <br />
 <ul>
-<li>All the jetstream APIs where either updated or added ... </li>
-<li>Added the vdb_oracle_template.sh to manage the Delphix template (init parameters) objects for Oracle VDBs</li>
-<li>Added provision_oracle_i.sh for interactive and command line arguements for provisioning an Oracle VDB</li>
+ <li>All the jetstream APIs where either updated or added ... </li>
+ <li>Added the vdb_oracle_template.sh to manage the Delphix template (init parameters) objects for Oracle VDBs</li>
+ <li>Added provision_oracle_i.sh for interactive and command line arguements for provisioning an Oracle VDB</li>
+ <li>Added provision_hana.sh for provisioning a HANA database</li>
+ <li>Added to the jqJSON_subroutines.sh a get API version function</li>  
 </ul>
 <br />
 <br />
