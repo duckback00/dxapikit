@@ -60,93 +60,94 @@ Sample Scripts
 --------------
 
 Linux Included Config Scripts
-        Delphix Engine Configuration Parameter Values	Filename: delphix_engine.conf
-        jq JSON Parsing Functions in Examples           Filename: jqJSON_subroutines.sh
+   Delphix Engine Configuration Parameter Values   Filename: delphix_engine.conf
+   jq JSON Parsing Functions in Examples           Filename: jqJSON_subroutines.sh
 
 Authentication
-	Linux Shell Script Authentication   		Filename: linux_shell_authentication.sh
+   Linux Shell Script Authentication   		   Filename: linux_shell_authentication.sh
 
 Delphix Engine
-	Delphix Engine User Timeout Value 		Filename: user_timeout_jq.sh
-        Concatenate DE Objects into single JSON string  Filename: delphix_objects_json.sh
+   Delphix Engine User Timeout Value 		   Filename: user_timeout_jq.sh
+        Concatenate DE Objects into single JSON string  
+						   Filename: delphix_objects_json.sh
            Usage: . ./delphix_objects_json.sh
                   echo $JSON
 
 Delphix dSource/VDB Operations
-	VDB Init (start|stop|enable|disable|delete) 	Filename: vdb_init.sh
-        VDB Operations (sync|refresh|rollback)          Filename: vdb_operations.sh
+   VDB Init (start|stop|enable|disable|delete) 	   Filename: vdb_init.sh
+   VDB Operations (sync|refresh|rollback)          Filename: vdb_operations.sh
 
 Delphix Groups
-        Group Operations (create|delete) 		Filename: group_operations.sh
+        Group Operations (create|delete) 	   Filename: group_operations.sh
 
 Oracle Database Template (Init Parameters)
-    	List, Create, Update and Delete Oracle Template Parameters   
-							Filename: vdb_oracle_template.sh
-	Sample Oracle Init File				Filename: 200M
+   List, Create, Update and Delete Oracle Template Parameters   
+						   Filename: vdb_oracle_template.sh
+   Sample Oracle Init File			   Filename: 200M
 
 Linux / Oracle Database
-        Link/Ingest an Oracle dSource                   Filename: link_oracle_jq.sh
-        Provision an Oracle VDB                         Filename: provision_oracle_jq.sh
-        Provision another Oracle VDB                    Filename: provision_oracle_child_jq.sh
-        Delete a dSource or Virtural Database           Filename: delete_database_oracle_jq.sh
-        Provision an Oracle VDB Interactive or Command Line Parameters
-							Filename: provision_oracle_i.sh
+   Link/Ingest an Oracle dSource                   Filename: link_oracle_jq.sh
+   Provision an Oracle VDB                         Filename: provision_oracle_jq.sh
+   Provision another Oracle VDB                    Filename: provision_oracle_child_jq.sh
+   Delete a dSource or Virtural Database           Filename: delete_database_oracle_jq.sh
+   Provision an Oracle VDB Interactive or Command Line Parameters
+						   Filename: provision_oracle_i.sh
 
 Linux / ASE Database
-        VDB Init (start|stop|enable|disable|delete)     Filename: vdb_ase_init.sh
-        VDB Operations (sync|refresh|rollback)          Filename: vdb_ase_operations.sh
-        Link/Ingest an ASE dSource                      Filename: link_ase_jq.sh
-        Provision an ASE VDB                            Filename: provision_ase_jq.sh
+   VDB Init (start|stop|enable|disable|delete)     Filename: vdb_ase_init.sh
+   VDB Operations (sync|refresh|rollback)          Filename: vdb_ase_operations.sh
+   Link/Ingest an ASE dSource                      Filename: link_ase_jq.sh
+   Provision an ASE VDB                            Filename: provision_ase_jq.sh
 
 Linux / SQL Server Database
-        Link/Ingest a SQL Server dSource                Filename: link_sqlserver_jq.sh
-        Provision a SQL Server VDB                      Filename: provision_sqlserver_jq.sh
+   Link/Ingest a SQL Server dSource                Filename: link_sqlserver_jq.sh
+   Provision a SQL Server VDB                      Filename: provision_sqlserver_jq.sh
 	
 Timeflows
-	VDB Timeflow Object Information /Details	Filename: flows.sh
-        Find Timeflow Object by Timestamp               Filename: timestamp.sh
-	Rollback VDB to Timestamp			Filename: vdb_rollback_timestamp.sh
-	Rollback VDB to Snapshot			Filename: vdb_rollback_snapshot.sh
-	Rollback VDB to SCN (location)			Filename: vdb_rollback_scn.sh
-	Refresh VDB to Timestamp			Filename: vdb_refresh_timestamp.sh
-	Refresh VDB to Snapshot				Filename: vdb_refresh_snapshot.sh
-	Refresh VDB to SCN (location)			Filename: vdb_refresh_scn.sh
+   VDB Timeflow Object Information /Details	   Filename: flows.sh
+   Find Timeflow Object by Timestamp               Filename: timestamp.sh
+   Rollback VDB to Timestamp			   Filename: vdb_rollback_timestamp.sh
+   Rollback VDB to Snapshot			   Filename: vdb_rollback_snapshot.sh
+   Rollback VDB to SCN (location)		   Filename: vdb_rollback_scn.sh
+   Refresh VDB to Timestamp			   Filename: vdb_refresh_timestamp.sh
+   Refresh VDB to Snapshot			   Filename: vdb_refresh_snapshot.sh
+   Refresh VDB to SCN (location)		   Filename: vdb_refresh_scn.sh
 
 Jetstream
-	Get a JSON list of Jetstream Objects		Filename: . ./jetstream_objects_json.sh
+   Get a JSON list of Jetstream Objects		   Filename: . ./jetstream_objects_json.sh
 	
 Jetstream - Bookmarks	
-	Create a new Bookmark from Latest		Filename: jetstream_bookmark_create_from_latest_jq.sh
-	Create a new Bookmark from Timestamp		Filename: jetstream_bookmark_create_from_timestamp_jq.sh
-	Delete a Bookmark 				Filename: jetstream_bookmark_delete_jq.sh
+   Create a new Bookmark from Latest		   Filename: jetstream_bookmark_create_from_latest_jq.sh
+   Create a new Bookmark from Timestamp		   Filename: jetstream_bookmark_create_from_timestamp_jq.sh
+   Delete a Bookmark 				   Filename: jetstream_bookmark_delete_jq.sh
 
 Jetstream - Branches
-	Create a Branch from a Bookmark			Filename: jetstream_branch_create_from_bookmark_jq.sh
-	Create a Branch from the Latest Timestamp	Filename: jetstream_branch_create_from_latest_jq.sh
-	Create a Branch from a provided Timestamp	Filename: jetstream_branch_create_from_timestamp_jq.sh
-	Active/Delete a Branch				Filename: jetstream_branch_operations_jq.sh
+   Create a Branch from a Bookmark		   Filename: jetstream_branch_create_from_bookmark_jq.sh
+   Create a Branch from the Latest Timestamp	   Filename: jetstream_branch_create_from_latest_jq.sh
+   Create a Branch from a provided Timestamp 	   Filename: jetstream_branch_create_from_timestamp_jq.sh
+   Active/Delete a Branch			   Filename: jetstream_branch_operations_jq.sh
 
 Jetstream - Containers
-	Create a new Container 				Filename: jetstream_container_create_jq.sh
-	Delete a Container				Filename: jetstream_container_delete_jq.sh
-	Refresh a Container from Template Source	Filename: jetstream_container_refresh_jq.sh
-	Reset a Container to last Event			Filename: jetstream_container_reset_jq.sh
-	Restore a Container to a Bookmark		Filename: jetstream_container_restore_to_bookmark_jq.sh
-	Restore a Container to a provided Timestamp	Filename: jetstream_container_restore_to_timestamp_jq.sh
-	Start/Stop a Jetstream Container 		Filename: jetstream_container_stop_start_jq.sh
-    	Get Active Branch at Timestamp			Filename: jetstream_container_active_branch_at_timestamp.sh
+   Create a new Container 			   Filename: jetstream_container_create_jq.sh
+   Delete a Container			 	   Filename: jetstream_container_delete_jq.sh
+   Refresh a Container from Template Source	   Filename: jetstream_container_refresh_jq.sh
+   Reset a Container to last Event		   Filename: jetstream_container_reset_jq.sh
+   Restore a Container to a Bookmark		   Filename: jetstream_container_restore_to_bookmark_jq.sh
+   Restore a Container to a provided Timestamp	   Filename: jetstream_container_restore_to_timestamp_jq.sh
+   Start/Stop a Jetstream Container 		   Filename: jetstream_container_stop_start_jq.sh
+   Get Active Branch at Timestamp		   Filename: jetstream_container_active_branch_at_timestamp.sh
 
 Jetstream - Templates	
-	Create a new Jetstream Template  		Filename: jetstream_template_create_jq.sh
-	Delete a Jetstream Template  			Filename: jetstream_template_delete_jq.sh           
+   Create a new Jetstream Template  		   Filename: jetstream_template_create_jq.sh
+   Delete a Jetstream Template  		   Filename: jetstream_template_delete_jq.sh           
 
 Snapshots
-	Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency 
-	with option to delete non-dependent snapshots	
-							Filename: snapshot_details.sh	
+   Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency 
+   with option to delete non-dependent snapshots	
+						   Filename: snapshot_details.sh	
 	
 Jobs
-	Display list of Delphix Engine Jobs		Filename: jobs.sh
+   Display list of Delphix Engine Jobs		   Filename: jobs.sh
 
 
 
