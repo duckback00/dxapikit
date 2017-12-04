@@ -65,7 +65,7 @@ RestSession() {
     "version": {
         "type": "APIVersion",
         "major": 1,
-        "minor": 7,
+        "minor": 8,
         "micro": 0
     }
 }
@@ -89,7 +89,6 @@ EOF
 
    echo $RESULTS
 }
-
 
 
 #########################################################
@@ -118,9 +117,6 @@ jqGet_APIVAL() {
    #else
    #   echo "Delphix Engine API Version: ${major}${minor}${micro}"
    fi
-
    echo $apival
-
 }
-
 
