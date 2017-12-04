@@ -37,6 +37,8 @@ Quick Start - Sample Scripts
 
 The Unix/Linux/Mac shell scripts required the jq command line parser and curl command line libraries.
 
+NOTE: The exact versions for both curl and jq are typically not important since the examples use the basic functionality which has been in the products for a while now.
+
 For Unix/Linux/Mac environments, verify that jq is installed.
 
 $ which jq
