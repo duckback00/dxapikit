@@ -1,0 +1,6 @@
+compatible = '11.2.0.4.0'
+log_archive_format = '%t_%s_%r.dbf'
+memory_target = 200M
+open_cursors = 120
+processes = 150
+remote_login_passwordfile = 'EXCLUSIVE'
