@@ -1,5 +1,5 @@
 README.txt
-v1.0
+v1.2
 
 ** So you want to work with the Delphix APIs? **
 
@@ -77,11 +77,18 @@ Delphix dSource/VDB Operations
 Delphix Groups
         Group Operations (create|delete) 		Filename: group_operations.sh
 
+Oracle Database Template (Init Parameters)
+    	List, Create, Update and Delete Oracle Template Parameters   
+							Filename: vdb_oracle_template.sh
+	Sample Oracle Init File				Filename: 200M
+
 Linux / Oracle Database
         Link/Ingest an Oracle dSource                   Filename: link_oracle_jq.sh
         Provision an Oracle VDB                         Filename: provision_oracle_jq.sh
         Provision another Oracle VDB                    Filename: provision_oracle_child_jq.sh
         Delete a dSource or Virtural Database           Filename: delete_database_oracle_jq.sh
+        Provision an Oracle VDB Interactive or Command Line Parameters
+							Filename: provision_oracle_i.sh
 
 Linux / ASE Database
         VDB Init (start|stop|enable|disable|delete)     Filename: vdb_ase_init.sh
@@ -104,37 +111,37 @@ Timeflows
 	Refresh VDB to SCN (location)			Filename: vdb_refresh_scn.sh
 
 Jetstream
-	Create a new Jetstream Template 		Filename: jetstream_template.sh
-	Create an Jetstream Container in a Template 	Filename: jetstream_container.sh
-	Create a Bookmark within a Branch		Filename: jetstream_bookmark.sh 
-	Refresh a Container from Template Source 	Filename: jetstream_refresh.sh
+	Get a JSON list of Jetstream Objects		Filename: . ./jetstream_objects_json.sh
+	
+Jetstream - Bookmarks	
+	Create a new Bookmark from Latest		Filename: jetstream_bookmark_create_from_latest_jq.sh
+	Create a new Bookmark from Timestamp		Filename: jetstream_bookmark_create_from_timestamp_jq.sh
+	Delete a Bookmark 				Filename: jetstream_bookmark_delete_jq.sh
 
-	#
-	# List Bookmarks per Branch and provides option to Delete Bookmark 
-	#
-	jetstream_list_bookmarks.sh							  
+Jetstream - Branches
+	Create a Branch from a Bookmark			Filename: jetstream_branch_create_from_bookmark_jq.sh
+	Create a Branch from the lastest Timestamp	Filename: jetstream_branch_create_from_latest_jq.sh
+	Create a Branch from a provided Timestamp	Filename: jetstream_branch_create_from_timestamp_jq.sh
+	Active/Delete a Branch				Filename: jetstream_branch_operations_jq.sh
 
-	#
-	# List Branches per Container and provides option to Activate/Delete Branch
-	#
-	jetstream_list_branches.sh                            
+Jetstream - Containers
+	Create a new Container 				Filename: jetstream_container_create_jq.sh
+	Delete a Container				Filename: jetstream_container_delete_jq.sh
+	Refresh a Container from Template Source	Filename: jetstream_container_refresh_jq.sh
+	Reset a Container to last Event			Filename: jetstream_container_reset_jq.sh
+	Restore a Container to a Bookmark		Filename: jetstream_container_restore_to_bookmark_jq.sh
+	Restore a Container to a provided Timestamp	Filename: jetstream_container_restore_to_timestamp_jq.sh
+	Start/Stop a Jetstream Container 		Filename: jetstream_container_stop_start_jq.sh
+    	Get Active Branch at Timestamp			Filename: jetstream_container_active_branch_at_timestamp.sh
 
-	#
-	# Creates a Branch within a Container using the latest Branch Timestamp
-	#
-	jetstream_create_branch_from_latest.sh				  
-
-	#
-	# Creates a Branch within a Container per Bookmark Selection
-	#
-	jetstream_create_branch_from_bookmark.sh              
+Jetstream - Templates	
+	Create a new Jetstream Template  		Filename: jetstream_template_create_jq.sh
+	Delete a Jetstream Template  			Filename: jetstream_template_delete_jq.sh           
 
 Snapshots
-	#
-	# Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency 
-	# with option to delete non-dependent snapshots
-	#
-	snapshot_details.sh	
+	Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency 
+	with option to delete non-dependent snapshots	
+							Filename: snapshot_details.sh	
 	
 Jobs
 	Display list of Delphix Engine Jobs		Filename: jobs.sh
