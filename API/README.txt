@@ -120,7 +120,7 @@ Jetstream - Bookmarks
 
 Jetstream - Branches
 	Create a Branch from a Bookmark			Filename: jetstream_branch_create_from_bookmark_jq.sh
-	Create a Branch from the lastest Timestamp	Filename: jetstream_branch_create_from_latest_jq.sh
+	Create a Branch from the Latest Timestamp	Filename: jetstream_branch_create_from_latest_jq.sh
 	Create a Branch from a provided Timestamp	Filename: jetstream_branch_create_from_timestamp_jq.sh
 	Active/Delete a Branch				Filename: jetstream_branch_operations_jq.sh
 
