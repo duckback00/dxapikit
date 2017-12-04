@@ -18,7 +18,7 @@
 # Description  : Delphix API timeflows examples
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.0.0
+# Version      : v1.1.0
 #
 # Requirements :
 #  1.) curl and jq command line libraries
@@ -28,6 +28,11 @@
 # Interactive Usage: ./flows.sh
 #
 #########################################################
+## Parameter Initialization ...
+
+. ./delphix_engine.conf
+
+#########################################################
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
 
@@ -36,10 +41,18 @@
 
 source ./jqJSON_subroutines.sh
 
-#########################################################
-## Parameter Initialization ...
-
-. ./delphix_engine.conf
+human_print(){
+while read B dummy; do
+  [ $B -lt 1024 ] && echo ${B} Bytes && break
+  KB=$(((B+512)/1024))
+  [ $KB -lt 1024 ] && echo ${KB} KB && break
+  MB=$(((KB+512)/1024))
+  [ $MB -lt 1024 ] && echo ${MB} MB && break
+  GB=$(((MB+512)/1024))
+  [ $GB -lt 1024 ] && echo ${GB} GB && break
+  echo $(((GB+512)/1024)) TB
+done
+}
 
 #########################################################
 ## Session and Login ...
@@ -152,6 +165,30 @@ echo "snapshot reference: ${SYNC_REF}"
 
 echo "${STATUS}" | jq --raw-output '.result[] | select(.name=="'"${SYNC_NAME}"'") '
 
+#########################################################
+## Get snapshot space ...
+
+echo "-----------------------------"
+echo "-- Snapshot Space JSON ... "
+
+json="{
+    \"type\": \"SnapshotSpaceParameters\",
+    \"objectReferences\": [
+        \"${SYNC_REF}\"
+   ]
+}"
+
+echo "JSON> $json"
+echo "Snapshot Space Results ..."
+SPACE=`curl -s -X POST -k --data @- $BaseURL/snapshot/space -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
+${json}
+EOF
+`
+
+echo "$SPACE" | jq '.'
+
+SIZE=`echo "${SPACE}" | jq '.result.totalSize' | human_print`
+echo "Snapshot Total Size: ${SIZE}"
 
 echo " "
 echo "Done "
