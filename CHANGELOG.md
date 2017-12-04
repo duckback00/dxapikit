@@ -1,5 +1,15 @@
 # Change Log 
 
+## December 3, 2017
+ <br />
+<ul>
+<li>All the jetstream APIs where either updated or added ... </li>
+<li>Added the vdb_oracle_template.sh to manage the Delphix template (init parameters) objects for Oracle VDBs</li>
+<li>Added provision_oracle_i.sh for interactive and command line arguements for provisioning an Oracle VDB</li>
+</ul>
+<br />
+<br />
+
 ## October 9, 2017
  <br />
 New APIs Added ... <br />
