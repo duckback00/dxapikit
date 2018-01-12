@@ -136,6 +136,7 @@ Jetstream - Containers
    Restore a Container to a provided Timestamp	   Filename: jetstream_container_restore_to_timestamp_jq.sh
    Start/Stop a Jetstream Container 		   Filename: jetstream_container_stop_start_jq.sh
    Get Active Branch at Timestamp		   Filename: jetstream_container_active_branch_at_timestamp.sh
+   List Users per Jetstream Container              Filename: jetstream_container_users_jq.sh
 
 Jetstream - Templates	
    Create a new Jetstream Template  		   Filename: jetstream_template_create_jq.sh
