@@ -168,23 +168,52 @@ Sample Scripts
 --------------
 
 Windows Included Config Script
-        Delphix Engine Configuration Parameter Values   	Filename: delphix_engine_conf.ps1
-        Powershell Functions in Examples          		Filename: delphixFunctions.sh
+   Delphix Engine Configuration Parameter Values   	Filename: delphix_engine_conf.ps1
+   Powershell Functions in Examples          		Filename: delphixFunctions.sh
 
 Authentication
-	Windows Powershell Authentication no Functions  	Filename: auth1.ps1
-	Windows Powershell Authentication w/Functions          	Filename: auth2.ps1
+   Windows Powershell Authentication no Functions  	Filename: auth1.ps1
+   Windows Powershell Authentication w/Functions        Filename: auth2.ps1
 
 Windows / SQL Server
-	Delphix PowerShell API Create Env Example		Filename: create_window_target_env.ps1
-	Link/Ingest a SQL Server dSource  			Filename: link_sqlserver.ps1
-	Provision a SQL Server VDB 				Filename: provision_sqlserver.ps1
-	Delete a SQL Server dSource or VDB 			Filename: delete_database_sqlserver.ps1
+   Delphix PowerShell API Create Env Example		Filename: create_window_target_env.ps1
+   Link/Ingest a SQL Server dSource  			Filename: link_sqlserver.ps1
+   Provision a SQL Server VDB 				Filename: provision_sqlserver.ps1
+   Delete a SQL Server dSource or VDB 			Filename: delete_database_sqlserver.ps1
 
-PowerShell 2.0 JSON Parsing Examples
-	Sample JSON Parsing for PowerShell 2.#.# Version	FIlename: parse_2.0.ps1
+SQL Server VDB Operations		
+   VDB Init (start|stop|enable|disable|delete)		Filename: vdb_init.ps1
+   VDB Operations (sync|refresh|rollback)    		Filename: vdb_operations.ps1
+		
+PowerShell JSON Parsing Examples
+   Sample Parsing for PowerShell Version 2.#        	Filename: parse_2.0.ps1
+   (above uses 2.0 functions in delphixFunctions.ps1)
+   Sample Parsing for PowerShell Version 3.# or later   Filename: parse_3.0.ps1
 
-NOTE: Starting with PowerShell 3.0 and later, native JSON parsing modules are included. The 2.0 JSON parsing functions are different than the PowerShell 3.0 or later modules, PLEASE update the scripts accordingly if you do not want to use the provided 2.0 JSON functions.
+Jetstream - Bookmarks	
+   Create a new Bookmark from Latest		        Filename: jetstream_bookmark_create_from_latest.ps1
+   Create a new Bookmark from Timestamp		        Filename: jetstream_bookmark_create_from_timestamp.ps1
+   Delete a Bookmark 				        Filename: jetstream_bookmark_delete.ps1
+
+Jetstream - Branches
+   Create a Branch from a Bookmark		        Filename: jetstream_branch_create_from_bookmark.ps1
+   Create a Branch from the Latest Timestamp            Filename: jetstream_branch_create_from_latest.ps1
+   Create a Branch from a provided Timestamp            Filename: jetstream_branch_create_from_timestamp.ps1
+   Active/Delete a Branch			        Filename: jetstream_branch_operations.ps1
+
+Jetstream - Containers
+   Create a new Container 				Filename: jetstream_container_create.ps1
+   Delete a Container			 		Filename: jetstream_container_delete.ps1
+   Refresh a Container from Template Source	   	Filename: jetstream_container_refresh.ps1
+   Reset a Container to last Event	  		Filename: jetstream_container_reset.ps1
+   Restore a Container to a Bookmark		   	Filename: jetstream_container_restore_to_bookmark.ps1
+   Restore a Container to a provided Timestamp          Filename: jetstream_container_restore_to_timestamp_.ps1
+   Start/Stop a Jetstream Container 		   	Filename: jetstream_container_stop_start.ps1
+   Get Active Branch at Timestamp			Filename: jetstream_container_active_branch_at_timestamp.ps1
+
+Jetstream - Templates	
+   Create a new Jetstream Template  		   	Filename: jetstream_template_create.ps1
+   Delete a Jetstream Template  	 		Filename: jetstream_template_delete.ps1
 
 
 *** WIP contact me for details or updates ***
