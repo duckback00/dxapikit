@@ -1,5 +1,5 @@
 README.txt
-v1.0
+v1.1
 
 ** So you want to work with the Delphix APIs? **
 
@@ -51,7 +51,7 @@ PowerShell Version
 ------------------
 Windows has a number of versions of PowerShell. The minimum version for Delphix is 2.0 for SQL Server 2008 environments. There are numerous enhancements and features with subsequent Powershell versions. 
 
-These examples are for PowerShell 2.0 or later. In PowerShell 2.0 there are no JSON parsing modules, so these scripts include JSON parsing functions. Starting with PowerShell 3.0 and later, native JSON parsing modules are included in PowerShell. The 2.0 JSON parsing functions are different than the PowerShell 3.0 or later modules, PLEASE update the scripts accordingly if you do not want to use the provided 2.0 JSON functions.
+These examples are for PowerShell 3.0 or later. Starting with PowerShell 3.0 and later, native JSON parsing modules are included in PowerShell. In PowerShell 2.0 there are no JSON parsing modules, so there are functions included to support Poweshell 2.x versions.  
 
 Additionally, you must be aware of the architecture of 32bit or 64bit Powershell versions you are running from within.
 
@@ -123,7 +123,10 @@ curl.exe
 --------
 
 NOTE:
-Not all Windows platforms have the cURL executable installed. The easiest method I found was to install the git+ client for Windows.	
+Not all Windows platforms have the cURL executable installed. 
+
+
+One method is to install the git+ client for Windows.	
 
 https://git-for-windows.github.io/
 The Git install includes, among other things, curl.exe. After installing, the /mingw64/bin will be added to your PATH. Then you will be able to use the curl command from the Windows Command Prompt or PowerShell console.
@@ -137,6 +140,39 @@ libidn/1.32 libssh2/1.7.0 nghttp2/1.12.0 librtmp/2.3
 Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s
 rtmp rtsp scp sftp smtp smtps telnet tftp
 Features: IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2
+
+
+Another method is to download the curl.exe binary executable and copy it to the Windows directory.
+========================= curl.exe executable download =========================
+
+https://curl.haxx.se/dlwiz/
+Click on "curl executable" link
+Select Operating System: 					Win64  		Select! 
+Select for What Flavour: 					Generic  	Select!
+Select which Win64 Version: Show package for Win64 version: 	Any  		Select!
+Select for What CPU: Show package for Win64 version: 		x_86_64  	Select!
+
+Select latest stable version with SSH enabled 
+The latest stable version available (7.56.1)!
+
+curl version: 7.56.1 - SSL enabled SSH enabled   [ Download ]  
+
+To install:
+1.) Download the .zip file from the website steps shown above.
+
+2.) Copy .zip file to computer
+
+3.) Either add the path below to the default system PATH environment variable   
+
+[full_path_to]\curl-7.56.1-win64-mingw\bin 
+... or ...
+copy the contents of the \bin directory, curl.exe, *.crt and libcurl-x64.dll, to the Windows\System32 directory
+
+4.) From Powershell, type the following command
+
+PS> curl.exe --version
+curl 7.56.1 ... [ more version info to follow ]
+
 
 Invoking the curl or curl.exe from Powershell command line.
 
