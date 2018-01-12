@@ -16,75 +16,50 @@
 # Program Name : create_windows_target_env.ps1
 # Description  : Delphix PowerShell API Create Env Example  
 # Author       : Alan Bitterman
-# Created      : 2017-08-09
-# Version      : v1.0.0
+# Created      : 2017-11-15
+# Version      : v1.1
 #
 # Requirements :
 #  1.) curl command line libraries
 #  2.) Populate Delphix Engine Connection Information . .\delphix_engine_conf.ps1
-#  3.) Change values below as required
+#  3.) Include Delphix Functions . .\delphixFunctions.ps1
+#  4.) Change values below as required
 #
-# Usage: ./create_windows_target_env.ps1
+# Usage: . .\create_windows_target_env.ps1
 #
 #########################################################
 #                   DELPHIX CORP                        #
 # Please make changes to the parameters below as req'd! #
 #########################################################
 
+#########################################################
+## Parameter Initialization ...
+
+. .\delphix_engine_conf.ps1
+
 #
-# Variables ...
+# Application Variables ...
 #
-$nl = [Environment]::NewLine
-$BaseURL = "http://172.16.160.195/resources/json/delphix"
-$cookie = "cookies.txt"
-$user = "delphix_admin"
-$pass = "delphix"
-$host_name = "172.16.160.196"         # IP Address or Fully Qualified Hostname
-$host_user = "DELPHIX\\delphix_admin"
+$host_name = "172.16.160.134"            # IP Address or Fully Qualified Hostname
+$host_user = "DELPHIX\\DELPHIX_ADMIN"
 $host_pass = "delphix"
-$TARGET_ENV = "Windows Target"
+$TARGET_ENV = "Windows Host"
 
-# 
-# Session JSON Data ...
-#
-$json = @"
-{
-    \"type\": \"APISession\",
-    \"version\": {
-        \"type\": \"APIVersion\",
-        \"major\": 1,
-        \"minor\": 7,
-        \"micro\": 0
-    }
-}
-"@
+#########################################################
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
 
+#########################################################
+## Local Functions ...
 
-#
-# Delphix Curl Session API ...
-#
-write-output "${nl}Calling Session API ...${nl}"
-$results = (curl --insecure -c "${cookie}" -sX POST -H "Content-Type: application/json" -d "${json}" -k ${BaseURL}/session)
-write-output "Session API Results: ${results}"
+. .\delphixFunctions.ps1
 
-#
-# Login JSON Data ...
-# 
-$json = @"
-{
-    \"type\": \"LoginRequest\",
-    \"username\": \"${user}\",
-    \"password\": \"${pass}\"
-}
-"@
+#########################################################
+## Authentication ...
 
-
-#
-# Delphix Curl Login API ...
-#
-write-output "${nl}Calling Login API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX POST -H "Content-Type: application/json" -d "${json}" -k ${BaseURL}/login)
-write-output "Login API Results: ${results}"
+Write-Output "Authenticating on ${BaseURL} ..."
+$results=RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" 
+Write-Output "Login Results: ${results}"
 
 #######################################################################
 #
@@ -116,13 +91,17 @@ $json = @"
 }
 "@
 
+Write-Output "JSON: $json"
 
-write-output "${nl}Calling Create Environment API ...${nl}"
-$results = (curl --insecure -b "${cookie}" -sX POST -H "Content-Type: application/json" -d "${json}" -k ${BaseURL}/environment)
-write-output "Environment API Results: ${results}"
+Write-Output "Calling Create Environment API ..."
+$results = (curl.exe -sX POST -k ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
+Write-Output "Environment API Results: ${results}"
 
-#
-# The End is Near ...
-#
-echo "${nl}Done ...${nl}"
-exit;
+############## E O F ####################################
+## Clean up and Done ...
+
+Remove-Variable -Name * -ErrorAction SilentlyContinue
+Write-Output " "
+Write-Output "Done ..."
+Write-Output " "
+exit 0

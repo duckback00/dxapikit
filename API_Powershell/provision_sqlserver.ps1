@@ -16,29 +16,35 @@
 # Program Name : provision_sqlserver.ps1
 # Description  : Delphix PowerShell API provision VDB Example  
 # Author       : Alan Bitterman
-# Created      : 2017-08-09
-# Version      : v1.0.0
+# Created      : 2017-11-15
+# Version      : v1.1
 #
 # Requirements :
-#  1.) curl command line libraries
+#  1.) curl command line executable and ConvertFrom-Json Commandlet
 #  2.) Populate Delphix Engine Connection Information . .\delphix_engine_conf.ps1
-#  3.) Change values below as required
+#  3.) Include Delphix Functions . .\delphixFunctions.ps1
+#  4.) Change values below as required
 #
-# Usage: ./provision_sqlserver.ps1 
+# Usage: . .\provision_sqlserver.ps1 
 #
 #########################################################
 #                   DELPHIX CORP                        #
 # Please make changes to the parameters below as req'd! #
 #########################################################
 
+#########################################################
+## Parameter Initialization ...
+
+. .\delphix_engine_conf.ps1
+
 #
 # Required for Provisioning Virtual Database ...
 #
-$SOURCE_SID="delphix_demo"        # dSource name used to get db container reference value
+$SOURCE_SID="delphixdb"           # dSource name used to get db container reference value
 
-$VDB_NAME="Vdelphix_demo"         # Delphix VDB Name
-$TARGET_GRP="Windows Source"      # Delphix Engine Group Name
-$TARGET_ENV="Windows Target"      # Target Environment used to get repository reference value 
+$VDB_NAME="Vdelphixdb"            # Delphix VDB Name
+$TARGET_GRP="Windows_Target"      # Delphix Engine Group Name
+$TARGET_ENV="Windows Host"        # Target Environment used to get repository reference value 
 $TARGET_REP="MSSQLSERVER"         # Target Environment Repository / Instance name
 
 #########################################################
@@ -51,110 +57,83 @@ $TARGET_REP="MSSQLSERVER"         # Target Environment Repository / Instance nam
 . .\delphixFunctions.ps1
 
 #########################################################
-## Parameter Initialization ...
-
-. .\delphix_engine_conf.ps1
-
-#########################################################
 ## Authentication ...
 
-write-output "Authenticating on ${BaseURL} ... ${nl}"
-
+Write-Output "Authenticating on ${BaseURL} ... ${nl}"
 $results=RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" 
-#write-output "${nl} Results are ${results} ..."
+#Write-Output "${nl} Results are ${results} ..."
+Write-Output "Login Successful ..."
 
-$o = ConvertFrom-Json20 $results
-$status=$o.status                       #echo "Status ... $status ${nl}"
-if ("${status}" -ne "OK") {
-   echo "Job Failed with ${status} Status ${nl} $results ${nl}"
-   exit 1
-}
+#########################################################
+## API Version ...
 
-echo "Login Successful ..."
+$apival=Get_APIVAL "${BaseURL}" "${COOKIE}" "${CONTENT_TYPE}" 
+Write-Output "API Version: ${apival} "
 
 #########################################################
 ## Get Group Reference ...
 
-#write-output "${nl}Calling Group API ...${nl}"
+#Write-Output "${nl}Calling Group API ...${nl}"
 $results = (curl.exe --insecure -sX GET -k ${BaseURL}/group -b "${COOKIE}" -H "${CONTENT_TYPE}")
-#write-output "Group API Results: ${results}"
+$status = ParseStatus "${results}" "${ignore}"
+#Write-Output "Group API Results: ${results}"
 
+#
 # Convert Results String to JSON Object and Get Results Status ...
-$o = ConvertFrom-Json20 $results
-$status=$o.status			#echo "Status ... $status ${nl}"
-if ("${status}" -ne "OK") {
-   echo "Job Failed with ${status} Status ${nl} $results ${nl}"
-   exit 1
-}
-
-# Parse Results ...
+#
+$o = ConvertFrom-Json $results
 $a = $o.result
-#$a
 $b = $a | where { $_.name -eq "${TARGET_GRP}" } | Select-Object
 $GROUP_REFERENCE=$b.reference
-echo "group reference: ${GROUP_REFERENCE}"
+Write-Output "group reference: ${GROUP_REFERENCE}"
 
 #########################################################
 ## Get database container ...
 
-#write-output "${nl}Calling Database API ...${nl}"
+#Write-Output "${nl}Calling Database API ...${nl}"
 $results = (curl.exe --insecure -sX GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}")
-#write-output "Database API Results: ${results}"
+$status = ParseStatus "${results}" "${ignore}"
+#Write-Output "Database API Results: ${results}"
 
+#
 # Convert Results String to JSON Object and Get Results Status ...
-$o = ConvertFrom-Json20 $results
-$status=$o.status			#echo "Status ... $status ${nl}"
-if ("${status}" -ne "OK") {
-   echo "Job Failed with ${status} Status ${nl} $results ${nl}"
-   exit 1
-}
-
-# Parse Results ...
+#
+$o = ConvertFrom-Json $results
 $a = $o.result
-#$a
 $b = $a | where { $_.name -eq "${SOURCE_SID}" -and $_.type -eq "MSSqlDatabaseContainer"} | Select-Object
 $CONTAINER_REFERENCE=$b.reference
-echo "container reference: ${CONTAINER_REFERENCE}"
-
-#CONTAINER_REFERENCE=$( parseResults "${STATUS}" "${SOURCE_SID}" "name" "reference" )
+Write-Output "container reference: ${CONTAINER_REFERENCE}"
 
 #########################################################
 ## Get Environment reference ...
 
-#write-output "${nl}Calling environment API ...${nl}"
+#Write-Output "${nl}Calling environment API ...${nl}"
 $results = (curl.exe --insecure -sX GET -k ${BaseURL}/environment -b "${COOKIE}" -H "${CONTENT_TYPE}")
-#write-output "environment API Results: ${results}"
+$status = ParseStatus "${results}" "${ignore}"
+#Write-Output "environment API Results: ${results}"
 
-$o = ConvertFrom-Json20 $results
+$o = ConvertFrom-Json $results
 $a = $o.result
 $b = $a | where { $_.name -eq "${TARGET_ENV}" } | Select-Object
-#$b
 $ENV_REFERENCE=$b.reference
-echo "env reference: ${ENV_REFERENCE}"
-
-#ENV_REFERENCE=$( parseResults "${STATUS}" "${TARGET_ENV}" "name" "reference" )
+Write-Output "env reference: ${ENV_REFERENCE}"
 
 #########################################################
 ## Get Repository reference ...
 
-#write-output "${nl}Calling repository API ...${nl}"
+#Write-Output "${nl}Calling repository API ...${nl}"
 $results = (curl.exe --insecure -sX GET -k ${BaseURL}/repository -b "${COOKIE}" -H "${CONTENT_TYPE}")
-#write-output "repository API Results: ${results}"
+$status = ParseStatus "${results}" "${ignore}"
+#Write-Output "repository API Results: ${results}"
 
+#
 # Convert Results String to JSON Object and Get Results Status ...
-$o = ConvertFrom-Json20 $results
-$status=$o.status			#echo "Status ... $status ${nl}"
-if ("${status}" -ne "OK") {
-   echo "Job Failed with ${status} Status ${nl} $results ${nl}"
-   exit 1
-}
-
-# Parse Results ...
+#
+$o = ConvertFrom-Json $results
 $a = $o.result
-$b = $a | where { $_.name -eq "${TARGET_REP}" } | Select-Object
-#$b
+$b = $a | where { $_.name -eq "${TARGET_REP}" -and $_.environment -eq "${ENV_REFERENCE}"} | Select-Object
 $REP_REFERENCE=$b.reference
-echo "repository reference: ${REP_REFERENCE}"
+Write-Output "repository reference: ${REP_REFERENCE}"
 
 #########################################################
 ## Provision a SQL Server Database ...
@@ -174,7 +153,26 @@ $json = @"
         \"validatedSyncMode\": \"TRANSACTION_LOG\"
     },
     \"source\": {
-        \"type\": \"MSSqlVirtualSource\",
+        \"type\": \"MSSqlVirtualSource\", 
+"@
+
+#
+# Auto Restart Option starting with API Version 1.8.x ...
+#
+if ( $apival -gt 180 ) {
+
+$json = @"
+${json}
+        \"allowAutoVDBRestartOnHostReboot\": false, 
+"@
+
+}
+
+#
+# Continue to build JSON string ...
+#
+$json1 = @"
+${json}
         \"operations\": {
             \"type\": \"VirtualSourceOperations\",
             \"configureClone\": [],
@@ -205,78 +203,36 @@ $json = @"
 "@
 
 
-#write-output "${nl}Calling database provision API ...${nl}"
-$results = (curl.exe --insecure -sX POST -k ${BaseURL}/database/provision -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
-write-output "database provision API Results: ${results}"
+Write-Output "JSON: $json1"
 
+#
+# NOTE: the above JSON does change with the upcomming Delphix J release API Version 1.9.0? 
+#
+
+#Write-Output "${nl}Calling database provision API ...${nl}"
+$results = (curl.exe --insecure -sX POST -k ${BaseURL}/database/provision -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json1}")
+$status = ParseStatus "${results}" "${ignore}"
+Write-Output "database provision API Results: ${results}"
+
+#
 # Convert Results String to JSON Object and Get Results Status ...
-$o = ConvertFrom-Json20 $results
-$status=$o.status			#echo "Status ... $status ${nl}"
-if ("${status}" -ne "OK") {
-   echo "Job Failed with ${status} Status ${nl} $results ${nl}"
-   exit 1
-}
-
 #
-# Parse Results ...
-# Get Container and Job Number ...
-#
-$CONTAINER=$o.result
-echo "DB Container: ${CONTAINER} ${nl}"
+$o = ConvertFrom-Json $results
 $JOB=$o.job
-echo "Job # $JOB ${nl}"
+Write-Output "Job # ${JOB}"
 
 # 
 # Allow job to submit internally before while loop ...
 #
-sleep 2
+sleep 1
 
-# 
-# Job Information ...
-#
-#write-output "${nl}Calling job API ...${nl}"
-$results = (curl.exe --insecure -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
-#write-output "job API Results: ${results}"
-
-$o = ConvertFrom-Json20 "${results}"		#$o
-$a = $o.result					#$a
-
-#
-# Get Job Status and Job Information ...
-#
-$JOBSTATE=$a.jobState
-$PERCENTCOMPLETE=$a.percentComplete
-
-echo "jobState  $JOBSTATE"
-echo "percentComplete $PERCENTCOMPLETE"
-
-echo "***** waiting for status *****"
-##$JOBSTATE="RUNNING"
-$rows = 0
-DO
-{
-  $d = Get-Date
-  echo "Current status as of ${d} : ${JOBSTATE} : ${PERCENTCOMPLETE}% Completed"
-  sleep ${DELAYTIMESEC}
-  $results = (curl.exe --insecure -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
-  $o = ConvertFrom-Json20 "${results}"
-  $a = $o.result
-  $JOBSTATE=$a.jobState
-  $PERCENTCOMPLETE=$a.percentComplete
-} While ($JOBSTATE -contains "RUNNING")
-
-#########################################################
-##
-##  Producing final status
-##
-if ("${JOBSTATE}" -eq "COMPLETED") {
-   echo "Job ${JOBSTATE} Succesfully. ${nl}"
-} else {
-   echo "Job Failed with ${JOBSTATE} Status ${nl}"
-}
+Monitor_JOB "$BaseURL" "$COOKIE" "$CONTENT_TYPE" "$JOB"
 
 ############## E O F ####################################
-echo " "
-echo "Done ..."
-echo " "
+## Clean up and Done ...
+
+Remove-Variable -Name * -ErrorAction SilentlyContinue
+Write-Output " "
+Write-Output "Done ..."
+Write-Output " "
 exit 0

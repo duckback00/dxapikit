@@ -17,26 +17,27 @@
 # Description  : Delphix PowerShell API Functions  
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.0.0
+# Version      : v1.3
 #
-# Requirements :
-#  1.) curl command line libraries
-#  2.) Populate Delphix Engine Connection Information . .\delphix_engine_conf.ps1
-#  3.) Change values below as required
+#  1.) curl command line executable and ConvertFrom-Json Commandlet
 #
-# Usage: . ./delphixFunctions.ps1
+# Include Delphix Functions in Scripts ...
+#
+# Usage: . .\delphixFunctions.ps1
 #
 #########################################################
 #                   DELPHIX CORP                        #
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
 #########################################################
 
+# 
+# JSON Parsing for Powershell version 2.0
+#
 Function ConvertTo-Json20([object] $item){
     add-type -assembly system.web.extensions
     $ps_js=new-object system.web.script.serialization.javascriptSerializer
     return $ps_js.Serialize($item)
 }
-
 Function ConvertFrom-Json20([object] $item){ 
     add-type -assembly system.web.extensions
     $ps_js=new-object system.web.script.serialization.javascriptSerializer
@@ -44,9 +45,12 @@ Function ConvertFrom-Json20([object] $item){
     return ,$ps_js.DeserializeObject($item)
 }
 
+#
+# Delphix Data Platform APIs ...
+# 
 Function RestSession([string]$DMUSER, [string]$DMPASS, [string]$BaseURL, [string]$COOKIE, [string]$CONTENT_TYPE){
    $nl = [Environment]::NewLine
-   #write-output "${nl} Parameters: $DMUSER $DMPASS $COOKIE ${nl}"
+   #Write-Output "${nl} Parameters: $DMUSER $DMPASS $COOKIE ${nl}"
    #
    # Session JSON Data ...
    #
@@ -56,19 +60,20 @@ Function RestSession([string]$DMUSER, [string]$DMPASS, [string]$BaseURL, [string
     \"version\": {
         \"type\": \"APIVersion\",
         \"major\": 1,
-        \"minor\": 7,
+        \"minor\": 8,
         \"micro\": 0
     }
 }
 "@
 
-   #write-output "${nl}${json}${nl}" 
+   #Write-Output "${nl}${json}${nl}" 
    #
    # Delphix Curl Session API ... 
    #
-   #write-output "${nl}Calling Session API ...${nl}"
-   $results = (curl --insecure -sX POST -k ${BaseURL}/session -c "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
-   #write-output "Session API Results: ${results}"  
+   #Write-Output "${nl}Calling Session API ...${nl}"
+   $results = (curl.exe -sX POST -k ${BaseURL}/session -c "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
+   $status = ParseStatus "${results}" "${ignore}"
+   #Write-Output "Session API Results: ${results}"  
    # 
    # Login JSON Data ...
    #
@@ -79,13 +84,119 @@ Function RestSession([string]$DMUSER, [string]$DMPASS, [string]$BaseURL, [string
     \"password\": \"${DMPASS}\"
 }
 "@
-   #write-output "${nl}${json}${nl}"
+   #Write-Output "${nl}${json}${nl}"
    #
    # Delphix Curl Login API ...
    #
-   #write-output "${nl}Calling Login API ...${nl}"
-   $results = (curl --insecure -sX POST -k ${BaseURL}/login -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
-   #write-output "${nl}Login API Results: ${results}"
+   #Write-Output "${nl}Calling Login API ...${nl}"
+   $results = (curl.exe -sX POST -k ${BaseURL}/login -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
+   $status = ParseStatus "${results}" "${ignore}"
+   #Write-Output "${nl}Login API Results: ${results}"
 
    return [string]$results
 }
+
+Function ParseStatus([string] $item, [string]$ignore){
+   $nl = [Environment]::NewLine
+   $status="Error"
+   # Write-Output "item $item"
+   try {
+      $o = ConvertFrom-Json $item
+      $status=$o.status                       #Write-Output "Status ... $status ${nl}"
+      if ("${status}" -ne "OK") {
+         Write-Output "Job Failed with ${status} Status ${nl}${results}${nl}"
+      }
+   } catch {
+     Write-Output "ERROR: Invalid JSON Content ... ${nl}${item}${nl}"
+     $status="ERROR: ${item}"
+   }    
+   if ( "$status" -ne "OK" -and "${ignore}".ToUpper() -eq "NO") {
+      Write-Output "Exiting ..."
+      exit 1
+   }
+   return [string]$status
+}
+
+
+############################################
+## Get API Version ...
+ 
+Function Get_APIVAL([string]$BaseURL, [string]$COOKIE, [string]$CONTENT_TYPE){
+   #
+   # Delphix About API ... 
+   #
+   #Write-Output "${nl}Calling Session API ...${nl}"
+   $results = (curl.exe -sX GET -k ${BaseURL}/about -b "${COOKIE}" -H "${CONTENT_TYPE}")
+   $status = ParseStatus "${results}" "${ignore}"
+   #Write-Output "About API Results: ${results}"  
+
+   $o = ConvertFrom-Json $results
+   $a = $o.result
+   $b = $a.apiVersion
+   $major=$b.major
+   $minor=$b.minor
+   $micro=$b.micro
+   $apival="${major}${minor}${micro}"
+   #Write-Output "API Version $apival ${nl}"
+
+   #
+   if ( "$apival" -eq "") {
+      Write-Output "ERROR: Delphix Engine API Version Value Unknown, $apival, Exiting ..."
+      exit 1
+   }
+   return [string]$apival
+}
+
+############################################
+## Monitor Job Status ...
+ 
+Function Monitor_JOB ([string]$BaseURL, [string]$COOKIE, [string]$CONTENT_TYPE, [string]$JOB) {
+   #
+   # Verify ...
+   #
+   if ( "${JOB}" -eq "" ) {
+      return [string] "ERROR: Missing Job ${JOB} Number"
+   }
+   # 
+   # Job Information ...
+   #
+   #Write-Output "${nl}Calling job API ...${nl}"
+   $results = (curl.exe -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
+   $status = ParseStatus "${results}" "${ignore}"
+   #Write-Output "job API Results: ${results}"
+
+   # 
+   # Get Job Status and Job Information ...
+   #
+   $o = ConvertFrom-Json $results
+   $a = $o.result
+   $JOBSTATE=$a.jobState
+   $PERCENTCOMPLETE=$a.percentComplete
+   Write-Output "jobState  $JOBSTATE"
+   Write-Output "percentComplete $PERCENTCOMPLETE"
+   $d = Get-Date
+   if ( "${JOBSTATE}" -ne "COMPLETED" ) {
+      Write-Output "***** waiting for status *****"
+      DO
+      {
+         $d = Get-Date
+         Write-Output "Current status as of ${d} : ${JOBSTATE} : ${PERCENTCOMPLETE}% Completed"
+         sleep ${DELAYTIMESEC}
+         $results = (curl.exe -sX GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}")
+         $status = ParseStatus "${results}" "${ignore}"
+         $o = ConvertFrom-Json $results
+         $a = $o.result
+         $JOBSTATE=$a.jobState
+         $PERCENTCOMPLETE=$a.percentComplete
+      } While ($JOBSTATE -contains "RUNNING")
+   }
+
+   #########################################################
+   ##  Producing final status
+
+   if ("${JOBSTATE}" -eq "COMPLETED") {
+      return [string] "${JOB} ${JOBSTATE} Succesfully."
+   } else {
+      return [string] "${JOB} Failed with ${JOBSTATE} Status"
+   }
+}           # End of Monitor_JOB Function ...

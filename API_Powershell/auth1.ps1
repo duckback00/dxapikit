@@ -16,14 +16,14 @@
 # Program Name : auth1.ps1
 # Description  : Delphix PowerShell API Basic Example  
 # Author       : Alan Bitterman
-# Created      : 2017-08-09
-# Version      : v1.0.0
+# Created      : 2017-11-15
+# Version      : v1.2
 #
 # Requirements :
-#  1.) curl command line library
+#  1.) curl command line executable
 #  2.) Change values below as required
 #
-# Usage: ./auth1.ps1
+# Usage: . .\auth1.ps1
 #
 #########################################################
 #                   DELPHIX CORP                        #
@@ -31,14 +31,23 @@
 #########################################################
 
 #
-# Variables ...
+# Delphix Engine Variables ...
+#
+$BaseURL = "http://172.16.160.195/resources/json/delphix"
+$DMUSER = "delphix_admin"
+$DMPASS = "delphix"
+
+#########################################################
+#                   DELPHIX CORP                        #
+#         NO CHANGES REQUIRED BELOW THIS POINT          #
+#########################################################
+
+# 
+# Application Variables ...
 #
 $nl = [Environment]::NewLine
-$BaseURL = "http://172.16.160.195/resources/json/delphix"
-$content_type="Content-Type: application/json"
-$cookie = "cookies.txt"
-$user = "delphix_admin"
-$pass = "delphix"
+$CONTENT_TYPE="Content-Type: application/json"
+$COOKIE = "cookies.txt"
 
 #########################################################
 ## Authentication ...
@@ -61,48 +70,45 @@ $json = @"
 }
 "@
 
-
 #write-output "${nl}${json}${nl}"
 
 #########################################################
-#
-# Delphix Curl Session API ...
-#
+## Delphix Curl Session API ...
 
 write-output "${nl}Calling Session API ...${nl}"
-$results = (curl.exe --insecure -sX POST -k ${BaseURL}/session -c "${cookie}" -H "${content_type}" -d "${json}")
+$results = (curl.exe -sX POST -k ${BaseURL}/session -c "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
 write-output "Session API Results: ${results}"
 
-#
-# Login JSON Data ...
-# 
+#########################################################
+## Login JSON Data ... 
 
 $json = @"
 {
     \"type\": \"LoginRequest\",
-    \"username\": \"${user}\",
-    \"password\": \"${pass}\"
+    \"username\": \"${DMUSER}\",
+    \"password\": \"${DMPASS}\"
 }
 "@
 
+#########################################################
+## Delphix Curl Login API ...
 
-#
-# Delphix Curl Login API ...
-#
 write-output "${nl}Calling Login API ...${nl}"
-$results = (curl.exe --insecure -sX POST -k ${BaseURL}/login -b "${cookie}" -H "${content_type}" -d "${json}")
+$results = (curl.exe -sX POST -k ${BaseURL}/login -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
 write-output "Login API Results: ${results}"
 
 #########################################################
-#
-# Delphix Curl system API ...
-#
+## Delphix Curl system API ...
+
 write-output "${nl}Calling System API ...${nl}"
-$results = (curl.exe --insecure -sX GET -k ${BaseURL}/system -b "${cookie}" -H "${content_type}")
+$results = (curl.exe -sX GET -k ${BaseURL}/system -b "${COOKIE}" -H "${CONTENT_TYPE}")
 write-output "System API Results: ${results}"
 
-#
-# The End is Near ...
-#
-echo "${nl}Done ...${nl}"
-exit;
+############## E O F ####################################
+## Clean up and Done ...
+
+Remove-Variable DMUSER, DMPASS, BaseURL, COOKIE, CONTENT_TYPE, results, json
+Write-Output " "
+Write-Output "Done ..."
+Write-Output " "
+exit 0
