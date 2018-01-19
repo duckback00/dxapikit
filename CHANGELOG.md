@@ -1,5 +1,20 @@
 # Change Log 
 
+## January 7, 2018
+ <br />
+<ul>
+ <li>Updated API's to support Delphix J Release 5.2.#</li>
+ <li>New API: jetstream_container_users_jq.sh	 --  List Users per Jetstream Containers</li>
+ <li>Updated and Added New Powershell API's to match more of the Linux Shell API Examples</li>
+    <ul>Key APIs
+     <li>vdb_init.ps1</li>
+     <li>vdb_operations.ps1</li>
+     <li>... plus others </li>
+    </ul>
+</ul>
+<br />
+<br />
+
 ## December 3, 2017
  <br />
 <ul>
