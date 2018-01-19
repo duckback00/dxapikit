@@ -252,11 +252,4 @@ Jetstream - Templates
    Delete a Jetstream Template  	 		Filename: jetstream_template_delete.ps1
 
 
-*** WIP contact me for details or updates ***
-
-Hooks
-Filename: link_hook_sqlserver.sh
-Filename: vdb_hook_sqlserver.sh
-
-
 *** End of README.txt ***
