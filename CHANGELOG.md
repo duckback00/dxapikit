@@ -10,6 +10,7 @@
      <li>vdb_init.ps1</li>
      <li>vdb_operations.ps1</li>
      <li>... plus others </li>
+     <li>NOTE: All Powershell Examples are now for Powershell Version 3.# or later. For Powershell v2.# environments, functions are provided, see respective README file</li>
     </ul>
 </ul>
 <br />
