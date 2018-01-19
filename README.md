@@ -38,7 +38,7 @@ The goal for this project is to help Delphix users get up to speed quickly on ho
 ## Delphix Engine Versions Tested
 - 5.0.#
 - 5.1.# 
-- 5.2.3
+- 5.2.#
 
 
 ## Required Packages
