@@ -37,7 +37,8 @@ The goal for this project is to help Delphix users get up to speed quickly on ho
 
 ## Delphix Engine Versions Tested
 - 5.0.#
-- 5.1.# including 5.1.8 
+- 5.1.# 
+- 5.2.3
 
 
 ## Required Packages
@@ -50,7 +51,7 @@ curl is command line tool and library for transferring data with URLs
 - Versions Tested: curl 7.19.7, 7.43.0 
   
 
-./jq 
+./jq    
 
 jq is a lightweight and flexible command-line JSON processor
 - Required for **Mac/Unix/Linux Platforms ONLY**
