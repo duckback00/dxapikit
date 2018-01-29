@@ -1,16 +1,33 @@
 #!/bin/bash
-#######################################################################
-# Filename: masking
-# Version: v1.0
-# Date: 2018-01-30
-# Last Updated: 2018-01-30 Bitt...
-# Author: Alan Bitterman
 #
-# Description: Demo script for executing a masking or profile job
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copyright (c) 2018 by Delphix. All rights reserved.
+#
+# Program Name : masking.sh
+# Description  : Delphix Masking API to execute a Masking Job Id
+# Author       : Alan Bitterman
+# Created      : 2018-01-30
+# Version      : v1.0
+#
+# Requirements :
+#  1.) Delphix Masking Version 5.2 or later!
+#  2.) curl and jq command line libraries
+#  3.) Populate Delphix Masking Connection Information . ./masking_engine.conf
+#  4.) Change any option values below as required
 #
 # Usage: 
 # ./masking.sh [job_number]
-#
 #
 #########################################################
 #                   DELPHIX CORP                        #
@@ -22,15 +39,9 @@
 start_time=`date +%s`
 
 #########################################################
-## Delphix Masking Parameter Initialization
+## Delphix Masking Parameter Initialization ...
 
-DMIP=172.16.160.195
-DMPORT=8282
-DMUSER="Axistech"
-DMPASS="Axis_123"
-DMURL="http://${DMIP}:${DMPORT}/masking/api"
-DELAYTIMESEC=10
-DT=`date '+%Y%m%d%H%M%S'`
+. ./masking_engine.conf
 
 SHOW_TIMINGS=""     # "Yes" or "" 
 
@@ -43,6 +54,12 @@ SHOW_TIMINGS=""     # "Yes" or ""
 #
 JOBID=${1}
 echo "Job Number: ${JOBID}"
+
+if [[ "${JOBID}" == "" ]]
+then
+   echo "No Job Id provided, exiting ..."
+   exit 1
+fi
 
 #########################################################
 ## File Pre-Processing ...
