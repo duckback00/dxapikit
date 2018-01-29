@@ -10,7 +10,9 @@ Prior to 5.2 release, please see previous API examples in the pre_5.2 directory.
 
 Sample Scripts:
 
-  Run a masking job from a Shell Script                Filename: masking.sh
+<table>
+  <tr><td>Run a masking job from a Shell Script</td><td>Filename: </td><td>masking.sh</td></tr>
+</table>
  
 
 *** End of README ***
