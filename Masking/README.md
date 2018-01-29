@@ -10,8 +10,8 @@ Prior to 5.2 release, please see previous API examples in the pre_5.2 directory.
 
 Sample Scripts:
 
-<table width="100%">
-  <tr><td width="60%">Run a masking job from a Shell Script</td><td>Filename: masking.sh</td></tr>
+<table>
+  <tr><td>Run a masking job from a Shell Script</td><td>Filename: masking.sh</td></tr>
 </table>
  
 
