@@ -36,7 +36,6 @@
 #########################################################
 ## Parameters ...
  
-DELETE_OPT="TRUE"      # TRUE=allow  FALSE=don't allow
 SORT_BY="DESC"         # ASC=Ascending (earliest to latest) 
                        # DESC=Descending (latest to earliest)
  
@@ -157,8 +156,8 @@ fi
 #
 let j=0
 let k=0
-printf "%-12s | %-26s | %-10s | %-34s | %s \n" "Database" "Snapshot Name" "Size" "Timeflow" "VDB"
-echo "-------------+----------------------------+------------+------------------------------------+-------------"
+printf "%-12s | %-26s | %-10s | %-34s | %-15s | %s \n" "Database" "Snapshot Name" "Size" "Timeflow" "VDB" "Retention"
+echo "-------------+----------------------------+------------+------------------------------------+-----------------+-----------"
 
 while read i
 do 
@@ -204,17 +203,60 @@ EOF
       PDB_NAME=""
    fi
 
-   #echo "---------------------------------"
-   #echo "DB: ${DBNAME}  Snapshot: ${SNAME}  Size: ${SIZE}  ${DSTR} "
-   printf "%-12s | %-26s | %-10s | %-34s | %s \n" ${DBNAME} ${SNAME} "${SIZE}" ${PARENT} ${PDB_NAME} 
- 
+   RETENTION=`echo "${STATUS}" | jq --raw-output '.result[] | select(.reference=="'"${i}"'") | .retention '`
+
+   printf "%-12s | %-26s | %-10s | %-34s | %-15s | %s \n" "${DBNAME}" "${SNAME}" "${SIZE}" "${PARENT}" "${PDB_NAME}" "${RETENTION}" 
 
 done <<< "${SYNC_REFS}"
+
+
+echo "Copy-n-paste Snapshot Name or enter to exit: "
+read SNAP_NAME
+if [ "${SNAP_NAME}" == "" ]
+then
+   echo "No Snapshot Name Provided ${SNAP_NAME}, Exiting ..."
+   exit 1;
+fi
+
+SNAP_REF=`echo "${STATUS}" | jq --raw-output '.result[] | select(.name=="'"${SNAP_NAME}"'") | .reference '`
+if [[ "${SNAP_REF}" == "" ]]
+then
+   echo "Error: Snapshot reference ${SNAP_REF} not found for Snapshot $SNAP_NAME, exiting ... "
+   exit 1;
+fi
+
+#########################################################
+## Action ...
+
+ACTION=$2
+if [[ "${ACTION}" == "" ]]
+then
+
+   echo "---------------------------------"
+   echo "NOTE: Snapshots with Timeflow/VDB Dependencies can not be deleted"
+   echo "Options: [ delete | keep_forever | keep_until ] "
+   echo "Please Enter Operation: "
+   read ACTION
+   if [ "${ACTION}" == "" ]
+   then
+      echo "No Operation Provided, Exiting ..."
+      exit 1;
+   fi
+fi
+ACTION=$(echo "${ACTION}" | tr '[:upper:]' '[:lower:]')
+
+if [[ "${ACTION}" != "delete" ]] && [[ "${ACTION}" != "keep_forever" ]] && [[ "${ACTION}" != "keep_until" ]] 
+then
+   echo "Error: Invalid Action ${ACTION}, exiting ..."
+   exit 1
+fi
+
+echo "Performing ${ACTION} on Snapshot ${SNAP_NAME} with reference ${SNAP_REF} ... "
 
 #########################################################
 ## Get snapshot name to delete ...
 
-if [[ "${DELETE_OPT}" == "TRUE" ]]
+if [[ "${ACTION}" == "delete" ]]
 then
    #
    # Delete option iff not last snapshot and no dependencies ...
@@ -224,34 +266,52 @@ then
    then
       echo "Last snapshot, delete not allowed ..."
    else
-      echo "NOTE: Snapshots with Timeflow/VDB Dependencies can not be deleted"
-      echo "Copy-n-paste Snapshot Name to Delete or enter to exit: "
-      read SNAP_DEL
-      if [ "${SNAP_DEL}" == "" ]
-      then
-         echo "No Snapshot Name Provided ${SNAP_DEL}, Exiting ..."
-         exit 1;
-      fi
-
       #########################################################
       ## Delete snapshot ...
 
-      SNAP_REF=`echo "${STATUS}" | jq --raw-output '.result[] | select(.name=="'"${SNAP_DEL}"'") | .reference '`
-      echo "Deleting Snapshot $SNAP_DEL ... "
-      if [[ "${SNAP_REF}" != "" ]]
-      then
-         STATUS=`curl -s -X POST -k --data @- ${BaseURL}/snapshot/${SNAP_REF}/delete -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
+      STATUS=`curl -s -X POST -k --data @- ${BaseURL}/snapshot/${SNAP_REF}/delete -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
 {}
 EOF
 `
 
-         echo "${STATUS}" | jq '.'
-      else
-         echo "Error, unable to get snapshot reference from ${SNAP_DEL}, exiting ..."
+      echo "${STATUS}" | jq '.'
+   fi              # end if not last snapshot ...
+fi 		# end if delete ...
+
+#########################################################
+## Snapshot Keep Forever or Keep Until ...
+
+if [[ "${ACTION}" == "keep_forever" ]] || [[ "${ACTION}" == "keep_until" ]]
+then
+
+   if [[ "${ACTION}" == "keep_until" ]]
+   then
+      echo "How many days to keep snapshot: "
+      read DAYS
+      if [ "${DAYS}" == "" ]
+      then
+         echo "No Days ${DAYS} Provided, Exiting ..."
          exit 1;
       fi
-   fi              # end if not last snapshot ...
-fi 		# end if DELETE_OPT ...
+   else 
+      DAYS="-1"
+   fi
+
+   json="{
+     \"type\": \"OracleSnapshot\",
+     \"retention\": ${DAYS}
+   }"
+
+   #echo "Updating Snapshot to Keep Forever ... "
+   STATUS=`curl -s -X POST -k --data @- ${BaseURL}/snapshot/${SNAP_REF} -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
+${json}
+EOF
+`
+
+   echo "${STATUS}" | jq '.'
+fi 		# end if Keep Forever ...
+
+############## E O F ####################################
 echo " "
 echo "Done "
 exit 0;
