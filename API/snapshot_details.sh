@@ -15,10 +15,11 @@
 # Copyright (c) 2017 by Delphix. All rights reserved.
 #
 # Program Name : snapshot_details.sh
-# Description  : Delphix API snapshot details with delete  
+# Description  : Delphix API snapshot details with 
+#                options to delete | keep_forever | keep_until  
 # Author       : Alan Bitterman
 # Created      : 2017-10-09
-# Version      : v1.0.0
+# Version      : v1.1
 #
 # Requirements :
 #  1.) curl and jq command line libraries
@@ -75,7 +76,7 @@ RESULTS=$( RestSession "${DMUSER}" "${DMPASS}" "${BaseURL}" "${COOKIE}" "${CONTE
 #echo "Results: ${RESULTS}"
 if [ "${RESULTS}" != "OK" ]
 then
-   echo "Error: Exiting ..."
+   echo "Session Login Error: Exiting ..."
    exit 1;
 fi
 
@@ -228,10 +229,9 @@ fi
 #########################################################
 ## Action ...
 
-ACTION=$2
+ACTION=""		# default action ...
 if [[ "${ACTION}" == "" ]]
 then
-
    echo "---------------------------------"
    echo "NOTE: Snapshots with Timeflow/VDB Dependencies can not be deleted"
    echo "Options: [ delete | keep_forever | keep_until ] "
@@ -302,7 +302,7 @@ then
      \"retention\": ${DAYS}
    }"
 
-   #echo "Updating Snapshot to Keep Forever ... "
+   #echo "Updating Snapshot Retention ... "
    STATUS=`curl -s -X POST -k --data @- ${BaseURL}/snapshot/${SNAP_REF} -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
 ${json}
 EOF
