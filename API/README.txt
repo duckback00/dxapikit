@@ -143,8 +143,8 @@ Jetstream - Templates
    Delete a Jetstream Template  		   Filename: jetstream_template_delete_jq.sh           
 
 Snapshots
-   Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency 
-   with option to delete non-dependent snapshots	
+   Display Snapshot Details; Database, Snapshot, Size, Timeflow Dependency, VDB Dependency, Retention 
+   with option to delete non-dependent snapshots, change retention to keep_forever or keep until # days	
 						   Filename: snapshot_details.sh	
 	
 Jobs
