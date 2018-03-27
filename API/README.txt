@@ -1,5 +1,5 @@
 README.txt
-v1.2.1
+v1.2.2
 
 ** So you want to work with the Delphix APIs? **
 
@@ -149,15 +149,6 @@ Snapshots
 	
 Jobs
    Display list of Delphix Engine Jobs		   Filename: jobs.sh
-
-
-
-*** WIP contact me for details or updates ***
-
-Hooks
-Filename: get_hook_template.sh
-Filename: get_source_hooks.sh
-Filename: read_hook.sh
 
 
 *** End of README.txt ***
