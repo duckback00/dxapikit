@@ -18,7 +18,7 @@
 # Description  : Delphix API to create a JetStream Container
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.0.0
+# Version      : v1.3 2018-03-26
 #
 # Requirements :
 #  1.) curl and jq command line libraries
@@ -47,7 +47,7 @@
 #DEF_JS_TEMPLATE="tpl"           # JetStream Template Name
 #DEF_JS_DS_NAME="ds"             # JetStream Template Data Source Name
 #DEF_JS_DC_NAME="dc"             # JetStream Data Container Name
-#DEF_DS_NAME="VBITT2" 		# Database Data Source VDB 
+#DEF_DS_NAME="VBITT" 	 	 # Database Data Source VDB 
 #
 # For full interactive option, set default values to nothing ...
 #
@@ -55,6 +55,10 @@ DEF_JS_TEMPLATE=""
 DEF_JS_DS_NAME=""
 DEF_JS_DC_NAME=""
 DEF_DS_NAME=""
+
+#
+FAST_REFRESH="Y"
+USERS="[\"delphix_admin\",\"dev\"]"
 
 #########################################################
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
@@ -79,6 +83,54 @@ then
 fi
 
 echo "Session and Login Successful ..."
+
+#########################################################
+## Get API Version Info ...
+
+APIVAL=$( jqGet_APIVAL )
+if [[ "${APIVAL}" == "" ]]
+then
+   echo "Error: Delphix Engine API Version Value Unknown ${APIVAL} ..."
+else
+   echo "Delphix Engine API Version: ${APIVAL}"
+fi
+
+if [[ $APIVAL -lt 190 ]]
+then
+   FAST_REFRESH="N"
+fi
+
+#########################################################
+## Get User Reference(s) ...
+
+#echo "User API "
+STATUS=`curl -s -X GET -k ${BaseURL}/user -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+RESULTS=$( jqParse "${STATUS}" "status" )
+
+###USERS="[\"delphix_admin\",\"dev\"]"
+TMP=`echo "$USERS" | jq --raw-output ".[]"`
+echo "User Names: ${USERS}"
+
+#
+# Process Array using jq ...
+#
+let i=0
+USER_REFS="["
+DELIM=""
+while read usr
+do
+   #echo "$i) |${usr}|"
+   #let i=i+1
+   Z=`echo "${STATUS}" | jq --raw-output ".result[] | select (.name == \"${usr}\") | .reference"`
+   if [[ "${Z}" != "" ]]
+   then
+      USER_REFS="${USER_REFS}${DELIM}\"${Z}\""       # quoted
+      #USER_REFS="${USER_REFS}${DELIM}"'\"'${Z}'\"'    # quotes escaped
+      DELIM=","
+   fi
+done <<< "$TMP"
+USER_REFS="${USER_REFS}]"
+echo "User References: ${USER_REFS}"
 
 #########################################################
 ## Get Template Reference ...
@@ -241,26 +293,39 @@ echo "jetstream container name: ${JS_DC_NAME}"
 #########################################################
 ## TODO ## Validate Data Container Object/Names are not already used ...
 
-#
-# Type Option for API version 190 or later
-# Faster Container Creations ...
-#
-#{
-#	"template":"JS_DATA_TEMPLATE-8"
-#	,"owners":["USER-2"]
-#	,"name":"dc"
-#	,"dataSources":[{
-#		"source":{"priority":1,"name":"ds","type":"JSDataSource"}
-#	   ,"container":"ORACLE_DB_CONTAINER-37"
-#	   ,"type":"JSDataSourceCreateParameters"
-#	 }]
-#	 ,"properties":{}
-#	,"type":"JSDataContainerCreateWithoutRefreshParameters"
-#}
-# NOTICE: no timelinePointParameters name: values
-
 #########################################################
-## Creating a JetStream Container from an Oracle Database ...
+## Creating a JetStream Container from a Source ...
+
+#
+# JSON parameters prior to J ...
+#
+if [[ $APIVAL -lt 190 ]]
+then
+
+   json="{
+     \"type\": \"JSDataContainerCreateParameters\",
+     \"dataSources\": [
+         {
+             \"type\": \"JSDataSourceCreateParameters\",
+             \"source\": {
+                 \"type\": \"JSDataSource\",
+                 \"priority\": 1,
+                 \"name\": \"${DS_NAME}\"
+             },
+             \"container\": \"${DS_REF}\"
+         }
+     ],
+     \"name\": \"${JS_DC_NAME}\",
+     \"template\": \"${JS_TPL_REF}\",     
+     \"timelinePointParameters\": {
+         \"type\": \"JSTimelinePointLatestTimeInput\",
+         \"sourceDataLayout\": \"${JS_DATALAYOUT}\"  
+     }
+}
+"
+
+elif [[ "${FAST_REFRESH}" != "Y" ]]
+then
 
 json="
 {
@@ -284,6 +349,33 @@ json="
      }
 }
 "
+
+else
+   #
+   # Type Option for API version 190 or later
+   # Faster Container Creations ...
+   #
+json="
+{
+       \"template\":  \"${JS_TPL_REF}\"
+       ,\"owners\": ${USER_REFS} 
+       ,\"name\": \"${JS_DC_NAME}\"
+       ,\"dataSources\": [{
+          \"source\": {
+              \"priority\":1
+              ,\"name\":\"${DS_NAME}\"
+              ,\"type\": \"JSDataSource\"
+           }
+          ,\"container\": \"${DS_REF}\"
+          ,\"type\": \"JSDataSourceCreateParameters\"
+        }]
+       ,\"properties\": {}
+       ,\"type\": \"JSDataContainerCreateWithoutRefreshParameters\"
+}
+"
+   # NOTICE: no timelinePointParameters name: values
+
+fi
 
 echo "JSON: ${json}"
 
