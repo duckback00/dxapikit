@@ -78,7 +78,7 @@ Delphix dSource/VDB Operations
    VDB Operations (sync|refresh|rollback)          Filename: vdb_operations.sh
 
 Delphix Groups
-        Group Operations (list|create|delete)      Filename: group_operations.sh
+   Group Operations (list|create|delete)           Filename: group_operations.sh
 
 Oracle Database Template (Init Parameters)
    List, Create, Update and Delete Oracle Template Parameters   
