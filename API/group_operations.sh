@@ -27,9 +27,9 @@
 #
 # Interactive Usage: ./group_operations.sh
 #
-# Non-Interactive Usage: ./group_operations.sh [create | delete] [Group_Name]
+# Non-Interactive Usage: ./group_operations.sh [list|create|delete] [Group_Name]
 #
-# Sample script to create or delete a Delphix Engine Group object ... 
+# Sample script to list, create or delete a Delphix Engine Group object ... 
 #
 #########################################################
 ## Parameter Initialization ...
@@ -74,7 +74,7 @@ RESULTS=$( jqParse "${STATUS}" "status" )
 ACTION=$1
 if [[ "${ACTION}" == "" ]]
 then
-   echo "Please Enter Group Option [create | delete] : "
+   echo "Please Enter Group Option [list|create|delete] : "
    read ACTION
    if [ "${ACTION}" == "" ]
    then
@@ -116,7 +116,10 @@ RESULTS=$( jqParse "${STATUS}" "status" )
 # Parse out container reference for name of $DELPHIX_GRP ...
 #
 GROUP_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${DELPHIX_GRP}"'") | .reference '`
-echo "group reference: ${GROUP_REFERENCE}"
+if [[ "${GROUP_REFERENCE}" != "" ]]
+then
+   echo "group reference: ${GROUP_REFERENCE}"
+fi
 
 #########################################################
 #
@@ -127,8 +130,10 @@ create)
 ;;
 delete)
 ;;
+list)
+;;
 *)
-  echo "Unknown option (create | delete): $ACTION"
+  echo "Unknown option [list|create|delete]: $ACTION"
   echo "Exiting ..."
   exit 1;
 ;;
@@ -171,6 +176,13 @@ then
    echo "Warning: Group Name ${DELPHIX_GRP} does not exist ..."
 fi      # end if delete ...
 
+#
+# List Group ...
+#
+if [ "${ACTION}" == "list" ] && [ "${GROUP_REFERENCE}" != "" ]
+then
+   echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${DELPHIX_GRP}"'") '
+fi
 
 #########################################################
 #
