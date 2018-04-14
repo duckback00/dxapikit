@@ -154,11 +154,13 @@ grant select any dictionary to profiler;
 
 -- 
 -- Grant select on any table ...
+-- (not recommended)
 --
-grant select any table to profiler;
+-- grant select any table to profiler;
 
 --
 -- ... or limit select grants on specific accounts tables ...
+-- (recommended)
 --
 set serveroutput on
 declare
