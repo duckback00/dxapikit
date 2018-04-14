@@ -12,8 +12,17 @@ Sample Scripts:
 
 <table>
   
+  <tr><td>Sample Masking Authentication</td><td>Filename: masking_authentication_example.sh</td></tr>
+  
+  <tr><td colspan=2><hr /></td></tr>
+  
   <tr><td>Masking Engine Configuration and Connection Parameters</td><td>Filename: masking_engine.conf</td></tr>
   <tr><td>Run a masking job from a Shell Script</td><td>Filename: masking.sh</td></tr>
+
+  <tr><td colspan=2><hr /></td></tr>
+
+  <tr><td>Profiling Many Data Sources</td><td>Directory: profile</td></tr>
+
 </table>
  
 
