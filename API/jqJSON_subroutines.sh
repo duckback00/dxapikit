@@ -130,16 +130,6 @@ if [ "${JOB}" != "" ]
 then
 
    #########################################################
-   ## Subroutines ...
-
-   . ./jqJSON_subroutines.sh
-
-   #########################################################
-   ## Parameter Initialization ...
-
-   . ./delphix_engine.conf
-
-   #########################################################
    ## Job Information ...
 
    JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
