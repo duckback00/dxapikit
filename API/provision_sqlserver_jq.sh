@@ -33,15 +33,20 @@
 # Please make changes to the parameters below as req'd! #
 #########################################################
 
+#########################################################
+## Parameter Initialization ...
+
+. ./delphix_engine.conf
+
 #
 # Required for Povisioning Virtual Database ...
 #
-SOURCE_SID="delphix_demo"        # dSource name used to get db container reference value
+SOURCE_SID="delphixdb"           # dSource name used to get db container reference value
 
-VDB_NAME="Vdelphix_demo"         # Delphix VDB Name
-DELPHIX_GRP="Windows Source"     # Delphix Engine Group Name
+VDB_NAME="Vdelphixdb"            # Delphix VDB Name
+DELPHIX_GRP="Windows_Target"     # Delphix Engine Group Name
 
-TARGET_ENV="Windows Target"      # Target Environment used to get repository reference value 
+TARGET_ENV="Windows Host"        # Target Environment used to get repository reference value 
 TARGET_REP="MSSQLSERVER"         # Target Environment Repository / Instance name
 
 #########################################################
@@ -52,13 +57,6 @@ TARGET_REP="MSSQLSERVER"         # Target Environment Repository / Instance name
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
-
-#########################################################
-#                   DELPHIX CORP                        #
-#########################################################
-## Parameter Initialization ...
-
-. ./delphix_engine.conf
 
 #########################################################
 ## Session and Login ...
@@ -74,6 +72,17 @@ then
 fi
 
 echo "Session and Login Successful ..."
+
+#########################################################
+## Get API Version Info ...
+
+APIVAL=$( jqGet_APIVAL )
+if [ "${APIVAL}" == "" ]
+then
+   echo "Error: Delphix Engine API Version Value Unknown ${APIVAL} ..."
+else
+   echo "Delphix Engine API Version: ${APIVAL}"
+fi
 
 #########################################################
 ## Get or Create Group 
@@ -132,50 +141,67 @@ echo "Source repository reference: ${REP_REFERENCE}"
 #########################################################
 ## Provision a SQL Server Database ...
 
-echo "Provisioning VDB from Source Database ..."
-STATUS=`curl -s -X POST -k --data @- $BaseURL/database/provision -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
+json="
 {
-    "type": "MSSqlProvisionParameters",
-    "container": {
-        "type": "MSSqlDatabaseContainer",
-        "name": "${VDB_NAME}",
-        "group": "${GROUP_REFERENCE}",
-        "sourcingPolicy": {
-            "type": "SourcingPolicy",
-            "loadFromBackup": false,
-            "logsyncEnabled": false
+    \"type\": \"MSSqlProvisionParameters\",
+    \"container\": {
+        \"type\": \"MSSqlDatabaseContainer\",
+        \"name\": \"${VDB_NAME}\",
+        \"group\": \"${GROUP_REFERENCE}\",
+        \"sourcingPolicy\": {
+            \"type\": \"SourcingPolicy\",
+            \"loadFromBackup\": false,
+            \"logsyncEnabled\": false
         },
-        "validatedSyncMode": "TRANSACTION_LOG"
+        \"validatedSyncMode\": \"TRANSACTION_LOG\"
     },
-    "source": {
-        "type": "MSSqlVirtualSource",
-        "operations": {
-            "type": "VirtualSourceOperations",
-            "configureClone": [],
-            "postRefresh": [],
-            "postRollback": [],
-            "postSnapshot": [],
-            "preRefresh": [],
-            "preSnapshot": []
+    \"source\": {
+        \"type\": \"MSSqlVirtualSource\","
+
+#
+# Version Specific JSON parameter requirement for Illium ...
+#
+if [ $APIVAL -ge 180 ]
+then
+json="${json}
+        \"allowAutoVDBRestartOnHostReboot\": false,"
+fi
+
+json="${json}
+        \"operations\": {
+            \"type\": \"VirtualSourceOperations\",
+            \"configureClone\": [],
+            \"postRefresh\": [],
+            \"postRollback\": [],
+            \"postSnapshot\": [],
+            \"preRefresh\": [],
+            \"preSnapshot\": []
         }
     },
-    "sourceConfig": {
-        "type": "MSSqlSIConfig",
-        "linkingEnabled": false,
-        "repository": "${REP_REFERENCE}",
-        "databaseName": "${VDB_NAME}",
-        "recoveryModel": "SIMPLE",
-        "instance": {
-            "type": "MSSqlInstanceConfig",
-            "host": "${ENV_REFERENCE}"
+    \"sourceConfig\": {
+        \"type\": \"MSSqlSIConfig\",
+        \"linkingEnabled\": false,
+        \"repository\": \"${REP_REFERENCE}\",
+        \"databaseName\": \"${VDB_NAME}\",
+        \"recoveryModel\": \"SIMPLE\",
+        \"instance\": {
+            \"type\": \"MSSqlInstanceConfig\",
+            \"host\": \"${ENV_REFERENCE}\"
         }
     },
-    "timeflowPointParameters": {
-        "type": "TimeflowPointSemantic",
-        "container": "${CONTAINER_REFERENCE}",
-        "location": "LATEST_SNAPSHOT"
+    \"timeflowPointParameters\": {
+        \"type\": \"TimeflowPointSemantic\",
+        \"container\": \"${CONTAINER_REFERENCE}\",
+        \"location\": \"LATEST_SNAPSHOT\"
     }
 }
+"
+
+echo "JSON: ${json}" 
+
+echo "Provisioning VDB from Source Database ..."
+STATUS=`curl -s -X POST -k --data @- $BaseURL/database/provision -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
+${json}
 EOF
 `
 
@@ -190,39 +216,7 @@ RESULTS=$( jqParse "${STATUS}" "status" )
 JOB=$( jqParse "${STATUS}" "job" )
 echo "Job: ${JOB}"
 
-#########################################################
-#
-# Job Information ...
-#
-JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-RESULTS=$( jqParse "${JOB_STATUS}" "status" )
-
-#########################################################
-#
-# Get Job State from Results, loop until not RUNNING  ...
-#
-JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-echo "Current status as of" $(date) ": ${JOBSTATE} ${PERCENTCOMPLETE}% Completed"
-while [ "${JOBSTATE}" == "RUNNING" ]
-do
-   echo "Current status as of" $(date) ": ${JOBSTATE} ${PERCENTCOMPLETE}% Completed"
-   sleep ${DELAYTIMESEC}
-   JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-   JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-   PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-done
-
-#########################################################
-##  Producing final status
-
-if [ "${JOBSTATE}" != "COMPLETED" ]
-then
-   echo "Error: Delphix Job Did not Complete, please check GUI ${JOB_STATUS}"
-#   exit 1
-else 
-   echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
-fi
+jqJobStatus "${JOB}"            # Job Status Function ...
 
 ############## E O F ####################################
 echo " "

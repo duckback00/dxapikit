@@ -14,7 +14,7 @@
 #
 # Copyright (c) 2017 by Delphix. All rights reserved.
 #
-# Program Name : link_oracle_jq.sh
+# Program Name : link_oracle_i.sh
 # Description  : Delphix API to link/ingest a dSource
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
@@ -26,7 +26,7 @@
 #  3.) Include ./jqJSON_subroutines.sh
 #  4.) Change values below as required
 #
-# Usage: ./link_oracle_jq.sh
+# Usage: ./link_oracle_i.sh
 #
 #########################################################
 #                   DELPHIX CORP                        #
@@ -185,16 +185,11 @@ jqJobStatus "${JOB}"            # Job Status Function ...
 #
 # sync snapshot ...
 #
-
-json="{
-    "type": "OracleSyncParameters"
-}"
-
-echo "JSON: ${json}"
-
 echo "Running SnapSync ..."
 STATUS=`curl -s -X POST -k --data @- $BaseURL/database/${CONTAINER}/sync -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
-${json}
+{
+    "type": "OracleSyncParameters"
+}
 EOF
 `
 

@@ -79,6 +79,17 @@ then
 fi
 
 #########################################################
+## Get API Version Info ...
+
+APIVAL=$( jqGet_APIVAL )
+if [[ "${APIVAL}" == "" ]]
+then
+   echo "Error: Delphix Engine API Version Value Unknown ${APIVAL} ..."
+else
+   echo "Delphix Engine API Version: ${APIVAL}"
+fi
+
+#########################################################
 ## Get Template Reference ...
 
 #echo "Getting Jetstream Template Reference ..."
@@ -185,15 +196,19 @@ echo "Active Branch Name: ${ACTIVE_BRANCH_NAME}"
 #########################################################
 ## Container Reset ...
  
-# v1.9.0
-#json="
-#{
-#    \"type\": \"JSDataContainerResetParameters\",
-#    \"forceOption\": false
-#}"
+if [[ $APIVAL -lt 190 ]]
+then
+   json="{}"
+else
+   # v1.9.0
+   json="
+{
+    \"type\": \"JSDataContainerResetParameters\",
+    \"forceOption\": false
+}
+"
 
-#=== POST /resources/json/delphix/jetstream/container/JS_DATA_CONTAINER-1/reset ===
-json="{}"
+fi
 
 echo "JSON: ${json}"
 
@@ -214,39 +229,7 @@ sleep 2
 JOB=$( jqParse "${STATUS}" "job" )
 echo "Job: ${JOB}"
 
-#########################################################
-#
-# Job Information ...
-#
-JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-RESULTS=$( jqParse "${JOB_STATUS}" "status" )
-
-#########################################################
-#
-# Get Job State from Results, loop until not RUNNING  ...
-#
-JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-echo "Current status as of" $(date) ": ${JOBSTATE} ${PERCENTCOMPLETE}% Completed"
-while [ "${JOBSTATE}" == "RUNNING" ]
-do
-   sleep ${DELAYTIMESEC}
-   JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-   JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-   PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-   echo "Current status as of" $(date) ": ${JOBSTATE} ${PERCENTCOMPLETE}% Completed"
-done
-
-#########################################################
-##  Producing final status
-
-if [ "${JOBSTATE}" != "COMPLETED" ]
-then
-   echo "Error: Delphix Job Did not Complete, please check GUI ${JOB_STATUS}"
-#   exit 1
-else
-   echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
-fi
+jqJobStatus "${JOB}"            # Job Status Function ...
 
 ############## E O F ####################################
 echo " "

@@ -270,38 +270,7 @@ JOB=`echo "$p$((n+1))"`
 
 echo "Job: ${JOB}"
 
-#########################################################
-#
-# Job Information ...
-#
-JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-RESULTS=$( jqParse "${JOB_STATUS}" "status" )
-
-#########################################################
-#
-# Get Job State from Results, loop until not RUNNING  ...
-#
-JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-while [ "${JOBSTATE}" == "RUNNING" ]
-do
-   echo "Current status as of" $(date) ": ${JOBSTATE} : ${PERCENTCOMPLETE}% Completed"
-   sleep ${DELAYTIMESEC}
-   JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-   JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-   PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-done
-
-#########################################################
-##  Producing final status
-
-if [ "${JOBSTATE}" != "COMPLETED" ]
-then
-   echo "Error: Delphix Job Did not Complete, please check GUI ${JOB_STATUS}"
-#   exit 1
-else
-   echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
-fi
+jqJobStatus "${JOB}"            # Job Status Function ...
 
 ############## E O F ####################################
 echo " "

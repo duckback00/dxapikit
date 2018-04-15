@@ -17,7 +17,7 @@
 # Description  : Shell Script Subroutines Commonly Used by API scripts
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.0.0
+# Version      : v1.1.0
 #
 # Requirements :
 #  1.) curl and jq command line libraries
@@ -65,7 +65,7 @@ RestSession() {
     "version": {
         "type": "APIVersion",
         "major": 1,
-        "minor": 8,
+        "minor": 9,
         "micro": 0
     }
 }
@@ -120,3 +120,62 @@ jqGet_APIVAL() {
    echo $apival
 }
 
+#########################################################
+## Job Status ...
+
+jqJobStatus () {
+
+JOB=${1}
+if [ "${JOB}" != "" ]
+then
+
+   #########################################################
+   ## Subroutines ...
+
+   . ./jqJSON_subroutines.sh
+
+   #########################################################
+   ## Parameter Initialization ...
+
+   . ./delphix_engine.conf
+
+   #########################################################
+   ## Job Information ...
+
+   JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+   RESULTS=$( jqParse "${JOB_STATUS}" "status" )
+   #echo "json> $JOB_STATUS"
+
+   #########################################################
+   ## Get Job State from Results, loop until not RUNNING  ...
+
+   JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
+   PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
+   echo "Current status as of" $(date) ": ${JOBSTATE} ${PERCENTCOMPLETE}% Completed"
+   while [ "${JOBSTATE}" == "RUNNING" ]
+   do
+      sleep ${DELAYTIMESEC}
+      JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+      JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
+      PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
+      echo "Current status as of" $(date) ": ${JOBSTATE} ${PERCENTCOMPLETE}% Completed"
+   done
+
+   #########################################################
+   ##  Producing final status ...
+
+   if [ "${JOBSTATE}" != "COMPLETED" ]
+   then
+      echo "Error: Delphix Job Did not Complete, please check GUI ${JOB_STATUS}"
+      # exit 1
+   else
+      echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
+   fi
+
+else
+
+   echo "Job Number Missing: ${JOB}"
+
+fi     # end if $JOB
+
+}

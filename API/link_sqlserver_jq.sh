@@ -32,26 +32,33 @@
 #                   DELPHIX CORP                        #
 # Please make changes to the parameters below as req'd! #
 #########################################################
+
+#########################################################
+## Parameter Initialization ...
+
+. ./delphix_engine.conf
+
 #
 # Required for Database Link and Sync ...
 #
-DELPHIX_NAME="delphix_demo"        # Delphix dSource Name
-DELPHIX_GRP="Windows Source"       # Delphix Group Name
+DELPHIX_NAME="delphixdb"         # Delphix dSource Name
+DELPHIX_GRP="Windows_Source"     # Delphix Group Name
 
-SOURCE_ENV="Windows Target"        # Source Enviroment Name
-SOURCE_INSTANCE="MSSQLSERVER"      # Source Database Oracle Home or SQL Server Instance Name
-SOURCE_SID="delphix_demo"          # Source Environment Database SID
-SOURCE_DB_USER="sa"                # Source Database user account
-SOURCE_DB_PASS="delphix"           # Source Database user password
+SOURCE_ENV="Windows Host"        # Source Enviroment Name
+SOURCE_INSTANCE="MSSQLSERVER"    # Source Database Oracle Home or SQL Server Instance Name
+SOURCE_SID="delphixdb"           # Source Environment Database SID
+SOURCE_DB_USER="delphixdb"       # Source Database user account
+SOURCE_DB_PASS="delphixdb"       # Source Database user password
 
-STAGE_ENV="Windows Target"         # Staging Environment   
-STAGE_INSTANCE="MSSQLSERVER"       # Staging Instance
+STAGE_ENV="Windows Host"         # Staging Environment   
+STAGE_INSTANCE="MSSQLSERVER"     # Staging Instance
 
 #
 # linkData.validatedSyncMode Value must be one of: 
 # [ 'TRANSACTION_LOG', 'FULL_OR_DIFFERENTIAL', 'FULL', 'NONE' ]
 #
-SYNC_MODE="FULL"  ##_OR_DIFFERENTIAL"
+#SYNC_MODE="TRANSACTION_LOG"  ## FULL _OR_ DIFFERENTIAL"
+SYNC_MODE="FULL"
 
 #########################################################
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
@@ -61,11 +68,6 @@ SYNC_MODE="FULL"  ##_OR_DIFFERENTIAL"
 ## Subroutines ...
 
 source ./jqJSON_subroutines.sh
-
-#########################################################
-## Parameter Initialization ...
-
-. ./delphix_engine.conf
 
 #########################################################
 ## Session and Login ...
@@ -85,8 +87,8 @@ echo "Session and Login Successful ..."
 #########################################################
 ## Get API Version Info ...
 
-apival=$( jqGet_APIVAL )
-echo "Delphix Engine API Version: ${apival}"
+APIVAL=$( jqGet_APIVAL )
+echo "Delphix Engine API Version: ${APIVAL}"
 
 #########################################################
 ## Get Group Reference ...
@@ -148,7 +150,7 @@ json="{
             \"password\": \"${SOURCE_DB_PASS}\"
         },
         \"dbUser\": \"${SOURCE_DB_USER}\","
-if [ $apival -ge 180 ]
+if [ $APIVAL -ge 180 ]
 then
 json="${json}
         \"validatedSyncMode\": \"${SYNC_MODE}\","
@@ -188,39 +190,7 @@ echo "Container: ${CONTAINER}"
 JOB=$( jqParse "${STATUS}" "job" )
 echo "Job: ${JOB}"
 
-#########################################################
-#
-# Job Information ...
-#
-JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-RESULTS=$( jqParse "${JOB_STATUS}" "status" )
-
-#########################################################
-# 
-# Get Job State from Results, loop until not RUNNING  ...
-#
-JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-while [ "${JOBSTATE}" == "RUNNING" ] 
-do
-   echo "Current status as of" $(date) ": ${JOBSTATE} : ${PERCENTCOMPLETE}% Completed"
-   sleep ${DELAYTIMESEC}
-   JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-   JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-   PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-done
-
-#########################################################
-##  Producing final status
-
-if [ "${JOBSTATE}" != "COMPLETED" ] 
-then
-   echo "Error: Delphix Job Did not Complete, please check GUI ${JOB_STATUS}"
-#   exit 1
-else 
-   echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
-fi
-
+jqJobStatus "${JOB}"            # Job Status Function ...
 
 #########################################################
 #
@@ -255,39 +225,7 @@ JOB=`echo "$p$((n+1))"`
 
 echo "Job: ${JOB}"
 
-#########################################################
-#
-# Job Information ...
-#
-JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-RESULTS=$( jqParse "${JOB_STATUS}" "status" )
-
-#########################################################
-#
-# Get Job State from Results, loop until not RUNNING  ...
-#
-JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-while [ "${JOBSTATE}" == "RUNNING" ]
-do
-   echo "Current status as of" $(date) ": ${JOBSTATE} : ${PERCENTCOMPLETE}% Completed"
-   sleep ${DELAYTIMESEC}
-   JOB_STATUS=`curl -s -X GET -k ${BaseURL}/job/${JOB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-   JOBSTATE=$( jqParse "${JOB_STATUS}" "result.jobState" )
-   PERCENTCOMPLETE=$( jqParse "${JOB_STATUS}" "result.percentComplete" )
-done
-
-#########################################################
-##  Producing final status
-
-if [ "${JOBSTATE}" != "COMPLETED" ]
-then
-   echo "Error: Delphix Job Did not Complete, please check GUI ${JOB_STATUS}"
-#   exit 1
-else
-   echo "Job: ${JOB} ${JOBSTATE} ${PERCENTCOMPLETE}% Completed ..."
-fi
-
+jqJobStatus "${JOB}"            # Job Status Function ...
 
 ############## E O F ####################################
 echo " "
