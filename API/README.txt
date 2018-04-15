@@ -1,5 +1,6 @@
 README.txt
 v1.3.0
+Quick Start - Sample Scripts
 
 ** So you want to work with the Delphix APIs? **
 
@@ -29,11 +30,12 @@ DMPASS=delphix
 ...
 [save & exit]
 
+NOTE: For when full paths are required, be sure to update both the . ./[references] within  
+      the scripts and within the jqJSON_subroutines.sh as well!!!
 
 
-Appendix
---------
-Quick Start - Sample Scripts
+Requirements
+------------
 
 The Unix/Linux/Mac shell scripts required the jq command line parser and curl command line libraries.
 
@@ -71,10 +73,9 @@ Authentication
 
 Delphix Engine
    Delphix Engine User Timeout Value 		   Filename: user_timeout_jq.sh
-        Concatenate DE Objects into single JSON string  
-						   Filename: delphix_objects_json.sh
-           Usage: . ./delphix_objects_json.sh
-                  echo $JSON
+   Concatenate DE Objects into single JSON string  Filename: delphix_objects_json.sh
+      Usage: . ./delphix_objects_json.sh
+             echo $JSON
 
 Delphix dSource/VDB Operations
    VDB Init (start|stop|enable|disable|delete) 	   Filename: vdb_init.sh
