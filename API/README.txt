@@ -1,5 +1,5 @@
 README.txt
-v1.2.2
+v1.3.0
 
 ** So you want to work with the Delphix APIs? **
 
