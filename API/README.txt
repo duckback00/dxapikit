@@ -63,6 +63,9 @@ Linux Included Config Scripts
    Delphix Engine Configuration Parameter Values   Filename: delphix_engine.conf
    jq JSON Parsing Functions in Examples           Filename: jqJSON_subroutines.sh
 
+NOTE: For when full paths are required, be sure to update both the . ./[references] within  
+      the scripts and within the jqJSON_subroutines.sh as well!!!
+
 Authentication
    Linux Shell Script Authentication   		   Filename: linux_shell_authentication.sh
 
