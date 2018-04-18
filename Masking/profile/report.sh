@@ -20,23 +20,31 @@ JNUM=${2}			# Job Number for Source Report ...
 #
 # Parameters ...
 #
-CSV="${BASENAME}.csv"		# Report CSV Path/Filename ...
-CSV_FILE=`basename $CSV`	# Report CSV Filename ...
-CSV_DELIM=","			# CSV Delimiter ...
+CSV="${BASENAME}.csv"           # Report CSV Path/Filename ...
+CSV_FILE=`basename $CSV`        # Report CSV Filename ...
+CSV_DELIM=","                   # CSV Delimiter ...
 HTML="${BASENAME}.html"         # Report HTML Path/Filename ...
+
+bg="lightgrey"                  # Metadata Background Color ...
+bg1="beige"                     # Table Background Color 1 ...
+bg2="snow"                      # Table Background Color 2 ...
+
+##########################################
+## No changes required below this point ##
+##########################################
 
 #
 # Read JSON Result Data ...
 #
 json=`cat ${JSON_OUT}${JNUM}`
-#echo "${json}"  
+#echo "JSON Source: ${JSON_OUT}${JNUM}"
 #echo "${json}" | jq "."
 
 #
 # Sorted Table Names ...
+# Note: Important for Diff Report ...
 #
 TABLES=`echo "${json}" | jq --raw-output ".tables | sort_by(.tableName) | .[].tableName "`
-##TABLES=`echo "${json}" | jq --raw-output ".tables.[].tableName"`
 #echo "Tables:  ${TABLES}"
 
 #
@@ -71,14 +79,7 @@ CSV_META="${DT}${CSV_DELIM}${DBT}${CSV_DELIM}${TMP}${CSV_DELIM}${CONN_STR}${CSV_
 #
 # HTML Output ...
 # 
-echo "<html><head><title>Delphix Rocks</title>" > ${HTML}
-echo "<style> table { font-family: arial, sans-serif; border-collapse: collapse; width: 100%; } td, th { border: 1px solid #dddddd; text-align: left; padding: 8px; } tr:nth-child(even) { background-color: #dddddd; } </style>" >> ${HTML}
-echo "</head><body>" >> ${HTML}
-echo "<table border=0 style=\"border: 0px solid #ffffff;\"><tr><td style=\"border: 0px solid #ffffff;\" width=\"25%\">" >> ${HTML}
-echo "<img src=\"${LOGO}\" border=0 />" >> ${HTML}
-echo "</td><td style=\"border: 0px solid #ffffff;\">" >> ${HTML}
-echo "${REPORT_TITLE}" >> ${HTML}
-echo "</td></tr></table>" >> ${HTML}
+echo "${BANNER}" > ${HTML}
 echo "Timestamp: ${DT} &nbsp;&nbsp; ... &nbsp;&nbsp; <a href=\"${CSV_FILE}\" target=\"_new\">Download CSV File</a><br />" >> ${HTML}
 echo "${STR}" >> ${HTML} 
 echo "<hr size=3 color=#1AD6F5 />" >> ${HTML}
@@ -98,6 +99,16 @@ then
 
    while read tbname
    do
+      #
+      # Background Colors per Table ...
+      #
+      if [[ "${bg}" == "${bg1}" ]]
+      then
+         bg=${bg2}
+      else
+         bg=${bg1}
+      fi
+
       #echo "... $tbname  "
       ### TABLES=`echo "${json}" | jq --raw-output ".tables | sort_by(.tableName) | .[].tableName "`
 
@@ -109,7 +120,7 @@ then
       #
       # HTML ...
       #
-      echo "${R1}" | jq --raw-output "\"<tr><td>${SCHEMA}</td><td>${tbname}</td><td>\" + .columnName + \"</td><td>\" + (.isMasked|tostring) + \"</td><td>\" + .domainName + \"</td><td>\" + .algorithmName + \"</td></tr>\" " >> ${HTML}
+      echo "${R1}" | jq --raw-output "\"<tr style='background-color:${bg};'><td>${SCHEMA}</td><td>${tbname}</td><td>\" + .columnName + \"</td><td>\" + (.isMasked|tostring) + \"</td><td>\" + .domainName + \"</td><td>\" + .algorithmName + \"</td></tr>\" " >> ${HTML}
 
       #
       # CSV ...
@@ -136,7 +147,7 @@ echo "No Tables: ${ROWS} <br />" >> ${HTML}
 echo "<span style=\"color:blue;\">Powered by Delphix Masking APIs v5.2</span>" >> ${HTML}
 echo "</body></html>" >> ${HTML}
 
-echo "Report Created ..."
+echo "Individual Report: `basename ${BASENAME}`.html created ..."
 
 # Done ...
 
