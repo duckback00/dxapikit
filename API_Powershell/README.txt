@@ -215,6 +215,7 @@ Windows / SQL Server
    Delphix PowerShell API Create Env Example		Filename: create_window_target_env.ps1
    Link/Ingest a SQL Server dSource  			Filename: link_sqlserver.ps1
    Provision a SQL Server VDB 				Filename: provision_sqlserver.ps1
+   Provision a SQL Server VDB from Command Line         Filename: provision_sqlserver_i.ps1
    Delete a SQL Server dSource or VDB 			Filename: delete_database_sqlserver.ps1
 
 SQL Server VDB Operations		
