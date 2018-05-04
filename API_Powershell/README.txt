@@ -118,6 +118,8 @@ PS>
 Now your shell scripts will be executed.
 
 
+----------------------------------------------------------------------------------------------------
+
 
 curl.exe
 --------
@@ -126,7 +128,8 @@ NOTE:
 Not all Windows platforms have the cURL executable installed. 
 
 
-One method is to install the git+ client for Windows.	
+METHOD 1: Install the git+ client for Windows	
+---------------------------------------------
 
 https://git-for-windows.github.io/
 The Git install includes, among other things, curl.exe. After installing, the /mingw64/bin will be added to your PATH. Then you will be able to use the curl command from the Windows Command Prompt or PowerShell console.
@@ -142,7 +145,9 @@ rtmp rtsp scp sftp smtp smtps telnet tftp
 Features: IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2
 
 
-Another method is to download the curl.exe binary executable and copy it to the Windows directory.
+METHOD 2: Download the curl.exe binary executable and copy it to the Windows directory
+--------------------------------------------------------------------------------------
+
 ========================= curl.exe executable download =========================
 
 https://curl.haxx.se/dlwiz/
@@ -174,6 +179,10 @@ PS> curl.exe --version
 curl 7.56.1 ... [ more version info to follow ]
 
 
+
+----------------------------------------------------------------------------------------------------
+
+
 Invoking the curl or curl.exe from Powershell command line.
 
 PS> Get-Command curl
@@ -198,6 +207,8 @@ curl 7.49.1 (x86_64-w64-mingw32) ...
 PS> curl --version
 curl 7.49.1 (x86_64-w64-mingw32) ...
 
+
+----------------------------------------------------------------------------------------------------
 
 
 Sample Scripts
