@@ -195,7 +195,7 @@ Function Monitor_JOB ([string]$BaseURL, [string]$COOKIE, [string]$CONTENT_TYPE, 
    ##  Producing final status
 
    if ("${JOBSTATE}" -eq "COMPLETED") {
-      return [string] "${JOB} ${JOBSTATE} Succesfully."
+      return [string] "${JOB} ${JOBSTATE} Successfully."
    } else {
       return [string] "${JOB} Failed with ${JOBSTATE} Status"
    }
