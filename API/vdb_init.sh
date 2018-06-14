@@ -18,7 +18,7 @@
 # Description  : Delphix API calls to change the state of VDB's
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.1
+# Version      : v1.2
 #
 # Requirements :
 #  1.) curl and jq command line libraries
@@ -60,6 +60,17 @@ then
 fi
 
 echo "Session and Login Successful ..."
+
+#########################################################
+## Get API Version Info ...
+
+APIVAL=$( jqGet_APIVAL )
+if [ "${APIVAL}" == "" ]
+then
+   echo "Error: Delphix Engine API Version Value Unknown ${APIVAL} ..."
+#else
+#   echo "Delphix Engine API Version: ${APIVAL}"
+fi
 
 #########################################################
 #
@@ -122,30 +133,11 @@ then
    exit 1;
 fi
 
-#########################################################
-## Get source reference ... 
-
-STATUS=`curl -s -X GET -k ${BaseURL}/source -b "${COOKIE}" -H "${CONTENT_TYPE}"`
-RESULTS=$( jqParse "${STATUS}" "status" )
-#echo "results> $RESULTS"
-
 #
-# Parse out source reference from container reference using jq ...
+# Parse out container type ...
 #
-VDB=`echo ${STATUS} | jq --raw-output '.result[] | select(.container=="'"${CONTAINER_REFERENCE}"'") | .reference '`
-echo "source reference: ${VDB}"
-if [ "${VDB}" == "" ]
-then
-  echo "ERROR: unable to find source reference in ... $STATUS"
-  echo "Exiting ..."
-  exit 1;
-fi
-
-#echo "${STATUS}"
-#echo " "
-VENDOR_SOURCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.container=="'"${CONTAINER_REFERENCE}"'") | .type '`
-echo "vendor source: ${VENDOR_SOURCE}"
-
+CONTAINER_TYPE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${SOURCE_SID}"'") | .type '`
+echo "database container type: ${CONTAINER_TYPE}"
 
 #########################################################
 #
@@ -177,19 +169,34 @@ esac
 if [ "${ACTION}" == "status" ]
 then
 
-
    # 
    # Get Source Status ...
    #
-   STATUS=`curl -s -X GET -k ${BaseURL}/source/${VDB} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+   STATUS=`curl -s -X GET -k "${BaseURL}/source" -b "${COOKIE}" -H "${CONTENT_TYPE}"`
    #echo ${STATUS} | jq '.'
+
+   SOURCE_REF=`echo "${STATUS}" | jq --raw-output '.result[] | select (.container=="'"${CONTAINER_REFERENCE}"'") | .reference '`
+   echo "Source Reference: ${SOURCE_REF}"
+
+   STATUS=`curl -s -X GET -k "${BaseURL}/source/${SOURCE_REF}" -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+   #echo ${STATUS} | jq '.'
+
    #
    # Parse and Display Results ...
    #
-   r=`echo ${STATUS} | jq '.result.runtime.status'`
-   r1=`echo ${STATUS} | jq '.result.enabled'`
-   echo "Runtime Status: ${r}"
-   echo "Enabled: ${r1}"
+   #echo "API: $APIVAL"
+   r=`echo ${STATUS} | jq --raw-output '.result.runtime.status'`
+   if [[ $APIVAL -lt 190 ]]
+   then
+      r1=`echo ${STATUS} | jq --raw-output '.result.enabled'`
+   else
+      r1=`echo ${STATUS} | jq --raw-output '.result.runtime.enabled'`
+   fi
+   #echo "Runtime Status: ${r}"
+   #echo "Enabled: ${r1}"
+   #echo "${STATUS}"
+   echo "\"RuntimeStatus\": \"${r}\",
+\"Enabled\": \"${r1}\""
 
 
 else
@@ -201,7 +208,7 @@ else
    if [ "${ACTION}" == "delete" ]
    then
 
-      if [[ ${VENDOR_SOURCE} == Oracle* ]]
+      if [[ "${CONTAINER_TYPE}" == "OracleDatabaseContainer" ]]
       then 
          deleteParameters="OracleDeleteParameters"
       else
@@ -209,7 +216,7 @@ else
       fi
       echo "delete parameters type: ${deleteParameters}"
 
-      STATUS=`curl -s -X POST -k --data @- ${BaseURL}/database/${CONTAINER_REFERENCE}/${ACTION} -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
+      STATUS=`curl -s -X POST -k --data @- ${BaseURL}/database/${SOURCE_SID}/${ACTION} -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
 {
     "type": "${deleteParameters}"
 }
@@ -222,10 +229,19 @@ EOF
       # All other init options; start | stop | enable | disable ...
       #
 
+      # NOTE: dSources require disable *> set type=OracleDisableParameters  SourceDisableParameters
+      #Delphix5240 source 'delphix_demo' disable *> set type=SourceDisableParameters
+      #
+      #=== POST /resources/json/delphix/source/MSSQL_LINKED_SOURCE-3/disable ===
+      #{ "type": "SourceDisableParameters" }
+      #
+      #=== POST /resources/json/delphix/source/MSSQL_LINKED_SOURCE-3/enable ===
+      #{ "type": "SourceEnableParameters" }
+
       #
       # Submit VDB init change request ...
       #
-      STATUS=`curl -s -X POST -k ${BaseURL}/source/${VDB}/${ACTION} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
+      STATUS=`curl -s -X POST -k ${BaseURL}/source/${CONTAINER_REFERENCE}/${ACTION} -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 
    fi      # end if delete ...
 

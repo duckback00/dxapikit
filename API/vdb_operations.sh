@@ -18,7 +18,7 @@
 # Description  : API calls to perform basic operations on a VDB
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.0.0
+# Version      : v1.2
 #
 # Requirements :
 #  1.) curl and jq command line libraries
@@ -119,6 +119,12 @@ then
    exit 1;
 fi
 
+#
+# Parse out container type ...
+#
+CONTAINER_TYPE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${SOURCE_SID}"'") | .type '`
+echo "database container type: ${CONTAINER_TYPE}"
+
 #########################################################
 ## Get provision source database container
 
@@ -131,44 +137,95 @@ PARENT_SOURCE=`echo ${STATUS} | jq --raw-output '.result | select(.reference=="'
 echo "provision source container: ${PARENT_SOURCE}"
 
 #########################################################
+## type values ...
+
+#sync *> set type=
+#ASELatestBackupSyncParameters
+#ASENewBackupSyncParameters
+#ASESpecificBackupSyncParameters
+#AppDataSyncParameters
+#MSSqlExistingMostRecentBackupSyncParameters
+#MSSqlExistingSpecificBackupSyncParameters
+#MSSqlNewCopyOnlyFullBackupSyncParameters
+#MySQLExistingMySQLDumpSyncParameters
+#MySQLNewMySQLDumpSyncParameters
+#MySQLXtraBackupSyncParameters
+#OracleSyncParameters
+#PgSQLSyncParameters
+#SyncParameters
+
 #
-# start or stop the vdb based on the argument passed to the script
+# Defaults for non-coded container types ...
 #
+SYNC_TYPE="SyncParameters"
+REFRESH_TYPE="RefreshParameters"
+ROLLBACK_TYPE="RollbackParameters"
+
+if [[ "${CONTAINER_TYPE}" == "OracleDatabaseContainer" ]]
+then
+   SYNC_TYPE="OracleSyncParameters"
+   REFRESH_TYPE="OracleRefreshParameters"
+   ROLLBACK_TYPE="OracleRollbackParameters"
+fi
+if [[ "${CONTAINER_TYPE}" == "MSSqlDatabaseContainer" ]]
+then
+   # MSSqlExistingMostRecentBackupSyncParameters
+   # MSSqlExistingSpecificBackupSyncParameters
+   # MSSqlNewCopyOnlyFullBackupSyncParameters
+   SYNC_TYPE="MSSqlExistingMostRecentBackupSyncParameters"
+   REFRESH_TYPE="RefreshParameters"
+   ROLLBACK_TYPE="RollbackParameters"
+fi
+if [[ "${CONTAINER_TYPE}" == "AppDataContainer" ]]
+then
+   SYNC_TYPE="AppDataSyncParameters"
+   REFRESH_TYPE="RefreshParameters"
+   ROLLBACK_TYPE="RollbackParameters"
+fi
+
+#########################################################
+## Perform Action ... 
+
 case ${ACTION} in
 sync)
-json="{
-   \"type\": \"OracleSyncParameters\"
+
+   json="{
+   \"type\": \"${SYNC_TYPE}\"
 }"
+
 ;;
 refresh)
-json="{
-    \"type\": \"OracleRefreshParameters\",
+
+   json="{
+    \"type\": \"${REFRESH_TYPE}\",
     \"timeflowPointParameters\": {
         \"type\": \"TimeflowPointSemantic\",
         \"container\": \"${PARENT_SOURCE}\"
     }
 }"
+
 ;;
 rollback)
-json="{
-    \"type\": \"OracleRollbackParameters\",
+
+   json="{
+    \"type\": \"${ROLLBACK_TYPE}\",
     \"timeflowPointParameters\": {
         \"type\": \"TimeflowPointSemantic\",
         \"container\": \"${CONTAINER_REFERENCE}\"
     }
 }"
+
 ;;
 *)
+
   echo "Unknown option (sync | refresh | rollback): ${ACTION}"
   echo "Exiting ..."
   exit 1;
+
 ;;
 esac
 
-
 echo "json> ${json}"
-#exit;
-
 
 #
 # Submit VDB operations request ...
