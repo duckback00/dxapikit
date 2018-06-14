@@ -106,7 +106,10 @@ Linux / ASE Database
 Linux / SQL Server Database
    Link/Ingest a SQL Server dSource                Filename: link_sqlserver_jq.sh
    Provision a SQL Server VDB                      Filename: provision_sqlserver_jq.sh
-	
+
+Linux / DB2 Database
+   Provision a DB2 VDB                             Filename: provision_db2.sh
+		
 Timeflows
    VDB Timeflow Object Information /Details	   Filename: flows.sh
    Find Timeflow Object by Timestamp               Filename: timestamp.sh
