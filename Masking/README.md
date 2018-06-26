@@ -2,7 +2,7 @@
 
 README file for Masking 
 
-Masking Scripts - All Platforms
+Masking Scripts - All Unix/Linux/Mac Platforms
 
 Starting with Delphix Engine 5.2 Release as of December 2017, Delphix Masking APIs have completely been updated.  
 
