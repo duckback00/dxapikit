@@ -17,11 +17,14 @@ Windows has a number of versions of PowerShell. The minimum version for Delphix 
 
 These examples are for PowerShell 3.0 or later. Starting with PowerShell 3.0 and later, native JSON parsing modules are included in PowerShell. In PowerShell 2.0 there are no JSON parsing modules, so there are functions included to support Poweshell 2.x versions.  
 
+<pre>
+Example
+
 PS> $PSVersionTable.PSVersion
 Major Minor Build Revision
 ----- ----- ----- --------
-2      0     -1    -1
-
+5      1     14393    2312
+</pre>
 
 
 ### Execution of Scripts Security Disabled
@@ -29,6 +32,7 @@ Major Minor Build Revision
 
 It is possible to disable Powershell environments on the system. If they are disabled, you will see the following error for any Powershell script that you try to execute.
 
+<pre>
 PS> . .\[any_powershell_script].ps1
 
 File [any_powershell_script].ps1 cannot be loaded because the execution of scriptsis disabled on this system. Please see "get-help about signing" for more details.
@@ -47,11 +51,11 @@ The execution policy helps protect you from scripts that you do not trust. Chang
 [Y] Yes [N] No [S] Suspend [?] Help (default is "Y"): Y
 
 PS>
+</pre>
 
 Now your shell scripts will be executed.
 
 
-----------------------------------------------------------------------------------------------------
 
 
 ### curl.exe
@@ -67,15 +71,14 @@ METHOD 1: Install the git+ client for Windows
 https://git-for-windows.github.io/
 The Git install includes, among other things, curl.exe. After installing, the /mingw64/bin will be added to your PATH. Then you will be able to use the curl command from the Windows Command Prompt or PowerShell console.
 
-PS> which curl.exe
-/mingw64/bin/curl
-
+<pre>
 PS> curl.exe --version
 curl 7.49.1 (x86_64-w64-mingw32) libcurl/7.49.1 OpenSSL/1.0.2h zlib/1.2.8
 libidn/1.32 libssh2/1.7.0 nghttp2/1.12.0 librtmp/2.3
 Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s
 rtmp rtsp scp sftp smtp smtps telnet tftp
 Features: IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2
+</pre>
 
 
 METHOD 2: Download the curl.exe binary executable and copy it to the Windows directory
@@ -84,6 +87,8 @@ METHOD 2: Download the curl.exe binary executable and copy it to the Windows dir
 ========================= curl.exe executable download =========================
 
 https://curl.haxx.se/dlwiz/
+
+<pre>
 Click on "curl executable" link
 Select Operating System: 					Win64  		Select! 
 Select for What Flavour: 					Generic  	Select!
@@ -91,9 +96,11 @@ Select which Win64 Version: Show package for Win64 version: 	Any  		Select!
 Select for What CPU: Show package for Win64 version: 		x_86_64  	Select!
 
 Select latest stable version with SSH enabled 
-The latest stable version available (7.56.1)!
+The latest stable version available (7.60.0)!
 
-curl version: 7.56.1 - SSL enabled SSH enabled   [ Download ]  
+curl version: 7.60.0 - SSL enabled SSH enabled   [ Download ]  
+</pre>
+
 
 To install:
 1.) Download the .zip file from the website steps shown above.
@@ -102,14 +109,14 @@ To install:
 
 3.) Either add the path below to the default system PATH environment variable   
 
-[full_path_to]\curl-7.56.1-win64-mingw\bin 
+[full_path_to]\curl-7.60.0-win64-mingw\bin 
 ... or ...
 copy the contents of the \bin directory, curl.exe, *.crt and libcurl-x64.dll, to the Windows\System32 directory
 
 4.) From Powershell, type the following command
 
 PS> curl.exe --version
-curl 7.56.1 ... [ more version info to follow ]
+curl 7.60.0 ... [ more version info to follow ]
 
 
 
