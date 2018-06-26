@@ -115,39 +115,44 @@ copy the contents of the \bin directory, curl.exe, *.crt and libcurl-x64.dll, to
 
 4.) From Powershell, type the following command
 
+<pre>
 PS> curl.exe --version
 curl 7.60.0 ... [ more version info to follow ]
+</pre>
 
 
-
-----------------------------------------------------------------------------------------------------
 
 
 Invoking the curl or curl.exe from Powershell command line.
 
+<pre>
 PS> Get-Command curl
 CommandType Name 
 ----------- ---- 
 Alias curl -> Invoke-WebRequest
+</pre>
 
+<pre>
 PS> Get-Command curl.exe
 CommandType Name  Version  Source
 ----------- ----  ----------  -------
 Application curl.exe  7.60.0.0  C:\Windows\system32\curl.exe
+</pre>
 
 If the alias curl name is to the Invoke-WebRequest, you will need to use the curl.exe command explicitly or remove the alias. Recommend that you just use the curl.exe explicitly.
 
 Verify that curl.exe works from the respective Powershell environment:
 
+<pre>
 PS> curl.exe --version
 curl 7.60.0 (x86_64-pc-win32) ...
-
+</pre>
 
 ----------------------------------------------------------------------------------------------------
 
 
-Sample Scripts
---------------
+### Masking Scripts
 
-Run a Masking Job                           Filename: masking.ps1   
+- Powershell Masking Job Script .................. Filename: masking.ps1
+
 
