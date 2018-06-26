@@ -4,7 +4,7 @@
 
 ## What is it?
 
-DxAPIkit is a set of scripts, which are provided by Delphix personnel. DxAPIkit scripts constist of Mac/Unix/Linux shell scripts and Windows PowerShell scripts. Also included, are Masking scripts for both platforms as well.
+DxAPIkit is a set of scripts, which are provided by Delphix personnel. DxAPIkit scripts constist of Mac/Unix/Linux shell scripts and Windows PowerShell scripts. Functionality covers Virtualization, SelfService, Delphix Reporting and Masking scripts. Examples include  Shell and Powershell scripts.
 
 - API
 - API_Powershell 
@@ -19,7 +19,7 @@ All shell scripts and some programming language examples require the curl comman
 
 The scripts are provided as shell scripts and can be easily ported to your favorite programming language of choice if desirable. Various programming languages starter examples are included in the language_examples directory.
 
-Knowledge of the Delphix Engine is required with limited programming experience recommended to use the DxAPIkit. 
+Knowledge of the Delphix functionality is required with limited programming experience recommended to use the DxAPIkit. 
 
 The goal for this project is to help Delphix users get up to speed quickly on how to use the Delphix API's.
 
