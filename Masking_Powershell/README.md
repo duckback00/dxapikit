@@ -153,6 +153,6 @@ curl 7.60.0 (x86_64-pc-win32) ...
 
 ### Masking Scripts
 
-- Powershell Masking Job Script .................. Filename: masking.ps1
+- Run a Masking Job Number Script .................. Filename: masking.ps1
 
 
