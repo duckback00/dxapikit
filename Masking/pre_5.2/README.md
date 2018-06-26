@@ -4,7 +4,6 @@
 
 Masking 
 - Shell Masking Job Script ............................ Filename: AgileMaskingExternalCalling.sh
-- Powershell Masking Job Script .................. Filename: masking.ps1
 - wget Command Masking Job Script .......... Filename: wget_local.sh
 
 Masking Logs/Report
