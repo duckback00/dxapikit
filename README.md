@@ -8,7 +8,9 @@ DxAPIkit is a set of scripts, which are provided by Delphix personnel. DxAPIkit 
 
 - API
 - API_Powershell 
+- Delphix_Reporting
 - Masking
+- Masking_Powershell
 - language_examples
 
 The Windows PowerShell scripts utilize the provided JSON parser functions (or native JSON parser module after PowerShell version 3) while the Mac/Unix/Linux shell scripts require the jq command line JSON parser.  
@@ -47,7 +49,9 @@ curl://
 
 curl is command line tool and library for transferring data with URLs 
 - NOTE: The curl command library is included with most operating systems
-- References: https://github.com/curl/curl     https://curl.haxx.se/
+- References: 
+	https://github.com/curl/curl     
+ 	https://curl.haxx.se/
 - Versions Tested: curl 7.19.7, 7.43.0 
   
 
