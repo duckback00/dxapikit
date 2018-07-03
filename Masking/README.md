@@ -8,7 +8,7 @@ Starting with Delphix Engine 5.2 Release as of December 2017, Delphix Masking AP
 
 Prior to 5.2 release, please see previous API examples in the pre_5.2 directory.
 
-Sample Scripts:
+### Sample Scripts:
 
 <table>
   
