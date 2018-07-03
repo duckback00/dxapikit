@@ -52,7 +52,7 @@ curl is command line tool and library for transferring data with URLs
 - References: 
 	https://github.com/curl/curl     
  	https://curl.haxx.se/
-- Versions Tested: curl 7.19.7, 7.43.0 
+- Versions Tested: curl 7.19.7, 7.43.0, 7.56.1, 7.60.0
   
 
 ./jq    
