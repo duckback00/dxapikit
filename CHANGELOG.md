@@ -1,9 +1,8 @@
 # Change Log 
 
-<br />
 
 ## July 3, 2018
-<br />
+ <br />
 <ul>
  <li>Added and Updated Masking API's</li>
  <ul>
@@ -12,6 +11,7 @@
  </ul>
  <li>New APIs: Delphix Reporting (formerly Mission Control)</li>
  <li>Updated Linux Shell API Examples</li>
+     <ul>
      <li>vdb_init.ps1        - updated to support other Delphix Data Sources</li>
      <li>vdb_operations.ps1  - updated to support other Delphix Data Sources </li>
     </ul>
