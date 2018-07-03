@@ -1,5 +1,21 @@
 # Change Log 
 
+<br />
+## July 3, 2018
+<br />
+<ul>
+ <li>Added and Updated Powershell API's for Virtualization and Masking</li>
+ <li>New APIs: Delphix Reporting (formerly Mission Control)</li>
+ <li>Updated and Added New Powershell API's to match more of the Linux Shell API Examples</li>
+    <ul>Key APIs
+     <li>vdb_init.ps1</li>
+     <li>vdb_operations.ps1</li>
+     <li>... plus others </li>
+    </ul>
+</ul>
+<br />
+<br />
+
 ## January 7, 2018
  <br />
 <ul>
