@@ -1,18 +1,19 @@
 # Change Log 
 
 <br />
+
 ## July 3, 2018
 <br />
 <ul>
- <li>Added and Updated Powershell API's for Masking</li>
+ <li>Added and Updated Masking API's</li>
  <ul>
-  <li> Masking_Powershell</li>
-  <li> Masking -> Profile - sample script to profile one or many environments</li>
+  <li> Masking_Powershell    - Powershell API's Examples</li>
+  <li> Masking -> Profile    - sample scripts to Profile one or many environments</li>
  </ul>
  <li>New APIs: Delphix Reporting (formerly Mission Control)</li>
  <li>Updated Linux Shell API Examples</li>
-     <li>vdb_init.ps1 - updated to support other Delphix Data Sources</li>
-     <li>vdb_operations.ps1 - updated to support other Delphix Data Sources </li>
+     <li>vdb_init.ps1        - updated to support other Delphix Data Sources</li>
+     <li>vdb_operations.ps1  - updated to support other Delphix Data Sources </li>
     </ul>
 </ul>
 <br />
