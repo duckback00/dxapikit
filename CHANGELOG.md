@@ -4,13 +4,15 @@
 ## July 3, 2018
 <br />
 <ul>
- <li>Added and Updated Powershell API's for Virtualization and Masking</li>
+ <li>Added and Updated Powershell API's for Masking</li>
+ <ul>
+  <li> Masking_Powershell</li>
+  <li> Masking -> Profile - sample script to profile one or many environments</li>
+ </ul>
  <li>New APIs: Delphix Reporting (formerly Mission Control)</li>
- <li>Updated and Added New Powershell API's to match more of the Linux Shell API Examples</li>
-    <ul>Key APIs
-     <li>vdb_init.ps1</li>
-     <li>vdb_operations.ps1</li>
-     <li>... plus others </li>
+ <li>Updated Linux Shell API Examples</li>
+     <li>vdb_init.ps1 - updated to support other Delphix Data Sources</li>
+     <li>vdb_operations.ps1 - updated to support other Delphix Data Sources </li>
     </ul>
 </ul>
 <br />
