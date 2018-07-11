@@ -14,10 +14,10 @@
 #
 # Copyright (c) 2018 by Delphix. All rights reserved.
 #
-# Program Name : dr_vdb.sh
+# Program Name : dr_dump_all.sh
 # Description  : Delphix Reporting API Examples
 # Author       : Alan Bitterman
-# Created      : 2018-07-02
+# Created      : 2018-07-11
 # Version      : v1.0
 # Platforms    : ONLY works with Delphix Version 5.2.x or later
 #
@@ -25,12 +25,8 @@
 #  1.) curl and jq command line libraries
 #  2.) Change values below as required
 #
-# Hard Code Defaults Usage:
-# ./dr_vdb.sh
-#
-# Command Line Options Usage:
-# ./dr_vdb.sh [vdb_name] [engine]
-# ./dr_vdb.sh Vorcl 172.16.160.195
+# Usage:
+# ./dr_dump_all.sh 
 #
 #########################################################
 #                   DELPHIX CORP                        #
