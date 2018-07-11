@@ -50,7 +50,7 @@ DRPWD="delphix"			# Delphix Reporting User Password
 
 # Output Variables ...
 DT=`date '+%Y%m%d%H%M%S'`
-OUTFILE="DumpAll_${DT}.json"
+OUTFILE="DumpAll_${DRIP}_${DT}.json"
 
 echo "{ 
   \"timeStamp\": \"${DT}\"
