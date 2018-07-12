@@ -1,14 +1,17 @@
 # Delphix Reporting APIs
 
 <table>
+  
   <tr>
    <th align="right">Description</th><th align="left">Filename</th>
   </tr>
+  
   <tr>
    <td align="right">One example with all the API calls</td><td>dr_api_examples.sh </td>
   </tr>
+  
   <tr>
-    <td colspan=2><font size=-1>
+    <td colspan=2 style="font-size:10pt;">
 Edit the file to change the configuration values prior to running.
 
 Includes authentication, listing reports, shows specified report name data, adding delphix engines, listing delphix engines, removing delphix engines and logging out 
@@ -22,15 +25,17 @@ Includes authentication, listing reports, shows specified report name data, addi
   <li>/api/get_report?report=&lt;reportId&gt;</li>
   <li>/api/logout</li>
 </ul>
-  </font>
   </td>
   </tr>
+  
   <tr>
    <td align="right">Consolidated VDB Report for VDB and ENGINE name</td><td>dr_vdb.sh </td>
   </tr>
+  
   <tr>
    <td align="right" width="50%">Dump All Report result collections into one JSON file</td><td>dr_dump_all.sh </td>
   </tr>
+  
  </table>
  
  <hr color=teal size=3 />
