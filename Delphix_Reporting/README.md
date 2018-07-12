@@ -1,5 +1,6 @@
 # Delphix Reporting APIs and Sample Reports
 
+
 <table>
 
   <tr>
@@ -31,6 +32,7 @@ Includes authentication, listing reports, shows specified report name data, addi
   <li>/api/get_report?report=&lt;reportId&gt;</li>
   <li>/api/logout</li>
 </ul>
+
   </td>
   </tr>
   
@@ -81,4 +83,7 @@ Includes authentication, listing reports, shows specified report name data, addi
   
   </table>
   
+<br />
+<br />
+<br />
 *** End of Document ***
