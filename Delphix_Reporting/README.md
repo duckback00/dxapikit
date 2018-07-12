@@ -2,10 +2,10 @@
 
 <table>
   <tr>
-   <th align=right>Description</th><th>Filename</th>
+   <th align="right">Description</th><th align="left">Filename</th>
   </tr>
   <tr>
-   <td align=right>One example with all the API calls</td><td>dr_api_examples.sh </td>
+   <td align="right">One example with all the API calls</td><td>dr_api_examples.sh </td>
   </tr>
   <tr>
     <td colspan=2>
@@ -26,10 +26,10 @@ Includes authentication, listing reports, shows specified report name data, addi
   </td>
   </tr>
   <tr>
-   <td align=right>Consolidated VDB Report for VDB and ENGINE name</td><td>dr_vdb.sh </td>
+   <td align="right">Consolidated VDB Report for VDB and ENGINE name</td><td>dr_vdb.sh </td>
   </tr>
   <tr>
-   <td align=right width="50%">Dump All Report result collections into one JSON file</td><td>dr_dump_all.sh </td>
+   <td align="right" width="50%">Dump All Report result collections into one JSON file</td><td>dr_dump_all.sh </td>
   </tr>
  </table>
  
