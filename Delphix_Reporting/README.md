@@ -26,6 +26,6 @@ Includes authentication, listing reports, shows specified report name data, addi
    <td align=right>Consolidated VDB Report for VDB and ENGINE name</td><td>Filename: dr_vdb.sh </td>
   </tr>
   <tr>
-   <td align=right>Dump All Report result collections into one JSON file</td><td>Filename: dr_dump_all.sh </td>
+   <td align=right width="50%">Dump All Report result collections into one JSON file</td><td>Filename: dr_dump_all.sh </td>
   </tr>
 *** End of Document ***
