@@ -8,7 +8,7 @@
    <td align="right">One example with all the API calls</td><td>dr_api_examples.sh </td>
   </tr>
   <tr>
-    <td colspan=2>
+    <td colspan=2><font size=-1>
 Edit the file to change the configuration values prior to running.
 
 Includes authentication, listing reports, shows specified report name data, adding delphix engines, listing delphix engines, removing delphix engines and logging out 
@@ -22,7 +22,7 @@ Includes authentication, listing reports, shows specified report name data, addi
   <li>/api/get_report?report=&lt;reportId&gt;</li>
   <li>/api/logout</li>
 </ul>
-
+  </font>
   </td>
   </tr>
   <tr>
