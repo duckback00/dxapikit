@@ -48,7 +48,7 @@ Includes authentication, listing reports, shows specified report name data, addi
  
  <hr color=teal size=3 />
  
- <table width="700">
+ <table>
 
   <tr>
    <th align="center" colspan=2>Delphix Reporting Custom/User Reports</th>
