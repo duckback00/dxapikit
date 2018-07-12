@@ -7,11 +7,13 @@
   </tr>
   
   <tr>
-   <th align="right">Description</th><th align="left">Filename</th>
+   <th align="left">Filename</th>
+   <th align="right">Description</th>
   </tr>
   
   <tr>
-   <td align="right">One example with all the API calls</td><td>dr_api_examples.sh </td>
+   <td>dr_api_examples.sh </td>
+   <td align="right">One example with all the API calls</td>
   </tr>
   
   <tr>
@@ -33,11 +35,13 @@ Includes authentication, listing reports, shows specified report name data, addi
   </tr>
   
   <tr>
-   <td align="right">Consolidated VDB Report for VDB and ENGINE name</td><td>dr_vdb.sh </td>
+   <td>dr_vdb.sh </td>
+   <td align="right">Consolidated VDB Report for VDB and ENGINE name</td>
   </tr>
   
   <tr>
-   <td align="right" width="50%">Dump All Report result collections into one JSON file</td><td>dr_dump_all.sh </td>
+   <td>dr_dump_all.sh </td>
+   <td align="right" width="50%">Dump All Report result collections into one JSON file</td>
   </tr>
  
  </table>
@@ -51,11 +55,13 @@ Includes authentication, listing reports, shows specified report name data, addi
   </tr>
   
   <tr>
-   <th align="right">Description</th><th align="left">Filename</th>
+   <th align="left">Filename</th>
+   <th align="right">Description</th>
   </tr>
   
   <tr>
-   <td align="right">Recent Actions (last 50k)</td><td>recent_actions.js</td>
+   <td>recent_actions.js</td>
+   <td align="right">Recent Actions (last 50k)</td>
   </tr>
   
   </table>
