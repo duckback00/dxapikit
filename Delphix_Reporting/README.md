@@ -8,12 +8,12 @@
   
   <tr>
    <th align="left">Filename</th>
-   <th align="right">Description</th>
+   <th align="left">Description</th>
   </tr>
   
   <tr>
    <td>dr_api_examples.sh </td>
-   <td align="right">One example with all the API calls</td>
+   <td align="left">One example with all the API calls</td>
   </tr>
   
   <tr>
@@ -36,12 +36,12 @@ Includes authentication, listing reports, shows specified report name data, addi
   
   <tr>
    <td>dr_vdb.sh </td>
-   <td align="right">Consolidated VDB Report for VDB and ENGINE name</td>
+   <td align="left">Consolidated VDB Report for VDB and ENGINE name</td>
   </tr>
   
   <tr>
    <td>dr_dump_all.sh </td>
-   <td align="right" width="50%">Dump All Report result collections into one JSON file</td>
+   <td align="left" width="50%">Dump All Report result collections into one JSON file</td>
   </tr>
  
  </table>
@@ -56,12 +56,12 @@ Includes authentication, listing reports, shows specified report name data, addi
   
   <tr>
    <th align="left">Filename</th>
-   <th align="right">Description</th>
+   <th align="left">Description</th>
   </tr>
   
   <tr>
    <td>recent_actions.js</td>
-   <td align="right">Recent Actions (last 50k)</td>
+   <td align="left">Recent Actions (last 50k)</td>
   </tr>
   
   </table>
