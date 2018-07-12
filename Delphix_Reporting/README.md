@@ -60,8 +60,23 @@ Includes authentication, listing reports, shows specified report name data, addi
   </tr>
   
   <tr>
+   <td>recent_db_sync_jobs.js</td>
+   <td align="left">Show Recent DB_SYNC Jobs</td>
+  </tr>
+
+  <tr>
+   <td>recent_db_rollback_jobs.js</td>
+   <td align="left">Show Recent DB_ROLLBACK Jobs</td>
+  </tr>
+  
+  <tr>
+   <td>recent_db_refresh_jobs.js</td>
+   <td align="left">Show Recent DB_REFRESH Jobs</td>
+  </tr>
+  
+  <tr>
    <td>recent_actions.js</td>
-   <td align="left">Recent Actions (last 50k)</td>
+   <td align="left">Show Recent Actions (Warning: last 50k)</td>
   </tr>
   
   </table>
