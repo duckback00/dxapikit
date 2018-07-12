@@ -48,7 +48,7 @@ Includes authentication, listing reports, shows specified report name data, addi
  
  <hr color=teal size=3 />
  
- <table>
+ <table width="100%">
 
   <tr>
    <th align="center" colspan=2>Delphix Reporting Custom/User Reports</th>
@@ -61,17 +61,17 @@ Includes authentication, listing reports, shows specified report name data, addi
   
   <tr>
    <td>recent_db_sync_jobs.js</td>
-   <td align="left">Show Recent DB_SYNC Jobs</td>
+   <td align="left">Show Recent DB_SYNC Jobs (last 2k)</td>
   </tr>
 
   <tr>
    <td>recent_db_rollback_jobs.js</td>
-   <td align="left">Show Recent DB_ROLLBACK Jobs</td>
+   <td align="left">Show Recent DB_ROLLBACK Jobs (last 2k)</td>
   </tr>
   
   <tr>
    <td>recent_db_refresh_jobs.js</td>
-   <td align="left">Show Recent DB_REFRESH Jobs</td>
+   <td align="left">Show Recent DB_REFRESH Jobs (last 2k)</td>
   </tr>
   
   <tr>
