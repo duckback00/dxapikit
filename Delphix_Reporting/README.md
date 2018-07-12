@@ -1,6 +1,10 @@
-# Delphix Reporting APIs
+# Delphix Reporting APIs and Sample Reports
 
 <table>
+
+  <tr>
+   <th align="center" colspan=2>Delphix Reporting APIs</th>
+  </tr>
   
   <tr>
    <th align="right">Description</th><th align="left">Filename</th>
@@ -35,9 +39,25 @@ Includes authentication, listing reports, shows specified report name data, addi
   <tr>
    <td align="right" width="50%">Dump All Report result collections into one JSON file</td><td>dr_dump_all.sh </td>
   </tr>
-  
+ 
  </table>
  
  <hr color=teal size=3 />
+ 
+ <table>
+
+  <tr>
+   <th align="center" colspan=2>Delphix Reporting Custom/User Reports</th>
+  </tr>
+  
+  <tr>
+   <th align="right">Description</th><th align="left">Filename</th>
+  </tr>
+  
+  <tr>
+   <td align="right">Recent Actions (last 50k)</td><td>recent_actions.js</td>
+  </tr>
+  
+  </table>
   
 *** End of Document ***
