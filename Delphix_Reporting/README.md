@@ -11,7 +11,7 @@
   </tr>
   
   <tr>
-    <td colspan=2 style="font-size:10pt;">
+    <td colspan=2 style="font-size:10px;">
 Edit the file to change the configuration values prior to running.
 
 Includes authentication, listing reports, shows specified report name data, adding delphix engines, listing delphix engines, removing delphix engines and logging out 
