@@ -14,7 +14,7 @@
   
   <tr>
    <td>dr_api_examples.sh<br />std_out.txt</td>
-   <td align="left" valign="top">One example with all the API calls</td>
+   <td align="left" valign="top">One example with all the API calls<br />Sample Run Output</td>
   </tr>
   
   <tr>
