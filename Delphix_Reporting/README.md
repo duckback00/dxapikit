@@ -13,7 +13,7 @@
   </tr>
   
   <tr>
-   <td>dr_api_examples.sh </td>
+   <td>dr_api_examples.sh<br />stdout.txt</td>
    <td align="left">One example with all the API calls</td>
   </tr>
   
@@ -80,6 +80,16 @@ Includes authentication, listing reports, shows specified report name data, addi
    <td>recent_actions.js</td>
    <td align="left">Show Recent Actions (Warning: last 50k)</td>
   </tr>
+
+  <tr>
+   <td>last50k_jobs.js</td>
+   <td align="left">Show Last 50k Jobs (Warning: last 50k)</td>
+  </tr>
+
+   <tr>
+   <td>jetstream-user-activity.js</td>
+   <td align="left">Jet Stream User Activity (Warning: last 50k)</td>
+  </tr>  
   
   </table>
   
