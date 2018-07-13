@@ -34,7 +34,7 @@ var jetstreamUserActionTypes = {
 
 var dateRange = dx.defineTunableInt({
     _id : 'jetstream.activity.dateRange',
-    defaultValue : 180,
+    defaultValue : 364,
     description : 'Number of days worth of Jet Stream user actions to display',
     report : RESULT_COL
 });
