@@ -13,8 +13,8 @@
   </tr>
   
   <tr>
-   <td>dr_api_examples.sh<br />stdout.txt</td>
-   <td align="left">One example with all the API calls</td>
+   <td>dr_api_examples.sh<br />std_out.txt</td>
+   <td align="left" valign="top">One example with all the API calls</td>
   </tr>
   
   <tr>
