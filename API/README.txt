@@ -76,6 +76,7 @@ Delphix Engine
    Concatenate DE Objects into single JSON string  Filename: delphix_objects_json.sh
       Usage: . ./delphix_objects_json.sh
              echo $JSON
+   Generate a local support bundle                 Filename: create_bundle.sh
 
 Delphix dSource/VDB Operations
    VDB Init (start|stop|enable|disable|delete) 	   Filename: vdb_init.sh
