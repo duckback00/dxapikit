@@ -12,7 +12,9 @@ Filename: perl_curl.pl
 JSP Example (Requires JSP Server such as Tomcat)
 Filename: delphix_http.jsp
 
-
+Java Examples
+Filename: delphix_sample.java
+Filename: delphix_sync_simple.java        // Requires json-simple-1.1.jar
 
 ## Other Projects of Interest
 
