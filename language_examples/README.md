@@ -1,10 +1,10 @@
 # README.txt
 
-Python Example
-Filename: auth.py	
+Python Example<br />
+Filename: auth.py<br />	
 
-PHP Example
-Filename: delphix_curl.php
+PHP Example<br />
+Filename: delphix_curl.php<br />
 
 Perl Example<br />
 Filename: perl_curl.pl<br />
