@@ -50,7 +50,7 @@ DMURL="http://${DMIP}:${DMPORT}/masking/api"
 DELAYTIMESEC=10
 
 #########################################################
-##        NO CHANGES REQUIED BELOW THIS LINE           ##
+##        NO CHANGES REQUIRED BELOW THIS LINE          ##
 #########################################################
 
 #
