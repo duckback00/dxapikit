@@ -10,6 +10,8 @@ change from just using the session cookie SESSIONID<br />
 to regenerating a new cookie on the login ...<br />
 /login -b "cookies.txt" -c "cookies.txt<br />
 <br />
+NOTE: this change is backwards compatible.<br />
+<br />
 
 ## July 3, 2018
  <br />
