@@ -2,7 +2,7 @@
 
 ## December 5, 2018
 
-Starting with Delphix Release 5.3.1.#, the login API call should be changed to get a new session id (JSESSIONID) <br />
+Starting with Delphix Release 5.3.1.#, the login API call should be changed to get a new session id (JSESSIONID) upon a successful login <br />
 <br />
 change from just using the session cookie SESSIONID<br />
 /login -b "cookies.txt"<br />
