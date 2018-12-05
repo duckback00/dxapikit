@@ -7,7 +7,7 @@ Starting with Delphix Release 5.3.1.#, the login API call should be changed to g
 change from just using the session cookie SESSIONID<br />
 /login -b "cookies.txt"<br />
 <br />
-to regenerating a new cookie on the login ...<br />
+to regenerating a new cookie only upon a successful login ...<br />
 /login -b "cookies.txt" -c "cookies.txt<br />
 <br />
 NOTE: this change is backwards compatible.<br />
