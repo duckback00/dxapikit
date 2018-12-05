@@ -75,7 +75,7 @@ EOF
    #echo "Session: ${STATUS}"
    RESULTS=$( jqParse "${STATUS}" "status" )
 
-   STATUS=`curl -s -X POST -k --data @- $BaseURL/login -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
+   STATUS=`curl -s -X POST -k --data @- $BaseURL/login -b "${COOKIE}" -c "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
 {
     "type": "LoginRequest",
     "username": "${DMUSER}",
