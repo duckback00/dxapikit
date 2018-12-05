@@ -17,7 +17,7 @@
 # Description  : Delphix PowerShell API Functions  
 # Author       : Alan Bitterman
 # Created      : 2017-08-09
-# Version      : v1.3
+# Version      : v1.3.1
 #
 #  1.) curl command line executable and ConvertFrom-Json Commandlet
 #
@@ -89,7 +89,7 @@ Function RestSession([string]$DMUSER, [string]$DMPASS, [string]$BaseURL, [string
    # Delphix Curl Login API ...
    #
    #Write-Output "${nl}Calling Login API ...${nl}"
-   $results = (curl.exe -sX POST -k ${BaseURL}/login -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
+   $results = (curl.exe -sX POST -k ${BaseURL}/login -b "${COOKIE}" -c "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
    $status = ParseStatus "${results}" "${ignore}"
    #Write-Output "${nl}Login API Results: ${results}"
 
