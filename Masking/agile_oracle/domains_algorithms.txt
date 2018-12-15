@@ -1,0 +1,117 @@
+Date Format Help
+
+Example Pattern			Result
+"MM/dd/yyyy"			12/23/1985
+"yyyy.MM.dd G 'at' HH:mm:ss z"	2001.07.04 AD at 12:08:56 PDT
+"EEE, MMM d, ''yy"		Wed, Jul 4, '01
+"hh 'o''clock' a, zzzz"		12 o'clock PM, Pacific Daylight Time
+"K:mm a, z"			0:08 PM, PDT
+"yyyyy.MMMMM.dd GGG hh:mm aaa"	02001.July.04 AD 12:08 PM
+"EEE, d MMM yyyy HH:mm:ss Z"	Wed, 4 Jul 2001 12:08:56 -0700
+"yyMMddHHmmssZ"			010704120856-0700
+"yyyy-MM-dd'T'HH:mm:ss.SSSZ"	2001-07-04T12:08:56.235-0700
+
+Letter	Date or Time Component	Example
+G	Era designator		AD
+y	Year			1996; 96
+M	Month in year		July; Jul; 07
+w	Week in year		27
+W	Week in montd		2
+D	Day in year		189
+d	Day in montd		10
+F	Day of week in montd	2
+E	Day in week		Tuesday; Tue
+a	Am/pm marker		PM
+H	Hour in day (0-23)	0
+k	Hour in day (1-24)	24
+K	Hour in am/pm (0-11)	0
+h	Hour in am/pm (1-12)	12
+m	Minute in hour		30
+s	Second in minute	55
+S	Millisecond		978
+z	Time zone		Pacific Standard Time; PST; GMT-08:00
+Z	Time zone		-0800
+
+
+dmsuite-# order by 2;
+        algorithm_cd         |       algorithm_name        | alogrithm_type |                             description                             
+-----------------------------+-----------------------------+----------------+---------------------------------------------------------------------
+ AccNoLookup                 | ACCOUNT SL                  | lookup         | Random number strings
+ AccountTK                   | ACCOUNT_TK                  | tokenization   | 
+ AddrLine2Lookup             | ADDRESS LINE 2  SL          | lookup         | Common US Address line 2 values
+ AddrLookup                  | ADDRESS LINE SL             | lookup         | Common US Address line 1 values
+ BusinessLegalEntityLookup   | BUSINESS LEGAL ENTITY SL    | lookup         | Legal business names
+ CommentLookup               | COMMENT SL                  | lookup         | Contains 1 generic value
+ CreditCard                  | CREDIT CARD                 | lookup         | Generates valid random CC number
+ DateShiftDiscrete           | DATE SHIFT(DISCRETE)        | lookup         | Transforms day component of date based in date
+ DateShiftFixed              | DATE SHIFT(FIXED)           | lookup         | Transforms date randomly by a fixed variance
+ DATE_SHIFT_VARCHAR_DATE     | DATE_SHIFT_VARCHAR_DATE     | Mapplet        | 
+ DATE_SHIFT_VARCHAR_DATETIME | DATE_SHIFT_VARCHAR_DATETIME | Mapplet        | 
+ DateShiftVariable           | DATE SHIFT(VARIABLE)        | lookup         | Transforms date randomly
+ DrivingLicenseNoLookup      | DR LICENSE SL               | lookup         | Dummy US Driving Licenses
+ DummyHospitalNameLookup     | DUMMY_HOSPITAL_NAME_SL      | lookup         | Dummy (non real) hospital names
+ EmailLookup                 | EMAIL SL                    | lookup         | Non-resolving dummy valid email addresses
+ FirstNameLookup             | FIRST NAME SL               | lookup         | Most popular US first names
+ Free Text Masking           | FREE TEXT MASKING           | Mapplet        | 
+ FREE_TEXT_REDACTOR          | FREE_TEXT_REDACTOR          | Mapplet        | 
+ FullNMLookup                | FULL_NM_SL                  | lookup         | Selected Full Names
+ INCLUSION_MAPPLET           | INCLUSION_MAPPLET           | Mapplet        | 
+ LastCommaFirstLookup        | LAST_COMMA_FIRST_SL         | lookup         | Last name then a comma and then a first name
+ LastNameLookup              | LAST NAME SL                | lookup         | Most popular US last names
+ NameTK                      | NAME_TK                     | tokenization   | 
+ NullValueLookup             | NULL SL                     | lookup         | Transforms target to NULL
+ TelephoneNoLookup           | PHONE SL                    | lookup         | Collection of Phone numbers
+ RandomValueLookup           | RANDOM_VALUE_SL             | lookup         | Random 50 Char length strings
+ SchoolNameLookup            | SCHOOL NAME SL              | lookup         | School and Universities name
+ SecureShuffle               | SECURE SHUFFLE              | lookup         | Securely shuffles the data in a column, may not maintain uniqueness
+ SsnTK                       | SSN_TK                      | tokenization   | 
+ USCitiesLookup              | USCITIES_SL                 | lookup         | Top 300 US cities by population density.
+ USCountiesLookup            | US_COUNTIES_SL              | lookup         | Top 1835 US counties by population density.
+ USstatecodesLookup          | USSTATE_CODES_SL            | lookup         | 2 character State code
+ USstatesLookup              | USSTATES_SL                 | lookup         | US states and territories
+ WebURLsLookup               | WEB_URLS_SL                 | lookup         | top 20 websites by popularity
+ RepeatFirstDigit            | ZIP+4                       | lookup         | Mask the "+4" component of ZIP
+(35 rows)
+
+dmsuite=# select * from domain;
+    domain_cd    | default_classification_cd |  default_algorithm_cd  | created_by | default_tokenize_algorithm_cd 
+-----------------+---------------------------+------------------------+------------+-------------------------------
+ ACCOUNT_NO      | Customer                  | AccNoLookup            |            | 
+ ADDRESS         | Customer                  | AddrLookup             |            | 
+ ADDRESS_LINE2   | Customer                  | AddrLine2Lookup        |            | 
+ CREDIT CARD     | Customer                  | CreditCard             |            | 
+ DOB             | Customer                  | DateShiftDiscrete      |            | 
+ DRIVING_LC      | Customer                  | DrivingLicenseNoLookup |            | 
+ EMAIL           | Customer                  | EmailLookup            |            | 
+ FIRST_NAME      | Customer                  | FirstNameLookup        |            | 
+ LAST_NAME       | Customer                  | LastNameLookup         |            | 
+ SCHOOL_NM       | Customer                  | SchoolNameLookup       |            | 
+ TELEPHONE_NO    | Customer                  | TelephoneNoLookup      |            | 
+ ZIP             | Customer                  | RepeatFirstDigit       |            | 
+ NULL_SL         | Customer                  | NullValueLookup        |            | 
+ CUSTOMER_NO     | Customer                  | NullValueLookup        |            | 
+ SECURITY_CODE   | Customer                  | NullValueLookup        |            | 
+ SSN             | Customer                  | NullValueLookup        |            | 
+ TAX_ID          | Customer                  | NullValueLookup        |            | 
+ BENEFICIARY_NO  | Customer                  | NullValueLookup        |            | 
+ CERTIFICATE_NO  | Customer                  | NullValueLookup        |            | 
+ CITY            | Customer                  | NullValueLookup        |            | 
+ COUNTY          | Customer                  | NullValueLookup        |            | 
+ PLATE_NO        | Customer                  | NullValueLookup        |            | 
+ PO_BOX          | Customer                  | NullValueLookup        |            | 
+ PRECINCT        | Customer                  | NullValueLookup        |            | 
+ RECORD_NO       | Customer                  | NullValueLookup        |            | 
+ SERIAL_NO       | Customer                  | NullValueLookup        |            | 
+ SIGNATURE       | Customer                  | NullValueLookup        |            | 
+ VIN_NO          | Customer                  | NullValueLookup        |            | 
+ IP ADDRESS      | Customer                  | NullValueLookup        |            | 
+ WEB             | Customer                  | NullValueLookup        |            | 
+ BIOMETRIC       | Customer                  | NullValueLookup        |            | 
+ SECURE_SHUFFLE  | Customer                  | SecureShuffle          |            | 
+ RANDOM_VALUE_SL | Customer                  | RandomValueLookup      |            | 
+ US_COUNTIES_SL  | Customer                  | USCountiesLookup       |            | 
+ NAME_TK         | Customer                  | NullValueLookup        |            | NameTK
+ ACCOUNT_TK      | Customer                  | NullValueLookup        |            | AccountTK
+ SSN_TK          | Customer                  | NullValueLookup        |            | SsnTK
+(37 rows)
+
