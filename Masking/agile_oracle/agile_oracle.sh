@@ -63,6 +63,8 @@
 #
 #set -x 
 
+SHOW_JSON="NO"
+
 #########################################################
 ## Delphix Masking Parameter Initialization
 
@@ -290,7 +292,9 @@ echo "Rule Set Id: ${RSID}"
 #########################################################
 ## Get List for Tables from Source File ...
 
-M_TBLS=`cat ${M_SOURCE} | cut -d. -f1 | sort -u`
+M_TBLS=`grep -v '^#' ${M_SOURCE} | cut -d. -f1 | sort -u`
+echo "Tables from ${M_SOURCE}: "
+echo "${M_TBLS}"
 
 #
 # only if you want to validated table list ...
@@ -380,37 +384,37 @@ while read line2
 do
    echo "---------------------------------------------------"
    echo "Processing $line2 ... "
-   # 
-   # Parse Table_Name.Column_Name Data ...
    #
-   FQN2=`echo $line2 | awk -F"," '{ print $1 }'`
-   NAM2=`echo "${FQN2}" | cut -d. -f2`
-   TAB2=`echo "${FQN2}" | cut -d. -f1`
-   echo "Table_Name.Column_Name: ${TAB2}.${NAM2}"
-
+   # Check for comment lines ...
    #
-   # Get tableMetadataId from previous rule set table list ...
-   #
-   TBL_META_ID=`echo "${TABLE_LIST}" | jq --raw-output ".responseList[] | select (.tableName==\"${TAB2}\") | .tableMetadataId"`
-   echo "Table Id: ${TBL_META_ID}"
-
-   # 
-   # Get Column MetaData iff new Table Name ...
-   #
-   if [[ "${TAB2_PREV}" != "${TAB2}" ]] 
-   then
-      META_STATUS=`curl -s -X GET --header "Accept: application/json" --header "Authorization: ${KEY}" "${DMURL}/column-metadata?table_metadata_id=${TBL_META_ID}&page_number=1"`
-      #echo "${META_STATUS}" | jq "."
-   fi
-
-   # 
-   # Parse Domain, Algorithm, Type Data ...
-   # 
-   C1=`echo ${NAM2:0:1}`            # check for comment lines ...
+   C1=`echo ${line2:0:1}`    
    if [[ "${C1}" == "#" ]]
    then
-      printf " Comment Line Skipping.\n"
-   else 
+      printf "Comment Line Skipping.\n"
+   else
+      #
+      # Parse Table_Name.Column_Name Data ...
+      #
+      FQN2=`echo $line2 | awk -F"," '{ print $1 }'`
+      NAM2=`echo "${FQN2}" | cut -d. -f2`
+      TAB2=`echo "${FQN2}" | cut -d. -f1`
+      #echo "Table_Name.Column_Name: ${TAB2}.${NAM2}"
+
+      #
+      # Get tableMetadataId from previous rule set table list ...
+      #
+      TBL_META_ID=`echo "${TABLE_LIST}" | jq --raw-output ".responseList[] | select (.tableName==\"${TAB2}\") | .tableMetadataId"`
+      #echo "Table Id: ${TBL_META_ID}"
+
+      # 
+      # Get Column MetaData iff new Table Name ...
+      #
+      if [[ "${TAB2_PREV}" != "${TAB2}" ]] 
+      then
+         META_STATUS=`curl -s -X GET --header "Accept: application/json" --header "Authorization: ${KEY}" "${DMURL}/column-metadata?table_metadata_id=${TBL_META_ID}&page_number=1"`
+         #echo "${META_STATUS}" | jq "."
+      fi
+
       VAL2=`echo $line2 | awk -F"," '{ print $2 }'`
       VAL3=`echo $line2 | awk -F"," '{ print $3 }'`
       VAL4=`echo $line2 | awk -F"," '{ print $4 }'`
@@ -425,7 +429,7 @@ do
       #
       if [[ "${VAL2}" != "" ]] && [[ "${COL_META_ID}" != "" ]]
       then
-         echo "Updating Domain and Algorithm for field ${NAM2} for id = ${COL_META_ID} ..."
+         echo "Updating Domain and Algorithm for ${TAB2}.${NAM2} with columnMetadataId=${COL_META_ID} ..."
          JSON="{
    \"algorithmName\": \"${VAL3}\", 
    \"domainName\": \"${VAL2}\" 
@@ -445,12 +449,18 @@ do
          JSON="${JSON},
    \"isProfilerWritable\": ${VTMP4}
 }"
-         echo $JSON
+         if [[ "${SHOW_JSON}" == "YES" ]]
+         then
+            echo $JSON
+         fi
          #
          # Update (PUT) column-metadata, i.e. add domain and algorithm ...
          #
          RESULTS=`curl -s -X PUT --header "Content-Type: application/json" --header "Accept: application/json" --header "Authorization: ${KEY}" -d "${JSON}" "${DMURL}/column-metadata/${COL_META_ID}"`
-         echo "${RESULTS}"
+         if [[ "${SHOW_JSON}" == "YES" ]]
+         then 
+            echo "${RESULTS}"
+         fi
          # {"errorMessage":"Missing required field 'dateFormat'"}
          ERR_CHK=`echo "${RESULTS}" | jq -r ".errorMessage | select (.!=null) "`
          if [[ "${ERR_CHK}" != "" ]] 
@@ -478,6 +488,7 @@ done < ${M_SOURCE}
 ########################################################
 ## Create Masking Job ...
 
+echo "---------------------------------------------------"
 echo "Creating Masking Job ${M_MASK_NAME} ..."
 json="{ 
    \"jobName\": \"${M_MASK_NAME}\", 
