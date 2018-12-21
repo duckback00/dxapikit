@@ -20,8 +20,10 @@
 # Created      : 2018-10-01
 # Version      : v1.0
 #
+# REMOVED all jq references 
+#
 # Requirements :
-#  1.) curl command line libraries
+#  1.) curl command line library
 #  2.) Populate Delphix Engine Connection Information
 #
 # Usage:
@@ -117,7 +119,8 @@ STATUS=`curl -s -X POST -k ${BaseURL}/service/support/bundle/generate -b "${COOK
 #STATUS=`curl -s -X POST -k ${BaseURL}/service/support/bundle/upload -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 #echo "STATUS> ${STATUS}" 
 
-TOKEN=`echo ${STATUS} | jq --raw-output ".result"`
+TOKEN=`echo "${STATUS}" | awk -F '"result":' '{print $2}' | cut -d, -f1 | sed 's/"//g'`
+#dcddea04-7950-4c67-8d2a-a4bac5fdcc90
 echo "Token for download is ${TOKEN}"
 
 TOKEN_FILE="${BUNDLE_PATH}/${TOKEN}.tar.gz"
