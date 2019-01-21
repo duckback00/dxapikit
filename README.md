@@ -31,8 +31,16 @@ The goal for this project is to help Delphix users get up to speed quickly on ho
 
 ## How to get started
 
-   Check Delphix documentation for more details
-   https://docs.delphix.com/docs/reference/web-service-api-guide/so-you-want-to-work-with-delphix-apis
+   Check Delphix documentation for more details<br />
+   Command Line Interface Guide<br />
+   https://docs.delphix.com/docs/reference/command-line-interface-guide<br />
+   <br />
+   Web Service API Guide<br />
+   https://docs.delphix.com/docs/reference/web-service-api-guide<br />
+   <br />
+   So you want to work with the Delphix APIs?<br />
+   https://docs.delphix.com/docs/reference/web-service-api-guide/so-you-want-to-work-with-delphix-apis<br />
+<br />
 
    Please see each folders respective README file for details
 
