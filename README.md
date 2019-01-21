@@ -32,7 +32,7 @@ The goal for this project is to help Delphix users get up to speed quickly on ho
 ## How to get started
 
    Check Delphix documentation for more details
-   https://docs.delphix.com/download/attachments/83053093/So%20you%20want%20to%20work%20with%20Delphix%20APIs.pdf?version=2&modificationDate=1512670878824&api=v2
+   https://docs.delphix.com/docs/reference/web-service-api-guide/so-you-want-to-work-with-delphix-apis
 
    Please see each folders respective README file for details
 
