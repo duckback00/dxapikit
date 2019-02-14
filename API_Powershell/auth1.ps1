@@ -94,7 +94,7 @@ $json = @"
 ## Delphix Curl Login API ...
 
 write-output "${nl}Calling Login API ...${nl}"
-$results = (curl.exe -sX POST -k ${BaseURL}/login -b "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
+$results = (curl.exe -sX POST -k ${BaseURL}/login -b "${COOKIE}" -c "${COOKIE}" -H "${CONTENT_TYPE}" -d "${json}")
 write-output "Login API Results: ${results}"
 
 #########################################################
