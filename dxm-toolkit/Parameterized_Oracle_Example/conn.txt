@@ -1,0 +1,14 @@
+[
+{
+  "username": "DELPHIXDB",
+  "password": "delphixdb",
+  "databaseType": "ORACLE",
+  "host": "172.16.160.133",
+  "port": 1521,
+  "schemaName": "DELPHIXDB",
+  "profileSetName": "HIPAA",
+  "connNo": 1,
+  "sid": "orcl"
+}
+]
+
