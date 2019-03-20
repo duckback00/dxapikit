@@ -191,6 +191,23 @@ try {
    out.println("login> "+resp.toString()+"<br />") ;
 
    //
+   // Login Cookie ...
+   //
+   headerName = null;
+   cookieStr = null;
+   for (int i = 1; (headerName = request1.getHeaderFieldKey(i)) != null; i++) {
+     if (headerName.equals("Set-Cookie")) {
+       cookieStr = request1.getHeaderField(i);
+     }
+   }
+   cookieStr = cookieStr.substring(0, cookieStr.indexOf(";"));
+   cookieName = cookieStr.substring(0, cookieStr.indexOf("="));
+   cookieValue = cookieStr.substring(cookieStr.indexOf("=") + 1, cookieStr.length());
+   cookie = cookieName + "=" + cookieValue;
+
+   out.println("cookie> "+ cookie.toString() + "<br />" );
+
+   //
    // System API call ...
    //
    endpoint = (url_str + "/system");
