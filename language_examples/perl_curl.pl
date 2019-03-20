@@ -66,7 +66,7 @@ print "Session Results: $results \n\n";
 #
 # Login ...
 #
-$cmd = "curl -s -X POST -k --data \@- \"http://172.16.160.195/resources/json/delphix/login\" -b ~/cookies.txt -H \"Content-Type: application/json\" <<EOF
+$cmd = "curl -s -X POST -k --data \@- \"http://172.16.160.195/resources/json/delphix/login\" -b ~/cookies.txt -c ~/cookies.txt -H \"Content-Type: application/json\" <<EOF
 {
     \"type\": \"LoginRequest\",
     \"username\": \"$DMUSER\",
