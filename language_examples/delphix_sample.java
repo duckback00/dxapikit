@@ -27,8 +27,8 @@ import java.util.*;
 //  1.) Change values below as required
 //
 // Usage: 
-//  javac -cp . delphix_sample.java
-//  java -cp . delphix_sample
+//  javac -cp .:json-simple-1.1.jar delphix_sample.java
+//  java -cp .:json-simple-1.1.jar delphix_sample
 //
 ///////////////////////////////////////////////////////////
 //                    DELPHIX CORP                       //
@@ -84,6 +84,14 @@ class delphix_sample {
       System.out.println("login> "+login_str[0]+"\n") ;
 
       //
+      // 5.3 fix backwards compatible 
+      // 
+      // After a login, recreate the cookie ...
+      //
+      System.out.println("cookie> "+login_str[1]+"\n") ;
+      cookie = login_str[1];
+
+      //
       // System API call ...
       //
       //endpoint = (url_str + "/system");
@@ -91,19 +99,12 @@ class delphix_sample {
       endpoint = (url_str + "/database");   
       urlParameters = null;
       String str[] = getEndPoint("GET", endpoint, cookie, urlParameters);
+
       //
       // Quick and dirty readable JSON string ...
       //
       //String str = resp.toString().replaceAll(",",",\n");
       System.out.println("system results> "+str[0]);
-
-      //
-      // VDB Sync ...
-      //
-      endpoint = (url_str + "/database/APPDATA_CONTAINER-25/sync");
-      urlParameters = ("{ \"type\": \"AppDataSyncParameters\" }");
-      String sync_str[] = getEndPoint("GET", endpoint, cookie, urlParameters);
-      System.out.println("result> "+sync_str[0]);
 
     } catch (Exception e0) {
       System.out.println("Exception: " + e0.getMessage());
@@ -111,7 +112,6 @@ class delphix_sample {
     }
 
   }
-
 
 
   private static String cut(String str, int l) {
@@ -130,7 +130,7 @@ class delphix_sample {
     String line = "";
 
     try {
-
+      //System.out.println("endpointURL: "+endpoint);
       endpointURL = new URL(endpoint);
       request1 = (HttpURLConnection)endpointURL.openConnection();
       request1.setRequestProperty("Content-Type", "application/json");
@@ -181,10 +181,16 @@ class delphix_sample {
       }
     }
 
+    // 5.3 fix for setting cookie after login, backwards compatible ...
+    if (endpoint.endsWith("login")) {
+       cookie = "";
+    }
+
     //
     // Session Cookie ...
     //
     if (cookie.equals("")) {
+       //System.out.println("cookie: "+cookie);
        String headerName = null;
        String cookieStr = null;
        for (int i = 1; (headerName = request1.getHeaderFieldKey(i)) != null; i++) {

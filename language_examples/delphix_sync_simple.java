@@ -93,6 +93,14 @@ class delphix_sync_simple {
       System.out.println("login> "+login_str[0]+"\n") ;
 
       //
+      // 5.3 fix backwards compatible
+      //
+      // After a login, recreate the cookie ...
+      //
+      System.out.println("cookie> "+login_str[1]+"\n") ;
+      cookie = login_str[1];
+
+      //
       // System API call ...
       //
       //endpoint = (url_str + "/system");
@@ -171,8 +179,6 @@ class delphix_sync_simple {
 
   }
 
-
-
   private static String cut(String str, int l) {
     //String shorter = str.substring(l,str.length()-l+1);
     String shorter = str.substring(l);
@@ -238,6 +244,11 @@ class delphix_sync_simple {
         } catch (IOException ex) {}
         wr = null;
       }
+    }
+
+    // 5.3 fix for setting cookie after login, backwards compatible ...
+    if (endpoint.endsWith("login")) {
+       cookie = "";
     }
 
     //
