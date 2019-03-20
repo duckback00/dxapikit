@@ -23,7 +23,7 @@ import org.json.simple.parser.*;
 // Description  : Delphix API Example for Java
 // Author       : Alan Bitterman
 // Created      : 2018-08-09
-// Version      : v1.0.0
+// Version      : v2.0.0 2019-03-20
 //
 // Requirements :
 //  1.) Requires json-simple-1.1.jar 
@@ -32,6 +32,15 @@ import org.json.simple.parser.*;
 // Usage:
 //  javac -cp .:json-simple-1.1.jar delphix_sync_simple.java
 //  java -cp .:json-simple-1.1.jar delphix_sync_simple 
+//
+// Notes:
+//  1.  Only valid for AppData or Oracle dSource/VDBs as coded
+//  2.  This is a simple example and for production use additional
+//      code is required, for example;
+//      x.) Only search for dSource/VDB name based on type
+//      x.) Error trapping logic
+//      x.) Delphix Job submission and monitoring
+//      x.) etc.
 //
 ///////////////////////////////////////////////////////////
 //                    DELPHIX CORP                       //
@@ -57,7 +66,12 @@ class delphix_sync_simple {
     //
     // VDB Name to perform Sync (Snapsync or Snapshot) ...
     //
-    String name = "VAppData";
+    // Valid Types currently coded are: AppData | Oracle 
+    //
+    //String type = "AppData";  
+    //String name = "VAppData";
+    String type = "Oracle";
+    String name = "orcl";
     String ref = "";
 
     ///////////////////////////////////////////////////////////
@@ -167,7 +181,7 @@ class delphix_sync_simple {
       if (! ref.equals("")) {
          //endpoint = (url_str + "/database/APPDATA_CONTAINER-25/sync");
          endpoint = (url_str + "/database/"+ref+"/sync");
-         urlParameters = ("{ \"type\": \"AppDataSyncParameters\" }");
+         urlParameters = ("{ \"type\": \""+type+"SyncParameters\" }");
          String sync_str[] = getEndPoint("GET", endpoint, cookie, urlParameters);
          System.out.println("result> "+sync_str[0]);
       }

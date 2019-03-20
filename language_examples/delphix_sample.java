@@ -21,7 +21,7 @@ import java.util.*;
 // Description  : Delphix API Example for Java
 // Author       : Alan Bitterman
 // Created      : 2018-08-09
-// Version      : v1.0.0
+// Version      : v2.0.0 2019-03-20
 //
 // Requirements :
 //  1.) Change values below as required
