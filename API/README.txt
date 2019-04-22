@@ -121,6 +121,10 @@ Timeflows
    Refresh VDB to Snapshot			   Filename: vdb_refresh_snapshot.sh
    Refresh VDB to SCN (location)		   Filename: vdb_refresh_scn.sh
 
+Replication
+   Replication Operations                          Filename: replication.sh
+   Generate Replication Objects Array              Filename: replicaiton_objects.sh
+   
 Jetstream
    Get a JSON list of Jetstream Objects		   Filename: . ./jetstream_objects_json.sh
 	
