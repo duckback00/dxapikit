@@ -33,7 +33,7 @@ Remember to change the   <b><i>masking_engine.conf</i></b>   file accordingly. <
   <tr><td colspan=2><hr /></td></tr>
 
   <tr><td>Profiling Many Data Sources</td><td>Directory: profile</td></tr>
-  <tr><td>Masking CSV Delimited Files</td><td>Directory: agile_delim</td></tr>
+  <tr><td>Masking CSV Delimited Files</td><td>Directory: file_masking</td></tr>
   <tr><td>Masking Oracle Sources</td><td>Directory: agile_oracle</td></tr>
 
 </table>
