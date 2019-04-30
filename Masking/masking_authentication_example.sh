@@ -15,6 +15,8 @@
 ## User Configured Parameters ...
 
 DMURL="http://172.16.160.195:8282/masking/api"
+# For version 5.3.3 or later ...
+# DMURL="http://172.16.160.195/masking/api"
 DMUSER="Axistech"
 DMPASS="Axis_123"
 
