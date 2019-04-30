@@ -72,7 +72,10 @@ DMIP=172.16.160.195
 DMPORT=8282
 DMUSER="Admin"
 DMPASS="Admin-12"
-DMURL="http://${DMIP}:${DMPORT}/masking/api"
+# URL for pre 5.3.3 ...
+# DMURL="http://${DMIP}:${DMPORT}/masking/api"
+# URL for version 5.3.3 or later ...
+DMURL="http://${DMIP}/masking/api"
 DELAYTIMESEC=10
 
 M_APP="ora_app" 		# Masking Application Name ...
