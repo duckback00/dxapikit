@@ -28,8 +28,8 @@ API example for masking a CSV delimited file: <br />
 <li>Done</li>
 </ul>
 
-# Modify agile_delim.sh for static parameters 
-# Modify masking_engine.conf for authentication information
+<pre>
+# Modify agile_delim.sh for Masking parameters 
 #
 # Requires:
 # x.) Existing Environment Name
@@ -55,4 +55,4 @@ API example for masking a CSV delimited file: <br />
 # Usage:  Delimited File Data ONLY with seperate Column Names file ...
 # ./agile_delim.sh bmobitt.csv delim_fields.txt delim_domains.txt "file_env" "file_delim_conn" "DELIMITED" "linux" "," "\"" "YES"
 #
-
+</pre>
