@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.time.LocalDateTime; 
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
@@ -17,13 +18,13 @@ import org.json.simple.parser.*;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Copyright (c) 2018 by Delphix. All rights reserved.
+// Copyright (c) 2019 by Delphix. All rights reserved.
 //
 // Program Name : vdb_operations.java
 // Description  : Delphix API Example for Java
 // Author       : Alan Bitterman
 // Created      : 2019-05-02
-// Version      : v1.0.0 2019-05-02
+// Version      : v1.0.1 2019-05-06
 //
 // Requirements :
 //  1.) Requires json-simple-1.1.jar 
@@ -44,7 +45,6 @@ import org.json.simple.parser.*;
 //      code is required, for example;
 //      x.) Only search for dSource/VDB name based on type
 //      x.) Error trapping logic
-//      x.) Delphix Job submission and monitoring
 //      x.) etc.
 //
 ///////////////////////////////////////////////////////////
@@ -61,6 +61,7 @@ class vdb_operations {
     String url_str = "http://172.16.160.195/resources/json/delphix";
     String username = "delphix_admin";
     String password = "delphix";
+    int delaysec = 10;     // Job Monitoring Delay in Seconds 
 
     ///////////////////////////////////////////////////////////
     //         NO CHANGES REQUIRED BELOW THIS POINT          //
@@ -233,93 +234,112 @@ class vdb_operations {
       //if (namespace == null) System.out.println("Namespace: "+namespace+" is NULL");
 
 /*
-#########################################################
-## type values ...
+## Container type values ...
+# database update *> set type=
+# ASEDBContainer           
+# AppDataContainer         
+# MSSqlDatabaseContainer   
+# MySQLDatabaseContainer   
+# OracleDatabaseContainer
+# PgSQLDatabaseContainer
 
-#database update *> set type=
-#ASEDBContainer           
-#AppDataContainer         
-#MSSqlDatabaseContainer   
-#MySQLDatabaseContainer   
-#OracleDatabaseContainer
-#PgSQLDatabaseContainer
-
-#sync *> set type=
-#ASELatestBackupSyncParameters			ASENewBackupSyncParameters 			ASESpecificBackupSyncParameters
-#AppDataSyncParameters
-#MSSqlExistingMostRecentBackupSyncParameters	MSSqlExistingSpecificBackupSyncParameters	MSSqlNewCopyOnlyFullBackupSyncParameters
-#MySQLExistingMySQLDumpSyncParameters		MySQLNewMySQLDumpSyncParameters			MySQLXtraBackupSyncParameters
-#OracleSyncParameters
-#PgSQLSyncParameters
-#SyncParameters
+## Sync Type Values ...
+# sync *> set type=
+# ASELatestBackupSyncParameters	
+# ASENewBackupSyncParameters 
+# ASESpecificBackupSyncParameters
+# AppDataSyncParameters
+# MSSqlExistingMostRecentBackupSyncParameters	
+# MSSqlExistingSpecificBackupSyncParameters
+# MSSqlNewCopyOnlyFullBackupSyncParameters
+# MySQLExistingMySQLDumpSyncParameters	
+# MySQLNewMySQLDumpSyncParameters
+# MySQLXtraBackupSyncParameters
+# OracleSyncParameters
+# PgSQLSyncParameters
+# SyncParameters
 */
 
-//
-// Defaults for non-coded container types ...
-//
-String sync_type = "SyncParameters";
-String refresh_type = "RefreshParameters";
-String rollback_type = "RollbackParameters";
+      //
+      // Defaults for non-coded container types ...
+      //
+      String sync_type = "SyncParameters";
+      String refresh_type = "RefreshParameters";
+      String rollback_type = "RollbackParameters";
 
-if ( objtype.equals("OracleDatabaseContainer") ) {
-   sync_type = "OracleSyncParameters";
-   refresh_type = "OracleRefreshParameters";
-   rollback_type = "OracleRollbackParameters";
-} else if ( objtype.equals("MSSqlDatabaseContainer") ) {
-   sync_type = "MSSqlExistingMostRecentBackupSyncParameters";
-   refresh_type = "RefreshParameters";
-   rollback_type = "RollbackParameters";
-} else if ( objtype.equals("ASEDBContainer") ) {
-   sync_type = "ASELatestBackupSyncParameters";
-   refresh_type = "RefreshParameters";
-   rollback_type = "RollbackParameters";
-} else if ( objtype.equals("AppDataContainer") ) {
-   sync_type = "AppDataSyncParameters";
-   refresh_type = "RefreshParameters";
-   rollback_type = "RollbackParameters";
-} else {
-   System.out.println("Container Type: "+objtype+" code not included yet, trying default options ...");
-}
-
-//
-// Perform Action ... 
-//
-String json = "";
-switch (action) {
-  case "sync":
-    json="{ \"type\": \""+sync_type+"\" }";
-    break;
-  case "refresh":
-    json="{ \"type\": \""+refresh_type+"\", \"timeflowPointParameters\": { \"type\": \"TimeflowPointSemantic\", \"container\": \""+parent+"\" } }";
-    break;
-  case "rollback":
-    json="{ \"type\": \""+rollback_type+"\", \"timeflowPointParameters\": { \"type\": \"TimeflowPointSemantic\", \"container\": \""+ref+"\" } }";
-    break;
-  default:
-    System.out.println("Unknown option (sync | refresh | rollback): "+action+", Exiting ...");
-    System.exit(1);
-}
-
-System.out.println("json> "+json+"");
-
-//
-// Submit VDB operations request ...
-//
-//curl -s -X POST -k --data @- ${BaseURL}/database/${CONTAINER_REFERENCE}/${ACTION} -b "${COOKIE}" -H "${CONTENT_TYPE}" <<EOF
-//${json}
-//EOF
+      if ( objtype.equals("OracleDatabaseContainer") ) {
+         sync_type = "OracleSyncParameters";
+         refresh_type = "OracleRefreshParameters";
+         rollback_type = "OracleRollbackParameters";
+      } else if ( objtype.equals("MSSqlDatabaseContainer") ) {
+         sync_type = "MSSqlExistingMostRecentBackupSyncParameters";
+         refresh_type = "RefreshParameters";
+         rollback_type = "RollbackParameters";
+      } else if ( objtype.equals("ASEDBContainer") ) {
+         sync_type = "ASELatestBackupSyncParameters";
+         refresh_type = "RefreshParameters";
+         rollback_type = "RollbackParameters";
+      } else if ( objtype.equals("AppDataContainer") ) {
+         sync_type = "AppDataSyncParameters";
+         refresh_type = "RefreshParameters";
+         rollback_type = "RollbackParameters";
+      } else {
+         System.out.println("Container Type: "+objtype+" code not included yet, trying default options ...");
+      }
 
       //
-      // VDB Sync ...
+      // Perform Action ... 
+      //
+      String json = "";
+      switch (action) {
+        case "sync":
+          json="{ \"type\": \""+sync_type+"\" }";
+          break;
+        case "refresh":
+          json="{ \"type\": \""+refresh_type+"\", \"timeflowPointParameters\": { \"type\": \"TimeflowPointSemantic\", \"container\": \""+parent+"\" } }";
+          break;
+        case "rollback":
+          json="{ \"type\": \""+rollback_type+"\", \"timeflowPointParameters\": { \"type\": \"TimeflowPointSemantic\", \"container\": \""+ref+"\" } }";
+          break;
+        default:
+          System.out.println("Unknown option (sync | refresh | rollback): "+action+", Exiting ...");
+          System.exit(1);
+      }
+
+      System.out.println("json> "+json+"");
+
+      //
+      // VDB operations request ...
       //
       if (! ref.equals("")) {
-         //endpoint = (url_str + "/database/APPDATA_CONTAINER-25/sync");
-         //endpoint = (url_str + "/database/"+ref+"/sync");
          endpoint = (url_str + "/database/"+ref+"/"+action+"");
-         //urlParameters = ("{ \"type\": \""+type+"SyncParameters\" }");
          urlParameters = (json);
-         String sync_str[] = getEndPoint("GET", endpoint, cookie, urlParameters);
-         System.out.println("result> "+sync_str[0]);
+         String results_str[] = getEndPoint("GET", endpoint, cookie, urlParameters);
+         System.out.println("result> "+results_str[0]);
+
+         // 
+         // Get Job status and job number ...
+         //
+         //{"type":"OKResult","status":"OK","result":"","job":"JOB-400","action":"ACTION-953"}
+         Object jobj = parser.parse(results_str[0]);
+         JSONObject j1 = (JSONObject) jobj;
+         String status = (String) j1.get("status");
+         String job = (String) j1.get("job");
+
+         //System.out.println("status> "+status);
+         //System.out.println("job> "+job);
+ 
+         // 
+         // Monitor Job ...
+         //
+         if (status.equals("OK")) {
+            String job_results = jobStatus(job, url_str, cookie, delaysec);
+            ///System.out.println("Job Results: "+job_results);
+         } else {
+            System.out.println("Error: "+status+", please check output for errors ..."+results_str[0]);
+            System.exit(1);
+         }
+
       }
 
     } catch (Exception e0) {
@@ -420,7 +440,63 @@ System.out.println("json> "+json+"");
     return new String[] {resp.toString(), cookie};
   }
 
-  private static String[] getParams(String filename) {
+  private static String jobStatus(String job, String url_str, String cookie, int delaysec) {
+    String line = "jobStatus: "+job+" ";
+    try {
+      if (! job.equals("")) {
+
+        // Job Information ...
+        String endpoint = (url_str + "/job/"+job+"");
+        String urlParameters = null;
+        String results_str[] = getEndPoint("GET", endpoint, cookie, urlParameters);
+        //System.out.println("result> "+results_str[0]);
+
+        JSONParser parser = new JSONParser();
+        Object jobj = parser.parse(results_str[0]);
+        JSONObject j1 = (JSONObject) jobj;
+        JSONObject j2 = (JSONObject) j1.get("result");
+        String jobState = (String) j2.get("jobState");
+        String perComplete = String.valueOf((double) j2.get("percentComplete"));
+        LocalDateTime myDate = LocalDateTime.now();
+        System.out.println("Current status as of "+myDate+": "+jobState+" "+perComplete+"% Completed");
+        while (jobState.equals("RUNNING")) {
+          //System.out.println("Sleeping for "+delaysec+" secs ");
+          //TimeUnit.SECONDS.sleep(delaysec);
+          Thread.sleep(delaysec*1000);
+          String str1[] = getEndPoint("GET", endpoint, cookie, urlParameters);
+          jobj = parser.parse(str1[0]);
+          j1 = (JSONObject) jobj;
+          j2 = (JSONObject) j1.get("result");
+          jobState = (String) j2.get("jobState");
+          perComplete = String.valueOf((double) j2.get("percentComplete")); 
+          myDate = LocalDateTime.now();
+          System.out.println("Current status as of "+myDate+": "+jobState+" "+perComplete+"% Completed");
+          //System.out.println("breaking");
+          //break;
+        }
+
+        // Producing final status ...
+        if ( ! jobState.equals("COMPLETED")) {
+          System.out.println("Error: Delphix Job Did not Complete, please check GUI "+jobState+"");
+          line = line+"Error: Delphix Job Did not Complete, please check GUI "+jobState+"";
+        } else {
+          System.out.println("Job: "+job+" "+jobState+" "+perComplete+"% Completed ...");
+          line = line+jobState+" "+perComplete+"% Completed ...";
+        }
+
+      } else { 
+
+        System.out.println("Job Number Missing: "+job+"");
+        line = line+"Job Number Missing: "+job+"";
+      }      
+    } catch (Exception e) {
+      System.out.println("Exception: " + e.getMessage());
+      e.printStackTrace();
+    }
+    return line;
+  }
+
+  private static String getParams(String filename) {
     String line = "\"host\":\"local\"";
     try {
       System.out.println("test");
@@ -428,7 +504,7 @@ System.out.println("json> "+json+"");
       System.out.println("Exception: " + e.getMessage());
       e.printStackTrace();
     }
-    return new String[] {line};
+    return line;
   }
 
 }
