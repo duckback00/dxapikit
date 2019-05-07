@@ -333,6 +333,7 @@ class vdb_operations {
          // Monitor Job ...
          //
          if (status.equals("OK")) {
+            System.out.println("Job: "+job+" submitted successfully ...");
             String job_results = jobStatus(job, url_str, cookie, delaysec);
             ///System.out.println("Job Results: "+job_results);
          } else {
