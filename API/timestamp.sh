@@ -52,23 +52,36 @@ function is_between() {
    if [[ ${#M} -lt 2 ]]; then
       M="0"${M}
    fi
+   d=${d#0}
+   h=${h#0}
+   m=${m#0}
+   s=${s#0}
    s1=${y}${M}$((($d*1440*60*1000)+(h*60*60*1000)+(m*60*1000)+(s*1000)+ms))
 
    read -r y M d h m s ms <<<${l2}
    if [[ ${#M} -lt 2 ]]; then
       M="0"${M}
    fi
+   d=${d#0}
+   h=${h#0}
+   m=${m#0}
+   s=${s#0}
    s2=${y}${M}$((($d*1440*60*1000)+(h*60*60*1000)+(m*60*1000)+(s*1000)+ms))
 
    read -r y M d h m s ms <<<${l3}
    if [[ ${#M} -lt 2 ]]; then
       M="0"${M}
    fi
+   d=${d#0}
+   h=${h#0}
+   m=${m#0}
+   s=${s#0}
    s3=${y}${M}$((($d*1440*60*1000)+(h*60*60*1000)+(m*60*1000)+(s*1000)+ms))
 
    let s1=${s1}
    let s2=${s2}
    let s3=${s3}
+#echo "shit ${s1} ... ${s2} ... ${s3}" 
    if [[ s3 -le s2 ]] && [[ s3 -gt s1 ]]
    then
       echo "true"
@@ -194,11 +207,14 @@ EOF
 `
 
    #echo ${TSTATUS} | jq --raw-output '.'
+   #echo "----------------------------------"
    ROWS=`echo ${TSTATUS} | jq --raw-output '.total'`
    #echo $ROWS
 
    for (( i=0; i < $ROWS; ++i ))
    do
+      ST=""
+      ET=""
       #echo "output: $i"
       echo "Is Provisionable and startPoint and endPoint values ..."
       echo ${TSTATUS} | jq --raw-output ".result[$i].provisionable"
@@ -208,7 +224,10 @@ EOF
       ST=`echo ${TSTATUS} | jq --raw-output ".result[$i].startPoint.timestamp"`
       ET=`echo ${TSTATUS} | jq --raw-output ".result[$i].endPoint.timestamp"`
 
+      echo "Is ${TZ} is between ${ST} and ${ET}?"
+
       results=$(is_between "${ST}" "${ET}" "${TZ}")
+echo "results: ${results}" 
       if [ "${results}" == "true" ]
       then
          echo "Yahoo, ${TZ} is between ${ST} and ${ET}"
