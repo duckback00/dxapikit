@@ -81,8 +81,8 @@ function is_between() {
    let s1=${s1}
    let s2=${s2}
    let s3=${s3}
-#echo "shit ${s1} ... ${s2} ... ${s3}" 
-   if [[ s3 -le s2 ]] && [[ s3 -gt s1 ]]
+   #echo "DEBUG: ${s1} ... ${s2} ... ${s3}" 
+   if [[ s3 -le s2 ]] && [[ s3 -ge s1 ]]
    then
       echo "true"
    else 
@@ -120,27 +120,23 @@ STATUS=`curl -s -X GET -k ${BaseURL}/database -b "${COOKIE}" -H "${CONTENT_TYPE}
 RESULTS=$( jqParse "${STATUS}" "status" )
 
 #########################################################
-#
-# Command Line Arguments ...
-#
+## Command Line Arguments ...
+
 SOURCE_SID=$1
 if [[ "${SOURCE_SID}" == "" ]]
 then
-
    VDB_NAMES=`echo "${STATUS}" | jq --raw-output '.result[] | .name '`
    echo "VDB Names:"
    echo "${VDB_NAMES}"
    echo " "
-
    echo "Please Enter dSource or VDB Name: "
    read SOURCE_SID
-   if [ "${SOURCE_SID}" == "" ]
+   if [[ "${SOURCE_SID}" == "" ]]
    then
       echo "No dSource of VDB Name Provided, Exiting ..."
-      exit 1;
+      exit 1
    fi
-fi;
-export SOURCE_SID
+fi 
 
 TZ=$2
 if [[ "${TZ}" == "" ]]
@@ -150,36 +146,37 @@ then
    echo "Example: 2016-10-19T02:24:21.000Z"
    echo "Enter Search Timestamp (exclude quotes): "
    read TZ
-   if [ "${TZ}" == "" ]
+   if [[ "${TZ}" == "" ]]
    then
       echo "No Timestamp provided, exiting ... ${TZ} "
-      exit 1;
+      exit 1
    fi
-fi;
-export TZ
+fi
 
 #########################################################
 ## Get database container ...
 
 echo "Source: ${SOURCE_SID}"
-
 CONTAINER_REFERENCE=`echo ${STATUS} | jq --raw-output '.result[] | select(.name=="'"${SOURCE_SID}"'") | .reference '`
 echo "container reference: ${CONTAINER_REFERENCE}"
 
 #########################################################
 ## List timeflows for the container reference
 
-echo " "
-echo "Timeflows API "
+##echo "Timeflows API "
 STATUS=`curl -s -X GET -k ${BaseURL}/timeflow -b "${COOKIE}" -H "${CONTENT_TYPE}"`
 
 #########################################################
 ## Select the timeflow ...
 
 FLOW_NAMES=`echo "${STATUS}" | jq --raw-output '.result[] | select(.container=="'"${CONTAINER_REFERENCE}"'") | .name '`
-echo "timeflow names:"
-echo "${FLOW_NAMES}"
-echo " "
+##echo "timeflow names:"
+##echo "${FLOW_NAMES}"
+##echo " "
+
+#
+# Individual Timeflow ...
+#
 #echo "Select timeflow Name (copy-n-paste from above list): "
 #read FLOW_NAME
 #if [ "${FLOW_NAME}" == "" ]
@@ -188,6 +185,9 @@ echo " "
 #   exit 1;
 #fi
 
+#
+# Loop through each Timeflow ...
+# 
 while read -r FLOW_NAME 
 do
    echo "-------------------------------------------------------"
@@ -195,52 +195,55 @@ do
 
    # Get timeflow reference ...
    FLOW_REF=`echo "${STATUS}" | jq --raw-output '.result[] | select(.name=="'"${FLOW_NAME}"'") | .reference '`
-   echo "timeflow reference: ${FLOW_REF}"
+   ##echo "timeflow reference: ${FLOW_REF}"
 
    # timeflowRanges for this timeflow ...
-   echo "TimeflowRanges for this timeflow ... "
+   #echo "TimeflowRanges for this timeflow ... "
    TSTATUS=`curl -s -X POST -k --data @- ${BaseURL}/timeflow/${FLOW_REF}/timeflowRanges -b "${COOKIE}" -H "${CONTENT_TYPE}" <<-EOF
 {
     "type": "TimeflowRangeParameters"
 }
 EOF
 `
-
    #echo ${TSTATUS} | jq --raw-output '.'
-   #echo "----------------------------------"
-   ROWS=`echo ${TSTATUS} | jq --raw-output '.total'`
-   #echo $ROWS
 
+   #
+   # Process each row within the TimeflowRange ...
+   #
+   ROWS=`echo ${TSTATUS} | jq --raw-output '.total'`
    for (( i=0; i < $ROWS; ++i ))
    do
+      PV=""
       ST=""
       ET=""
       #echo "output: $i"
-      echo "Is Provisionable and startPoint and endPoint values ..."
-      echo ${TSTATUS} | jq --raw-output ".result[$i].provisionable"
-      echo ${TSTATUS} | jq --raw-output ".result[$i].startPoint.timestamp"
-      echo ${TSTATUS} | jq --raw-output ".result[$i].endPoint.timestamp"
+      #echo "Is Provisionable and startPoint and endPoint values ..."
+      #echo "${TSTATUS}" | jq --raw-output ".result[$i].provisionable"
+      #echo "${TSTATUS}" | jq --raw-output ".result[$i].startPoint.timestamp"
+      #echo "${TSTATUS}" | jq --raw-output ".result[$i].endPoint.timestamp"
 
-      ST=`echo ${TSTATUS} | jq --raw-output ".result[$i].startPoint.timestamp"`
-      ET=`echo ${TSTATUS} | jq --raw-output ".result[$i].endPoint.timestamp"`
+      PV=`echo "${TSTATUS}" | jq --raw-output ".result[$i].provisionable"`
+      ST=`echo "${TSTATUS}" | jq --raw-output ".result[$i].startPoint.timestamp"`
+      ET=`echo "${TSTATUS}" | jq --raw-output ".result[$i].endPoint.timestamp"`
 
-      echo "Is ${TZ} is between ${ST} and ${ET}?"
-
+      echo "Is ${TZ} is between ${ST} and ${ET} ?"
       results=$(is_between "${ST}" "${ET}" "${TZ}")
-echo "results: ${results}" 
-      if [ "${results}" == "true" ]
+      #echo "is_between results: ${results}" 
+      if [[ "${results}" == "true" ]]
       then
-         echo "Yahoo, ${TZ} is between ${ST} and ${ET}"
-         echo "Timestamp found in Timeflow Reference: ${FLOW_REF}"
+         if [[ "${PV}" == "true" ]] 
+         then
+            echo "Yes, timestamp found in Timeflow Reference: ${FLOW_REF} and IS provisionable"
+         else
+            echo "Yes, timestamp found in Timeflow Reference: ${FLOW_REF} but IS NOT provisionable"
+         fi 
       else 
-         echo "Timestamp NOT found in this timeflow ..."
+         echo "No"
       fi
-      #echo "Is between ... $results"
    done
 
 done <<< "${FLOW_NAMES}"
 
-echo " "
-echo "Done "
-exit 0;
+echo "Done ..."
+exit 0
 
