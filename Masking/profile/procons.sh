@@ -28,6 +28,7 @@ let i=0
 JSON="["
 DELIM=""
 DELIM1=""
+OLD_IFS="$IFS"
 while IFS='' read -r line || [[ -n "$line" ]]; do
    #echo "$i:  $line"
    if [[ $i == 0 ]] 
@@ -67,6 +68,7 @@ fi
    fi
    let i=i+1
 done < "${PFILE}"
+IFS="${OLD_IFS}"
 JSON="${JSON}
 ]"
 

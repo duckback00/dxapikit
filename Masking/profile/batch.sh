@@ -1,8 +1,13 @@
 #!/bin/bash
 #
+#    Filename: batch.sh
+#      Author: Alan Bitterman
+# Description: This script performs the neccessary steps to profile a
+#              set of database connections 
+#
 
-START=$1
-END=$2
+START=$1	# Database Connection (connNo) starting Number ...
+END=$2		# Database Connection end Number ...
 
 #######################################################################
 #
@@ -10,11 +15,11 @@ END=$2
 #
 
 # Debug/Verify ...
-#echo $DMURL > log.${START}.${END}.${DT}
-#echo "${CONN}" | jq ".[] | select (.connNo >= ${START} and .connNo <= ${END}) " >> log.${START}.${END}.${DT}
+##echo $DMURL > log.${START}.${END}.${DT}
+##echo "${CONN}" | jq ".[] | select (.connNo >= ${START} and .connNo <= ${END}) " >> log.${START}.${END}.${DT}
 
-#echo "${CONN}" | jq --raw-output "."
-#DBCONNS=`echo "${CONN}" | jq --raw-output ".[] | .schemaName "`
+##echo "${CONN}" | jq --raw-output "."
+##DBCONNS=`echo "${CONN}" | jq --raw-output ".[] | .schemaName "`
 
 let j=0
 for ((j=$START;j<=$END;j++))
@@ -25,8 +30,6 @@ do
 
    CONN0=`echo "${CONN}" | jq --raw-output ".[] | select (.connNo == ${j})"`
    #echo "$CONN0" | jq -r "."
-
-   #echo "$CONN0" | jq -r "." >> log.${START}.${END}.${DT}
 
    #######################################################################
    #
@@ -46,6 +49,10 @@ do
  
    USR=`echo "${CONN0}" | jq --raw-output ".username"`
    PWD=`echo "${CONN0}" | jq --raw-output ".password"`
+   #
+   # If Password is Encrypted, put Decrypt code here ...
+   #
+
    DBT=`echo "${CONN0}" | jq --raw-output ".databaseType"` 
 
    ZTMP=`echo "${CONN0}" | jq --raw-output ".host | select (.!=null)"`
@@ -272,6 +279,7 @@ do
       echo ", \"tables\": [" >> ${JSON_OUT}${j}
       if [[ "${TABLEINFO}" != "" ]]
       then
+         OLD_IFS="$IFS"
          DELIM=""
          while read tbinfo
          do
@@ -298,6 +306,7 @@ do
             echo " }" >> ${JSON_OUT}${j}
             DELIM=","
          done <<< "${TABLEINFO}"
+         IFS="${OLD_IFS}"
 
       else 
          JOBID=""

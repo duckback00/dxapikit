@@ -96,6 +96,7 @@ EOF
    #
    # Convert CSV results into JSON Array containing Database Connection Objects ...
    #
+   OLD_IFS="$IFS"
    while IFS='' read -r line || [[ -n "$line" ]]; do
    if [[ "${line}" != "" ]]
    then
@@ -128,7 +129,7 @@ EOF
       fi      # end if OPEN 
    fi      # end if $line ""
    done <<< "${RESULTS}"
-   IFS=
+   IFS="${OLD_IFS}"
 
 
    let j=j+1             # Database Connection Counter ...

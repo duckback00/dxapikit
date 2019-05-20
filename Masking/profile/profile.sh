@@ -1,13 +1,14 @@
 #!/bin/bash
 #######################################################################
 # Filename: profile.sh
-# Version: v1.6
+# Version: v1.7
+VERSION="v1.7"
 # Date: 2017-09-15 
-# Last Updated: 2018-04-12 Bitt...
+# Last Updated: 2018-11-12 Bitt...
 # Author: Alan Bitterman 
 # 
 # Description: Demo script for profile multiple databases at a time
-#              using the new Delphix Masking 5.2 APIs 
+#              using the new Delphix Masking APIs v5.2 or later
 #
 # Logic:
 #  The script starts with defining a number of user defined variables.
@@ -65,6 +66,7 @@
 # 1.4 | 2017-10-04 | Bitt  | Moved reports to html directory
 # 1.5 | 2017-10-12 | Bitt  | Added code for ALL schema logic
 # 1.6 | 2018-04-12 | Bitt  | Added parallel option and code 
+# 1.7 | 2018-04-14 | Bitt  | Added sampled diff report 
 #     |            |       |
 #     |            |       |
 #######################################################################
@@ -73,16 +75,20 @@
 #
 #set -x 
 start_time=`date +%s`
-echo "Program: Delphix 5.2.x or later script to profile one or many environments - v1.6"
+echo "Program: Delphix 5.2.x or later script to profile one or many environments - ${VERSION}"
 
 #
 # User Configured Parameters ...
 #
 # Delphix Masking Engine ...
 #
-DMURL="http://172.16.160.195:8282/masking/api"
-DMUSER="Axistech"
-DMPASS="Axis_123"
+##DMURL="http://172.16.160.195:8282/masking/api"
+##DMUSER="Axistech"
+##DMPASS="Axis_123"
+# Starting with 5.3.3
+DMURL="http://172.16.160.195/masking/api"
+DMUSER="Admin"
+DMPASS="Admin-12"
 DELAYTIMESEC=10					 # Job Monitoring Sleep Time(s) 
 DT=`date '+%Y%m%d%H%M%S'`
 
@@ -119,9 +125,10 @@ REPORT_TITLE="<span style=\"font-size:32px;padding-top:20px;color:#1AD6F5;\">Del
 #
 # Report Logo ...
 #
-LOGO="images/delphix-logo-black_300w.png"	# Delphix Logo ...
+#LOGO="images/delphix-logo-black_300w.png"	# Delphix Logo ...
 #LOGO="images/[your_logo_filename]\" height=\"125\""
-### Delphix Demos ### . ./logos.sh
+### Delphix Demos ### 
+. ./logos.sh
 
 #
 # Parallel Option ...
@@ -204,7 +211,8 @@ then
       fi
    fi
 fi
-#DEBUG#echo "$CONN" | jq "." ; echo "----------"
+#DEBUG#
+## echo "$CONN" | jq "." ; echo "----------"
 
 # 
 # Generate a list of Database/Schema Names to be used later by loop logic ...
@@ -323,15 +331,23 @@ fi
 # 
 # HTML Report Header Output ...
 #
+BANNER="<html>
+<head>
+<title>Delphix Rocks</title>
+<style> 
+table { font-family: arial, sans-serif; border-collapse: collapse; width: 100%; } 
+td, th { border: 1px solid #dddddd; text-align: left; padding: 8px; } 
+tr:nth-child(even) { background-color: #dddddd; } 
+</style>
+</head>
+<body>
+<table border=0 style=\"border: 0px solid #ffffff;\"><tr>
+<td style=\"border: 0px solid #ffffff;\" width=\"25%\"><img src=\"${LOGO}\" border=0 /></td>
+<td style=\"border: 0px solid #ffffff;\">${REPORT_TITLE}</td>
+<td style=\"text-align;right;border: 0px solid #ffffff;\"><font size=-2>Version: ${VERSION}</td>
+</tr></table>"
 
-echo "<html><head><title>Delphix Rocks</title>" > ${REPORT} 
-echo "<style> table { font-family: arial, sans-serif; border-collapse: collapse; width: 100%; } td, th { border: 1px solid #dddddd; text-align: left; padding: 8px; } tr:nth-child(even) { background-color: #dddddd; } </style>" >> ${REPORT}
-echo "</head><body>" >> ${REPORT}
-echo "<table border=0 style=\"border: 0px solid #ffffff;\"><tr><td style=\"border: 0px solid #ffffff;\" width=\"25%\">" >> ${REPORT}
-echo "<img src=\"${LOGO}\" border=0 />" >> ${REPORT}
-echo "</td><td style=\"border: 0px solid #ffffff;\">" >> ${REPORT}
-echo "${REPORT_TITLE}" >> ${REPORT}
-echo "</td></tr></table>" >> ${REPORT}
+echo "${BANNER}" > ${REPORT}
 echo "Timestamp: ${DT} <br />" >> ${REPORT}
 echo "<hr size=3 color=#1AD6F5 />" >> ${REPORT}
 echo "<table border=0 cellspacing=1 cellpadding=1>" >> ${REPORT}
@@ -425,6 +441,15 @@ echo "]" >> ${REPORT_TMP}
 
 farr=`cat "${REPORT_TMP}" | jq --raw-output ". | sort_by(.job)"`
 echo "${farr}" | jq --raw-output ".[] | .Run, .JobName, .Results" >> ${REPORT}
+
+
+#
+# Sample Diff Report ...
+# (move to Tomcat to generate page to allow user [ ] checkbox compare selections)
+#
+. ./diff.sh "html/json.out1" "html/json.out2"
+echo "<tr><td colspan=3 style=\"text-align:center;\"><a href=\"file://`pwd`/${HTML}\" target=\"_new\">Sample Diff Report</a></td></tr>"  >> ${REPORT} 
+
 
 # 
 # HTML Report The End ...
