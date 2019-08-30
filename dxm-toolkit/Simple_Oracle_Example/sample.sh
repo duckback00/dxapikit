@@ -40,7 +40,7 @@
 #
 # DDDP Connection ... 
 #
-DE="de2"
+DE="de"
 DMIP="172.16.160.195"
 #DMIP="10.0.1.10"
 DMUSER="Admin"
@@ -131,9 +131,12 @@ then
    do
       #echo "|${line}|"
       #echo "dxmc connector delete --connectorname ${line} --envname ${ENV} --engine ${DE}"
-      CMD="dxmc connector delete --connectorname ${line} --envname ${ENV} --engine ${DE}"
-      RESULTS=`${CMD}`
-      echo "${RESULTS}"
+      if [[ "${line}" != "" ]]
+      then
+         CMD="dxmc connector delete --connectorname ${line} --envname ${ENV} --engine ${DE}"
+         RESULTS=`${CMD}`
+         echo "${RESULTS}"
+      fi
    done <<< "${CHK}"
 fi
 
@@ -214,33 +217,33 @@ echo "${RESULTS}"
 # Algorithms ...
 #
 #echo "Column List ..."
-#RESULTS=`dxmc column list --rulesetname ${RSNAME} --envname ${ENV} --format json`
+#RESULTS=`dxmc column list --rulesetname ${RSNAME} --envname ${ENV} --engine ${DE} --format json`
 #echo "${RESULTS}"
 
 echo "Adding Algorithms ..."
 
-RESULTS=`dxmc column setmasking --rulesetname ${RSNAME} --envname ${ENV} --columnname FIRST_NAME --algname FirstNameLookup --domainname FIRST_NAME`
+RESULTS=`dxmc column setmasking --rulesetname ${RSNAME} --envname ${ENV} --engine ${DE} --columnname FIRST_NAME --algname FirstNameLookup --domainname FIRST_NAME`
 #echo "${RESULTS}"
 
-RESULTS=`dxmc column setmasking --rulesetname ${RSNAME} --envname ${ENV} --columnname LAST_NAME --algname LastNameLookup --domainname LAST_NAME`
+RESULTS=`dxmc column setmasking --rulesetname ${RSNAME} --envname ${ENV} --engine ${DE} --columnname LAST_NAME --algname LastNameLookup --domainname LAST_NAME`
 #echo "${RESULTS}"
 
 echo "Column List ..."
-RESULTS=`dxmc column list --rulesetname ${RSNAME} --envname ${ENV} --format json`
+RESULTS=`dxmc column list --rulesetname ${RSNAME} --envname ${ENV} --engine ${DE} --format json`
 echo "${RESULTS}"
 
 
 echo "Create Masking Job ..."
-RESULTS=`dxmc job add --jobname ${MASKNAME} --envname ${ENV} --rulesetname ${RSNAME}`
+RESULTS=`dxmc job add --jobname ${MASKNAME} --envname ${ENV} --engine ${DE} --rulesetname ${RSNAME}`
 echo "${RESULTS}"
 
 #echo "List Masking Jobs ..."
-#RESULTS=`dxmc job list --format json`
+#RESULTS=`dxmc job list --engine ${DE} --format json`
 #echo "${RESULTS}"
 
 echo "Execute Masking Job ${MASKNAME} ..."
-RESULTS=`dxmc job start --jobname ${MASKNAME} --envname ${ENV}`
-echo "${RESULTS}"
+#RESULTS=`dxmc job start --jobname ${MASKNAME} --envname ${ENV} --engine ${DE}`
+#echo "${RESULTS}"
 
 ############## E O F ####################################
 echo " "
