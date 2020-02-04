@@ -60,23 +60,15 @@ param (
 
 #
 # For non-interactive defaults ...
-
 # 
-
 # $DEF_SOURCE_SID="delphixdb"           # dSource name used to get db container reference value
-
 # $DEF_VDB_NAME="Vdelphixdb"            # Delphix VDB Name
-
 # $DEF_TARGET_GRP="Windows_Target"      # Delphix Engine Group Name
-
 # $DEF_TARGET_ENV="Windows Host"        # Target Environment used to get repository reference value 
-
 # $DEF_TARGET_REP="MSSQLSERVER"         # Target Environment Repository / Instance name
-
 
 #
 # For full interactive option, set default values to nothing ...
-
 #
 $DEF_SOURCE_SID=""
 $DEF_VDB_NAME=""
@@ -307,7 +299,7 @@ if ("${TARGET_REP}" -eq "") {
 #
 # Parse Results (cont) ...
 #
-$b = $a | where { $_.name -eq "${TARGET_REP}"} | Select-Object
+$b = $a | where { $_.name -eq "${TARGET_REP}" -and $_.environment -eq "${ENV_REFERENCE}"} | Select-Object
 $REP_REFERENCE=$b.reference
 Write-Output "repository/instance reference: ${REP_REFERENCE}"
 
