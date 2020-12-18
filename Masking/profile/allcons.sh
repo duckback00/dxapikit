@@ -8,32 +8,32 @@
 # Note: Requires command line path/access to sqlplus command ...
 #
 
-#
-# Updating Path to local sqlplus executable client ...
-#
+#######################################################################
+## Updating Path to local sqlplus executable client ...
+
 OS=`uname -s`
 if [[ "${OS}" == "Darwin" ]]
 then
    PATH=$PATH:${HOME}/instantclient_12_1	# Change for your local sqlplus client path ...
 fi
 
-#
-# Source connection information (from calling script) ...
-#
+#######################################################################
+## Source connection information (from calling script) ...
+
 #echo "Using $CONN"
 #echo "${CONN}" | jq "."
 
 DBCONNS=`echo "${CONN}" | jq --raw-output ".[] | .schemaName "`
 
-# 
-# Build JSON database connection string ...
-#
+#######################################################################
+## Build JSON database connection string ...
+
 JSON="["
 DELIM=""
 
-#
-# Loop through provided connections ...
-# 
+#######################################################################
+## Loop through provided connections ...
+ 
 let j=0
 let i=0
 while read dbname
@@ -137,9 +137,9 @@ done <<< "${DBCONNS}"
 JSON="${JSON}
 ]"
 
-#
-# Verify ...
-#
+#######################################################################
+## Verify ...
+
 #echo "${JSON}" | jq "."
 CONN="${JSON}"
 

@@ -1,10 +1,10 @@
 #!/bin/bash
 #######################################################################
 # Filename: profile.sh
-# Version: v1.7
-VERSION="v1.7"
+# Version: v1.8
+VERSION="v1.8"
 # Date: 2017-09-15 
-# Last Updated: 2018-11-12 Bitt...
+# Last Updated: 2019-08-02 Bitt...
 # Author: Alan Bitterman 
 # 
 # Description: Demo script for profile multiple databases at a time
@@ -67,6 +67,7 @@ VERSION="v1.7"
 # 1.5 | 2017-10-12 | Bitt  | Added code for ALL schema logic
 # 1.6 | 2018-04-12 | Bitt  | Added parallel option and code 
 # 1.7 | 2018-04-14 | Bitt  | Added sampled diff report 
+# 1.8 | 2019-08-02 | Bitt  | Misc Changes and added verify report
 #     |            |       |
 #     |            |       |
 #######################################################################
@@ -77,24 +78,18 @@ VERSION="v1.7"
 start_time=`date +%s`
 echo "Program: Delphix 5.2.x or later script to profile one or many environments - ${VERSION}"
 
-#
-# User Configured Parameters ...
-#
-# Delphix Masking Engine ...
-#
-##DMURL="http://172.16.160.195:8282/masking/api"
-##DMUSER="Axistech"
-##DMPASS="Axis_123"
-# Starting with 5.3.3
-DMURL="http://172.16.160.195/masking/api"
-DMUSER="Admin"
-DMPASS="Admin-12"
-DELAYTIMESEC=10					 # Job Monitoring Sleep Time(s) 
-DT=`date '+%Y%m%d%H%M%S'`
+#######################################################################
+## User Configured Parameters ...
+#######################################################################
 
-# 
-# Masking Variables ...
-#
+#######################################################################
+## Delphix Masking Engine ...
+
+. ./masking_engine.conf
+
+#######################################################################
+## Masking Variables ...
+
 APP="profile_app" 			# Will use if exists, create if not exists
 ENV="profile_env"			# Will use if exists, create if not exists 
                                         # NOTE: if exists, all connections and rule sets will be deleted!!!
@@ -108,9 +103,16 @@ RSNAME="RuleSet"                        # Rule Set Basename
 ##PSNAME="Financial"
 PSNAME="HIPAA"
 
-# 
-# Report Variables / Filenames ...
 #
+# Default Run Masking Job if not provided in the connection information ...
+#
+M_RUN_JOB="NO" 				# Run Masking Job ...
+
+SAMPLE=10				# Data Verification Sample Size ...
+
+#######################################################################
+## Report Variables / Filenames ...
+
 RPT_DIR=`pwd`"/html/"				# Absolute Path for HTML Output ...
 JSON_OUT="${RPT_DIR}json.out"			# each db json results output file ...
 RPT="profile_report"				# Report Name ...
@@ -122,21 +124,34 @@ then
 fi
 REPORT_TITLE="<span style=\"font-size:32px;padding-top:20px;color:#1AD6F5;\">Delphix Profiler Security Scan Results</span>"
 
-#
-# Report Logo ...
-#
-#LOGO="images/delphix-logo-black_300w.png"	# Delphix Logo ...
-#LOGO="images/[your_logo_filename]\" height=\"125\""
-### Delphix Demos ### 
-. ./logos.sh
+#######################################################################
+## Default Delphix Report Logo ...
 
-#
-# Parallel Option ...
-#
+LOGO="images/delphix-logo-black_300w.png"	# Delphix Logo ...
+## LOGO="images/[your_logo_filename]\" height=\"125\""
+
+#######################################################################
+## Custom Logos, comment out to use above LOGO value ...
+
+. ./custom_logos.sh
+
+#######################################################################
+## Parallel Option ...
+
 PARALLEL=0	# Number of Parallel Jobs, performance is dependent on CPU/Cores/RAM, 4 works nice ...
 
-# 
-# Hard Coded Database Connections (JSON) ...
+#######################################################################
+## Additional Report Options ...
+
+RUN_DIFF="YES" 		# Run diff report ...
+
+# NOTE: a new java verifier program is now available
+# Ref: https://drive.google.com/drive/folders/1jfbxLnCenIwQg9_9cm5BNrzKIEmSf8s8?usp=sharing
+RUN_VERIFY="NO" 	# Run data verify report ...
+
+#######################################################################
+## Hard Coded Database Connections (JSON) ...
+
 # (or loaded via CSV file, see later code) 
 #
 # Note: if "ALL" argument was provided, this first hard-coded connection is used to query the
@@ -145,48 +160,10 @@ PARALLEL=0	# Number of Parallel Jobs, performance is dependent on CPU/Cores/RAM,
 #       schema meta data, select any dictionary and select on any table privileges.
 #       IMPORTANT: This option requires sqlplus installed and found within the path!!!
 #
-CONN="[
-{
-  \"username\": \"PROFILER\",
-  \"password\": \"profiler00\",
-  \"databaseType\": \"ORACLE\",
-  \"host\": \"172.16.160.133\",
-  \"port\": 1521,
-  \"schemaName\": \"DELPHIXDB\",
-  \"profileSetName\": \"Financial\",
-  \"connNo\": 1,
-  \"sid\": \"orcl\"
-},
-  {
-  \"username\": \"DELPHIXDB\",
-  \"password\": \"delphixdb\",
-  \"databaseType\": \"ORACLE\",
-  \"host\": \"172.16.160.133\",
-  \"port\": 1521,
-  \"schemaName\": \"DELPHIXDB\",
-  \"profileSetName\": \"HIPAA\",
-  \"connNo\": 2,
-  \"sid\": \"orcl\"
-}
-]
-"
-#
-# Add additional JSON database connection objects if desired ...
-# remove previous 5 lines which include this line plus next line
-XTMP="
-, {
-  \"username\": \"DELPHIXDB\",
-  \"password\": \"delphixdb\",
-  \"databaseType\": \"ORACLE\",
-  \"host\": \"172.16.160.133\",
-  \"port\": 1521,
-  \"schemaName\": \"DELPHIXDB\",
-  \"profileSetName\": \"HIPAA\",
-  \"connNo\": 3,
-  \"sid\": \"VBITT2\"
-}
-]
-"
+#. ./connections_oracle.sh
+#. ./connections_aws.sh
+. ./connections_VBITT2.sh
+#. ./connections_mssql.sh
 
 #######################################################################
 # No changes below this line is required ...
@@ -200,6 +177,7 @@ XTMP="
 #
 if [[ "${1}" != "" ]]
 then
+   echo "Using the command line options: ${1} ${2}"
    if [[ "${1}" == "ALL" ]]         # ./profile.sh ALL 
    then
       source allcons.sh             # Get all schema's using the provided hard coded account
@@ -234,47 +212,59 @@ KEY=`echo "${STATUS}" | jq --raw-output '.Authorization'`
 echo "Authentication Key: ${KEY}"
 
 #######################################################################
-# 
-# Get Application ...
-#
+## Get Application ...
+ 
 STATUS=`curl -s -X GET --header "Accept: application/json" --header "Authorization: ${KEY}" "${DMURL}/applications"`
 #echo "${STATUS}"
+APPNAME=`echo "${STATUS}" | jq --raw-output ".responseList[] | select (.applicationName == \"${APP}\") | .applicationName"`
+APPID=`echo "${STATUS}" | jq --raw-output ".responseList[] | select (.applicationName == \"${APP}\") | .applicationId"`
 
 #
 # Create Application ...
 #
-APPNAME=`echo "${STATUS}" | jq --raw-output ".responseList[] | select (.applicationName == \"${APP}\") | .applicationName"`
 if [[ "${APP}" != "${APPNAME}" ]]
 then 
    STATUS=`curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header "Authorization: ${KEY}" -d "{ \"applicationName\": \"${APP}\" }" "${DMURL}/applications"`
    #echo "${STATUS}" | jq "."
+   APPID=`echo "${STATUS}" | jq --raw-output ".applicationId"`
+fi
+
+if [[ "${APPID}" == "" ]]
+then
+   echo "Application Id ${APPID} not found for Application Name ${APP}, exiting ..."
+   exit 1
 fi
 echo "Application Name: ${APP}"
+echo "Application Id: ${APPID}"
 
 #######################################################################
-# 
-# Get Environment ...
-#
+## Get Environment ...
+ 
 STATUS=`curl -s -X GET --header 'Accept: application/json' --header "Authorization: ${KEY}" "${DMURL}/environments"`
 #echo "${STATUS}" | jq "."
+ENVID=`echo "${STATUS}" | jq --raw-output ".responseList[] | select (.applicationId == ${APPID} and .environmentName == \"${ENV}\") | .environmentId"`
 
 #
 # Create Environment ...
 #
-ENVID=`echo "${STATUS}" | jq --raw-output ".responseList[] | select (.application == \"${APP}\" and .environmentName == \"${ENV}\") | .environmentId"`
 if [[ "${ENVID}" == "" ]]
 then
-   STATUS=`curl -s -X POST --header "Content-Type: application/json" --header "Accept: application/json" --header "Authorization: ${KEY}" -d "{ \"environmentName\": \"${ENV}\", \"application\": \"${APP}\", \"purpose\": \"MASK\" }" "${DMURL}/environments"`
+   STATUS=`curl -s -X POST --header "Content-Type: application/json" --header "Accept: application/json" --header "Authorization: ${KEY}" -d "{ \"environmentName\": \"${ENV}\", \"applicationId\": \"${APPID}\", \"purpose\": \"MASK\" }" "${DMURL}/environments"`
    #echo "${STATUS}" | jq "."
-   ENVID=`echo "${STATUS}" | jq --raw-output ". | select (.application == \"${APP}\" and .environmentName == \"${ENV}\") | .environmentId"`
+   ENVID=`echo "${STATUS}" | jq --raw-output ".environmentId"`
+fi
+
+if [[ "${ENVID}" == "" ]]
+then
+   echo "EnvironmentId ${ENVID} not found for Environment Name ${ENV}, exiting ..."
+   exit 1
 fi
 echo "Environment Name: ${ENV}"
 echo "Environment Id: ${ENVID}"
 
 #######################################################################
-#
-# Get Environment Connectors ...
-# 
+## Get Environment Connectors ...
+ 
 STATUS=`curl -s -X GET --header "Accept: application/json" --header "Authorization: ${KEY}" "${DMURL}/database-connectors"`
 #echo ${STATUS} | jq "."
 DELDB=`echo "${STATUS}" | jq --raw-output ".responseList[] | select (.environmentId == ${ENVID}) | .databaseConnectorId "`
@@ -295,36 +285,10 @@ done <<< "${DELDB}"
 fi
 
 #######################################################################
-# 
-# Get Rule Set ...
-# 
-STATUS=`curl -s -X GET --header "Accept: application/json" --header "Authorization: ${KEY}" "${DMURL}/database-rulesets"`
-#echo "${STATUS}" | jq "."
-DELRS=`echo "${STATUS}" | jq --raw-output ".responseList[] | select (.environmentId == ${ENVID}) | .databaseRulesetId"`
-#echo "Delete Rule Set Ids: ${DELRS}"
-
+## Delete All Rule Sets ...
+ 
 #
-# Delete all existing rule sets ...
-#
-if [[ "${DELRS}" != "" ]]
-then
-while read TMPID
-do
-   #echo ".. $TMPID "
-   STATUS=`curl -s -X DELETE --header "Accept: application/json" --header "Authorization: ${KEY}" "${DMURL}/database-rulesets/${TMPID}"`
-   #echo "${STATUS}" | jq "."
-   echo "Removing previous rule set id ${TMPID}"  
-done <<< "${DELRS}"
-fi
-
-#
-# Get Profile Jobs ...
-#
-#curl -s -X GET --header "Accept: application/json" --header "Authorization: ${KEY}" "${DMURL}/profile-jobs?environment_id=3"
-
-#
-# Delete all existing profile jobs ...
-# NOTE: Profile jobs automatically get deleted when Rulesets are deleted
+# NOTE: Masking/Profile Jobs and RuleSets are cascade deleted when Connectors are deleted
 #
 
 #######################################################################
@@ -381,7 +345,7 @@ then
    let ii=0			# While loop counter for number of connections ...
    let ff=1			# Initial connection number ...
    set -m 			# Enable Job Control ...
-   while [ $ii -lt $ll ]; do    
+   while [[ $ii -lt $ll ]]; do    
       let ii=$ii+1              # Increment connection counter, start with 1 ...
       let gg=$ff+$dd-1		# Calculate number of connections per job ...
       if [[ $rr -gt 0 ]]        # If remaining, add 1 to this job ...
@@ -419,7 +383,7 @@ then
    #
    # Wait for all parallel jobs to finish, then continue ...
    #
-   while [ 1 ]; do fg 2> /dev/null; [ $? == 1 ] && break; done
+   while [[ 1 ]]; do fg 2> /dev/null; [[ $? == 1 ]] && break; done
 
 else
    
@@ -447,14 +411,44 @@ echo "${farr}" | jq --raw-output ".[] | .Run, .JobName, .Results" >> ${REPORT}
 # Sample Diff Report ...
 # (move to Tomcat to generate page to allow user [ ] checkbox compare selections)
 #
-. ./diff.sh "html/json.out1" "html/json.out2"
-echo "<tr><td colspan=3 style=\"text-align:center;\"><a href=\"file://`pwd`/${HTML}\" target=\"_new\">Sample Diff Report</a></td></tr>"  >> ${REPORT} 
+if [[ "${RUN_DIFF}" == "YES" ]]
+then
+   . ./diff.sh "html/json.out1" "html/json.out2"
+   echo "<tr><td colspan=3 style=\"text-align:center;\"><a href=\"file://`pwd`/${HTML}\" target=\"_new\">Sample Diff Report</a></td></tr>"  >> ${REPORT} 
+fi
 
+# 
+# Sample Verify Data Report ...
+#
+if [[ "${RUN_VERIFY}" == "YES" ]]
+then
+
+   TMP=`echo "${CONN}" | jq length`
+   let i=0
+   for m in $(seq 1 ${TMP});
+   do
+      #echo "$i) "
+      CONNZ=`echo "${CONN}" | jq ".[${i}]"`
+      #echo "${CONNZ}" | jq "."
+      MTMP=`echo "${CONNZ}" | jq --raw-output ".runMaskingJob | select (.!=null)"`
+      #echo "test ${MTMP}"
+      if [[ "${MTMP}" == "YES" ]]
+      then
+         echo "<tr><td colspan=3 style=\"text-align:center;\"><a href=\"file://`pwd`/html/audit_${m}.html\" target=\"_new\">Masking Verification Report for Run ${m}</a></td></tr>"  >> ${REPORT}
+      fi
+      let i=i+1
+   done 
+
+else
+
+   echo "<tr><td colspan=3 style=\"text-align:center;\"><a href=\"https://drive.google.com/drive/folders/1jfbxLnCenIwQg9_9cm5BNrzKIEmSf8s8?usp=sharing\" target=\"_new\">Verification Beta Program</a></td></tr>"  >> ${REPORT}
+
+fi
 
 # 
 # HTML Report The End ...
 #
-echo "</table><span style=\"color:blue;\">Powered by Delphix Masking APIs v5.2</span>" >> ${REPORT}
+echo "</table><span style=\"color:blue;\">Powered by Delphix Masking APIs</span>" >> ${REPORT}
 echo "</body></html>" >> ${REPORT}
 echo "==============================================="
 end_time=`date +%s`

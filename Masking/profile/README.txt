@@ -1,9 +1,14 @@
 # Filename: README.txt
 #
-# API_DEMO - Profiling Many Database Environments
+# Purpose: Profiling Many Database Environments from one scripts and 
+#          build a simple consolidated HTML report. 
 #
 # Description: Demo script for profile multiple databases at a time
-#              using the new Delphix Masking 5.2 APIs
+#              using Delphix Masking APIs. This version is for Delphix 
+#              Platform version 6.0 or higher.
+#
+# Future: Could save output into database for diff reports and/or
+#         retention requirements.
 #
 # Usage:
 # 1.) [ edit profile.sh and change Masking Engine connection parameters ]
@@ -31,6 +36,7 @@
 ################################################################
 # Files ...
 
+delphix_masking.conf    # Delphix Masking Engine Connection Variables ...
 profile.sh              # Main script to profile one or many environments ...
 batch.sh		# Batch Job Script for executing parallel jobs or single job ...
 procons.sh              # Script for CSV filename command line option, converts CSV data into JSON string 
@@ -38,12 +44,16 @@ allcons.sh              # Script for ALL command line option that generates a li
                         # be sure to change PATH variable so sqlplus client can be executed
 report.sh               # Script to generate Report HTML Files from the db conn results, json.out file
 html			# Directory for HTML Reports and CSV results
-htmo/images/            # Images for Delphix Logo's and/or Customer Logo's
+html/images/            # Images for Delphix Logo's and/or Customer Logo's
+logos                   # Delphix Logos
+custom_logs		# Customer Image Logos use typically for Demos
 README.txt              # This file ...
 profile_connections.csv		# Sample list of saved CSV formatted database connections
 profile_connections.csv_orig	
 Profiling_Sources_v4.pptx	# WIP - DRAFT Presentation ...
 
+# Reports ...
+file:///[path_to_script_directory]/html/report.html
 
 ################################################################
 # Create a zip file of required files/folder structure ...
@@ -54,10 +64,10 @@ zip -r masking_api_demo.zip html README.txt *.sh *.csv*
 ################################################################
 # On source Unix/Linux/Mac systems ...
 
-1.) Verify jq is installed ...
+1.) Verify jq version 1.4 or later is installed ...
 
 jq --version
-jq version 1.3
+jq version 1.4 
 
 If not, install it ...
 
@@ -66,7 +76,7 @@ sudo apt-get install jq
 sudo yum install jq
 
 
-2.) cd /[path_to_script_directory]/API_DEMO ...
+2.) cd /[path_to_script_directory]/ ...
 
 vi profile.sh
 [ change any *parameters ]
@@ -81,9 +91,9 @@ vi profile.sh
    #
    # Delphix Masking Engine ...
    #
-   DMURL="http://172.16.160.195:8282/masking/api"
-   DMUSER="Axistech"
-   DMPASS="Axis_123"
+   DMURL="http://172.16.160.195/masking/api"
+   DMUSER="admin"
+   DMPASS="Admin-12"
 
    PARALLEL=0 		# 0 or 1 = Single Job for All Connections ...
    PARALLEL=4     	# Number of Parallel Jobs, connections per job will be automatically computed ...
@@ -127,7 +137,7 @@ vi profile.sh
 
 Open Web Browser and open the URL ...
 
-file:///[full_path_to_directory]/API_DEMO/html/report.html
+file:///[full_path_to_directory]/html/report.html
 
 
 ################################################################

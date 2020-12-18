@@ -7,6 +7,9 @@
 # Note: If using Excel, be sure the save the CSV file as Windows CSV File format.
 #
 
+#######################################################################
+## Command Line Arguements ...
+ 
 PFILE=""
 if [[ "${1}" == "" ]]
 then 
@@ -15,15 +18,15 @@ else
    PFILE="${1}"				# Command Line specificed CSV file ...
 fi
 
-#
-# Just to be safe of source LF ...
-#
+#######################################################################
+## Just to be safe of source LF ...
+
 #dos2unix ${PFILE}
 #sed -e 's/\^M/\n/g' ${PFILE} > ${PFILE}.tmp
 
-#
-# Convert CSV to JSON Array containing Database Connection Objects ...
-#
+#######################################################################
+## Convert CSV to JSON Array containing Database Connection Objects ...
+
 let i=0
 JSON="["
 DELIM=""
@@ -72,9 +75,9 @@ IFS="${OLD_IFS}"
 JSON="${JSON}
 ]"
 
-#
-# Verify ...
-#
+#######################################################################
+## Verify ...
+
 #echo "${JSON}" | jq "."
 CONN="${JSON}"
 
