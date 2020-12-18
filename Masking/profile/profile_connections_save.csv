@@ -1,0 +1,14 @@
+databaseType,host,port,sid,instanceName,databaseName,schemaName,username,password,jdbc,profileSetName,theEnd
+MSSQL,10.0.1.60,1433,,MSSQLSERVER,Vdelphix_demo,dbo,delphixdb,delphixdb,,HIPAA,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,DELPHIXDB,DELPHIXDB,delphixdb,,Financial,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,DELPHIXDB,DELPHIXDB,delphixdb,,HIPAA,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,HR,HR,hr,,Financial,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,HR,HR,hr,,HIPAA,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,DELPHIXDB,DELPHIXDB,delphixdb,,Financial,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,DELPHIXDB,DELPHIXDB,delphixdb,,HIPAA,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,HR,HR,hr,,Financial,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,HR,HR,hr,,HIPAA,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,DELPHIXDB,DELPHIXDB,delphixdb,,Financial,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,DELPHIXDB,DELPHIXDB,delphixdb,,HIPAA,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,HR,HR,hr,,Financial,theEnd
+ORACLE,10.0.1.20,1521,XEXE,,,HR,HR,hr,,HIPAA,theEnd

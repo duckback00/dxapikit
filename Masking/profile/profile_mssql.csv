@@ -1,0 +1,3 @@
+databaseType,host,port,sid,instanceName,databaseName,schemaName,username,password,jdbc,profileSetName,runMaskingJob,theEnd
+MSSQL,172.16.160.134,1433,,MSSQLSERVER,Vdelphix_demo,dbo,delphixdb,delphixdb,,Financial,NO,theEnd
+MSSQL,172.16.160.134,1433,,MSSQLSERVER,Vdelphix_demo,dbo,delphixdb,delphixdb,,HIPAA,NO,theEnd

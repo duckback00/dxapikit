@@ -1,0 +1,3 @@
+databaseType,host,port,sid,instanceName,databaseName,schemaName,username,password,jdbc,profileSetName,runMaskingJob,theEnd
+ORACLE,172.16.129.133,1521,VBITT,,,DELPHIXDB,DELPHIXDB,delphixdb,,Financial,NO,theEnd
+ORACLE,172.16.129.133,1521,VBITT,,,DELPHIXDB,DELPHIXDB,delphixdb,,HIPAA,NO,theEnd
