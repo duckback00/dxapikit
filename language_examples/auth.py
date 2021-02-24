@@ -29,10 +29,10 @@
 # Please make changes to the parameters below as req'd! #
 #########################################################
 
-DMUSER='delphix_admin'
-DMPASS='delphix'
+DMUSER='admin'
+DMPASS='Admin-12'
 DELAYTIMESEC=10
-BASEURL='http://172.16.160.195/resources/json/delphix'
+BASEURL='http://172.16.129.132/resources/json/delphix'
 
 #########################################################
 #         NO CHANGES REQUIRED BELOW THIS POINT          #
@@ -56,32 +56,33 @@ session = requests.session()
 #
 # Authenticate ...
 #
-print "Authenticating URL " + BASEURL + " ... "
+print ("Authenticating URL " + BASEURL + " ... ")
 formdata = '{ "type": "APISession", "version": { "type": "APIVersion", "major": 1, "minor": 7, "micro": 0 } }'
 r = session.post(BASEURL+'/session', data=formdata, headers=req_headers, allow_redirects=False)
-print r.text
+print (r.text)
 
 # 
 # Login ...
 #
-print "Login ... "
+print ("Login ... ")
 formdata = '{ "type": "LoginRequest", "username": "' + DMUSER + '", "password": "' + DMPASS + '" }'
 r = session.post(BASEURL+'/login', data=formdata, headers=req_headers, allow_redirects=False)
-print r.text
+print (r.text)
 
 #
 # About ...
 # 
-print "About ... "
+print ("About ... ")
 r = session.get(BASEURL+'/about')
-print r.text 
+print (r.text) 
 
 #
 # JSON Parsing ...
 #
-print "JSON Parsing Examples ..."
+print ("JSON Parsing Examples ...")
 j = json.loads(r.text)
-print j['status']
-print j['result']['buildTitle']
-print j['result']['apiVersion']['major']
+print (j['status'])
+print (j['result']['buildTitle'])
+print (j['result']['apiVersion']['major'])
+
 
